@@ -14,6 +14,7 @@ public class DniWolneBean
 	private int mId;
 	private Date mData;
 	private String mOpis;
+	
 	public int getId()
 	{
 		return mId;
