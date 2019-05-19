@@ -5,8 +5,8 @@ import javax.swing.JOptionPane;
 public enum Komunikat
 {
 	oknoPracownikaBrakZaznaczeniaWTabeli("Wybierz Absencje!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE), //
-	oknoGlowneBrakZaznaczeniaWTabeli("Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE)//
-	;
+	oknoGlowneBrakZaznaczeniaWTabeli("Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE),//
+	Nachodz¹NaSiebieOkresy("Wystêpuje ju¿ absencja w tym okresie!","B³¹d",JOptionPane.ERROR_MESSAGE);
 
 	private String mOpis;
 	private String mNazwa;

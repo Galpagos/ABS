@@ -13,8 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
+import Parsery.ParseryDB;
 import dbAccess.Absencja;
+import dbAccess.AbsencjaBean;
 import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 import dbAccess.Components.DatePicker;
@@ -76,8 +79,16 @@ public class OknoAbsencji extends JDialog
 				String lvDelete = //
 						"Delete from " + Absencja.NazwaTabeli//
 								+ " where " + Absencja.kolumnaID + "= " + pmAbsencja.getId();
+			
+				if(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != "+pmAbsencja.getId()+ " and id_pracownika="+pmAbsencja.getIdPracownika()+" and Od_kiedy <= "+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataDo())//
+				+" and Do_Kiedy>="+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataOd()))==0)
+				{	
 				dbAccess.Zapisz(lvDelete);
 				dbAccess.Zapisz(pmAbsencja.ZapiszDataSet());
+				}
+				else
+					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
+				
 				// pmFrame.odswiezTabele();
 				pmFrameDiagog.dispose();
 
