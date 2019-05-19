@@ -24,9 +24,7 @@ public class dbAccess
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 
 			Statement s = conn.createStatement();
-			System.out.println("\n Przed wywolaniem " + instrukcja);
 			s.execute(instrukcja);
-			System.out.println("\n Po wywolaniu " + instrukcja);
 			s.close();
 			conn.close();
 		} catch (Exception ex)
@@ -238,8 +236,7 @@ public class dbAccess
 			String instrukcja = "SELECT Count(*) as total FROM " + Zapytanie;
 			Statement s = conn.createStatement();
 			s.execute(instrukcja);
-			System.out.println("Wywolano " + instrukcja);
-			rs = s.getResultSet();
+				rs = s.getResultSet();
 			rs.next();
 			int k = rs.getInt("total");
 

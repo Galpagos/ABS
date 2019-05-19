@@ -71,8 +71,6 @@ public class OknoAbsencji extends JDialog
 			public void actionPerformed(ActionEvent e)
 			{
 				pmAbsencja.setDataDo((Date) mDataDo.getValue());
-				System.out.print(mDataDo.getValue() + "\n");
-				System.out.print((Date) mDataDo.getValue());
 				pmAbsencja.setDataOd((Date) mDataOd.getValue());
 				pmAbsencja.setRodzajAbsencji((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
 
@@ -85,12 +83,13 @@ public class OknoAbsencji extends JDialog
 				{	
 				dbAccess.Zapisz(lvDelete);
 				dbAccess.Zapisz(pmAbsencja.ZapiszDataSet());
+				pmFrameDiagog.dispose();
 				}
 				else
 					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
 				
-				// pmFrame.odswiezTabele();
-				pmFrameDiagog.dispose();
+			
+				
 
 			}
 		});
@@ -134,7 +133,6 @@ public class OknoAbsencji extends JDialog
 				if (lvData == null)
 					return;
 				mDataOd.setValue(lvData);
-				System.out.println("TEST");
 			}
 		});
 
@@ -148,7 +146,7 @@ public class OknoAbsencji extends JDialog
 				if (lvData == null)
 					return;
 				mDataDo.setValue(lvData);
-				System.out.println("TEST");
+				
 			}
 		});
 		contentPane.add(btnPickDate2);

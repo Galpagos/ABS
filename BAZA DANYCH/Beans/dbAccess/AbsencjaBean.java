@@ -25,8 +25,6 @@ public class AbsencjaBean
 
 	public int getId()
 	{
-
-		System.out.print(mId);
 		return mId;
 	}
 

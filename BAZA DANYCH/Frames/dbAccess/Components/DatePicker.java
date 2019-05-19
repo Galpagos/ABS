@@ -159,7 +159,8 @@ public class DatePicker
 		l.setText(sdf.format(cal.getTime()));
 		// set title
 		d.setTitle(Miesiace[(36 + month) % 12]);
-	}
+			}
+	
 
 	public java.util.Date setPickedDate()
 	{

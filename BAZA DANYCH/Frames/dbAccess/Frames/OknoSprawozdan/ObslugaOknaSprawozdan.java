@@ -45,10 +45,7 @@ public class ObslugaOknaSprawozdan
 		DateTime lvStart = new DateTime().withMonthOfYear(1).withDayOfMonth(1).withYear(mRok).withTimeAtStartOfDay();
 		DateTime lvEnd = new DateTime().withMonthOfYear(12).withDayOfMonth(31).withYear(mRok).withTimeAtStartOfDay();
 		mDane.setOkresSprawozdawczy(new Interval(lvStart, lvEnd));
-		System.out.println(lvStart);
-		System.out.println(mDane.getOkresSprawozdawczy());
-
-	}
+			}
 
 	private void przygotujDaneMiesieczne()
 	{
