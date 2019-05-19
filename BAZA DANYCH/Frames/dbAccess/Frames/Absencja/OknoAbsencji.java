@@ -78,15 +78,18 @@ public class OknoAbsencji extends JDialog
 						"Delete from " + Absencja.NazwaTabeli//
 								+ " where " + Absencja.kolumnaID + "= " + pmAbsencja.getId();
 			
-				if(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != "+pmAbsencja.getId()+ " and id_pracownika="+pmAbsencja.getIdPracownika()+" and Od_kiedy <= "+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataDo())//
-				+" and Do_Kiedy>="+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataOd()))==0)
+				if(!(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != "+pmAbsencja.getId()+ " and id_pracownika="+pmAbsencja.getIdPracownika()+" and Od_kiedy <= "+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataDo())//
+				+" and Do_Kiedy>="+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataOd()))==0))
 				{	
+					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
+					return;
+				}
+				if(pmAbsencja.getDataDo().before(pmAbsencja.getDataOd())) { Komunikat.DataPoPrzedDataPrzed.pokaz();return;}
+			
 				dbAccess.Zapisz(lvDelete);
 				dbAccess.Zapisz(pmAbsencja.ZapiszDataSet());
 				pmFrameDiagog.dispose();
-				}
-				else
-					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
+					
 				
 			
 				
@@ -145,6 +148,7 @@ public class OknoAbsencji extends JDialog
 				Date lvData = new DatePicker().setPickedDate();
 				if (lvData == null)
 					return;
+				if(lvData.before((Date)mDataOd.getValue()))
 				mDataDo.setValue(lvData);
 				
 			}
