@@ -3,6 +3,8 @@ package dbAccess.Components.OknoPrzygotowniaLustyPracownikow;
 import java.util.ArrayList;
 import java.util.List;
 
+import Grupy.GrupaDTO;
+import Grupy.ObslugaGrup;
 import PrzygotowanieDanych.PracownikDTO;
 
 public class ObslugaPrzygotowaniaListyPracownikow
@@ -98,11 +100,15 @@ public class ObslugaPrzygotowaniaListyPracownikow
 	}
 
 	public Object[] pobierzGrupy()
-	{
-		Object[] lvDane = new Object[2];
-		lvDane[0] = "";
-		lvDane[1] = "Wszyscy";
-
-		return lvDane;
+	{		
+		List<GrupaDTO> lvListaCB=ObslugaGrup.getListaGrup();
+		GrupaDTO lvPusta=new GrupaDTO();
+		lvPusta.setNazwa("");
+		GrupaDTO lvWszyscy=new GrupaDTO();
+		lvPusta.setNazwa("Wszyscy");
+		
+		lvListaCB.add(0, lvPusta);
+		lvListaCB.add(0, lvWszyscy);
+		return lvListaCB.toArray();
 	}
 }

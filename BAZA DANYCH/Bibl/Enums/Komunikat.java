@@ -8,6 +8,7 @@ public enum Komunikat
 	oknoGlowneBrakZaznaczeniaWTabeli("Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE),//
 	Nachodz¹NaSiebieOkresy("Wystêpuje ju¿ absencja w tym okresie!","B³¹d",JOptionPane.ERROR_MESSAGE),//
 	DataPoPrzedDataPrzed("Data koñcowa musi byæ po dacie pocz¹tkowej","B³¹d",JOptionPane.ERROR_MESSAGE);//
+	
 	private String mOpis;
 	private String mNazwa;
 	private int mRodzaj;
