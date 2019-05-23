@@ -66,7 +66,7 @@ public class LicznikDaty
 		Timestamp lvStart = (Timestamp) pmDataOd;
 		Timestamp lvEnd = (Timestamp) pmDataDo;
 		DateTime lvStartt = DateTime.parse(lvStart.toLocalDateTime().toString());
-		DateTime lvEndd = DateTime.parse(lvEnd.toLocalDateTime().toString());
+		DateTime lvEndd = DateTime.parse(lvEnd.toLocalDateTime().plusMinutes(10).toString());
 		if (lvStartt.isBefore(lvEndd))
 			return new Interval(lvStartt, lvEndd);
 		return new Interval(lvEndd, lvStartt);

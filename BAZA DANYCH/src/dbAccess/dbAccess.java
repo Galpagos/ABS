@@ -14,8 +14,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class dbAccess
 {
-	// public static String mSciezkaDoBazy = "jdbc:ucanaccess://BAZA.accdb";
-	public static String mSciezkaDoBazy = "jdbc:ucanaccess://C:/Users/Bogdan/Desktop/BAZA_NEW/BAZA.accdb";
+	public static String mSciezkaDoBazy = "jdbc:ucanaccess://BAZA.accdb";
 
 	public static void Zapisz(String instrukcja)
 	{

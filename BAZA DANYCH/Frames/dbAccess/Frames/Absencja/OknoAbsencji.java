@@ -148,7 +148,7 @@ public class OknoAbsencji extends JDialog
 				Date lvData = new DatePicker().setPickedDate();
 				if (lvData == null)
 					return;
-				if(lvData.before((Date)mDataOd.getValue()))
+				
 				mDataDo.setValue(lvData);
 				
 			}

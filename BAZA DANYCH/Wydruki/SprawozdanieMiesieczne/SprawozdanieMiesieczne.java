@@ -162,6 +162,7 @@ public class SprawozdanieMiesieczne
 				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
 				lvAbs.setRodzaj(SLRodzajeAbsencji.AbsencjaPoNazwie((String) lvDanePracownika[i][4]));
 				lvAbs.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDanePracownika[i][2], lvDanePracownika[i][3]));
+				
 				lvListaAbs.add(lvAbs);
 			}
 			lvPrac.setListaAbsencji(lvListaAbs);

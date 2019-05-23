@@ -62,4 +62,8 @@ public class AbsencjaDTO
 	}
 
 	private String mNazwaPracownika;
+	public String toString()
+	{
+		return mRodzaj +": "+mOkres.getStart() +" - " + mOkres.getEnd();
+	}
 }

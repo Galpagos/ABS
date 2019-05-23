@@ -31,7 +31,8 @@ import dbAccess.dbAccess.MyTableModel;
 public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 {
 	private ZestawienieBean mPracownik;
-
+	private JLabel lblDataUrodzenia;
+	private JLabel lblUrlopNalezny;
 	private JPanel contentPane;
 	private JTable tbAbsencje;
 	private JScrollPane mScrollPane;
@@ -77,6 +78,41 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 		btnUsunGrupe.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnUsunGrupe.setBounds(737, 56, 160, 22);
 		contentPane.add(btnUsunGrupe);
+
+		JButton btnUstawDatUrodzenia = new JButton("Ustaw dat\u0119 urodzenia");
+		btnUstawDatUrodzenia.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				mObsluga.ustawDateUrodzenia();
+				odswiezLblDataUrodzenia();
+
+			}
+		});
+		btnUstawDatUrodzenia.setBounds(315, 20, 223, 25);
+		contentPane.add(btnUstawDatUrodzenia);
+
+		JButton btnUstawUrlop = new JButton("Ustaw urlop nale¿ny");
+		btnUstawUrlop.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				mObsluga.ustawUrlopNalezny();
+				odswiezLblUrlop();
+			}
+		});
+		btnUstawUrlop.setBounds(315, 55, 223, 25);
+		contentPane.add(btnUstawUrlop);
+
+		lblDataUrodzenia = new JLabel("");
+		lblDataUrodzenia.setBounds(557, 24, 168, 16);
+		contentPane.add(lblDataUrodzenia);
+		odswiezLblDataUrodzenia();
+
+		lblUrlopNalezny = new JLabel("");
+		lblUrlopNalezny.setBounds(550, 59, 175, 16);
+		contentPane.add(lblUrlopNalezny);
+		odswiezLblUrlop();
 		setVisible(true);
 
 	}
@@ -259,5 +295,15 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 				.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
 		lvAbsencja.setRodzajAbsencji(lvRodzajAbs);
 		return lvAbsencja;
+	}
+
+	public void odswiezLblDataUrodzenia()
+	{
+		lblDataUrodzenia.setText(mObsluga.getDataUrodzenia(mPracownik));
+	}
+
+	public void odswiezLblUrlop()
+	{
+		lblUrlopNalezny.setText(mObsluga.getUrlop(mPracownik));
 	}
 }

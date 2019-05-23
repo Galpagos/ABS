@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import Wersja.Przekod;
 import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 import dbAccess.dbAccess.MyTableModel;
@@ -64,6 +68,65 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 
 	public SrcOknoGlowne() throws SQLException
 	{
+		addWindowListener(new WindowListener()
+		{
+			
+			@Override
+			public void windowOpened(WindowEvent pmArg0)
+			{
+				try
+				{
+					Przekod.Wykonaj();
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent pmArg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent pmArg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent pmArg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent pmArg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent pmArg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent pmArg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		JPanel contentPane;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 825, 560);
@@ -113,7 +176,7 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 				mObsluga.dodajPracownika();
 			}
 		});
-
+		
 		btnDodajPracownika.setBounds(46, 40, 191, 39);
 		mButtonPanel.add(btnDodajPracownika);
 
