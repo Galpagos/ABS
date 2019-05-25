@@ -7,6 +7,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
+import Enums.Komunikat;
 import dbAccess.Components.ObsluzenieComboPicker;
 
 public class ObslugaGrup implements ObsluzenieComboPicker
@@ -48,7 +49,11 @@ public class ObslugaGrup implements ObsluzenieComboPicker
 	public void usun(Object pmObject)
 	{
 		if (pmObject != null)
+		{
+			if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
+				return;
 			mRepo.usunGrupe((GrupaDTO) pmObject);
+		}
 	}
 
 	public static void ustawGrupePracownikowi(int lvIdPracownika, Object pmGrupa)

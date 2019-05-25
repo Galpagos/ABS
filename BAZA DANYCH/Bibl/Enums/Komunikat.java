@@ -5,10 +5,10 @@ import javax.swing.JOptionPane;
 public enum Komunikat
 {
 	oknoPracownikaBrakZaznaczeniaWTabeli("Wybierz Absencje!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE), //
-	oknoGlowneBrakZaznaczeniaWTabeli("Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE),//
-	Nachodz¹NaSiebieOkresy("Wystêpuje ju¿ absencja w tym okresie!","B³¹d",JOptionPane.ERROR_MESSAGE),//
-	DataPoPrzedDataPrzed("Data koñcowa musi byæ po dacie pocz¹tkowej","B³¹d",JOptionPane.ERROR_MESSAGE);//
-	
+	oknoGlowneBrakZaznaczeniaWTabeli("Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE), //
+	Nachodz¹NaSiebieOkresy("Wystêpuje ju¿ absencja w tym okresie!", "B³¹d", JOptionPane.ERROR_MESSAGE), //
+	DataPoPrzedDataPrzed("Data koñcowa musi byæ po dacie pocz¹tkowej", "B³¹d", JOptionPane.ERROR_MESSAGE);//
+
 	private String mOpis;
 	private String mNazwa;
 	private int mRodzaj;
@@ -23,5 +23,19 @@ public enum Komunikat
 	public void pokaz()
 	{
 		JOptionPane.showMessageDialog(null, mOpis, mNazwa, mRodzaj);
+	}
+
+	public static boolean PotwierdzenieOperacjiUsuniecia()
+	{
+		int reply = JOptionPane.showConfirmDialog(null,
+				"Czy na pewno chcesz usun¹æ dane? \nOperacja jest nieodwracalna", "Potwierdzenie operacji",
+				JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION)
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
 	}
 }

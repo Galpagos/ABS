@@ -49,14 +49,17 @@ public class ObslugaOknaGlownego
 
 	public void usunPracownika()
 	{
-		if (mOkno.getZaznaczenieTabeli() >= 0)
+		if (mOkno.getZaznaczenieTabeli() < 0)
 		{
-			mRepo.usunPracownikaDB(mOkno.getPracownikZTabeli());
-			mOkno.odswiezTabele();
-		} else
-		{
-			JOptionPane.showMessageDialog(null, "Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE);
+			Komunikat.oknoGlowneBrakZaznaczeniaWTabeli.pokaz();
+			return;
 		}
+		if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
+			return;
+
+		mRepo.usunPracownikaDB(mOkno.getPracownikZTabeli());
+		mOkno.odswiezTabele();
+
 	}
 
 	public void pokazNieobecnych() throws ParseException

@@ -60,15 +60,18 @@ public class ObslugaOknaPracownika
 
 	public void UsunAbsencje()
 	{
-		if (mOkno.getZaznaczenieTabeli() >= 0)
-		{
-			int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();
-			mRepo.usunAbsencje(lvIdAbsencji);
-			mOkno.odswiezTabele();
-		} else
+		if (mOkno.getZaznaczenieTabeli() < 0)
 		{
 			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
+			return;
 		}
+		if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
+			return;
+
+		int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();
+		mRepo.usunAbsencje(lvIdAbsencji);
+		mOkno.odswiezTabele();
+
 	}
 
 	public String grupyPracownika()
