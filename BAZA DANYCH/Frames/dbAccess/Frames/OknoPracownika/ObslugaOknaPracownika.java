@@ -10,9 +10,9 @@ import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
+import PrzygotowanieDanych.PracownikDTO;
 import dbAccess.Absencja;
 import dbAccess.AbsencjaBean;
-import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 import dbAccess.Components.ComboPicker;
 import dbAccess.Frames.Absencja.OknoAbsencji;
@@ -37,7 +37,7 @@ public class ObslugaOknaPracownika
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.urlop_wypoczynkowy;
 
 		lvAbsencja.setId(dbAccess.GetNextID(AbsencjaBean.NazwaTabeli));
-		lvAbsencja.setIdPracownika(mOkno.getPracownika().getLvID());
+		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
 		lvAbsencja.setDataOd(lvCurrentDate);
 		lvAbsencja.setDataDo(lvCurrentDate);
 		lvAbsencja.setRodzajAbsencji(lvRodzajAbs);
@@ -76,7 +76,7 @@ public class ObslugaOknaPracownika
 
 	public String grupyPracownika()
 	{
-		return "Nale\u017Cy do grup: " + ObslugaGrup.getGrupyPracownikaText(mOkno.getPracownika().getLvID());
+		return "Nale\u017Cy do grup: " + ObslugaGrup.getGrupyPracownikaText(mOkno.getPracownika().getId());
 	}
 
 	public void przypiszGrupe()
@@ -88,7 +88,7 @@ public class ObslugaOknaPracownika
 		GrupaDTO lvGrupa = (GrupaDTO) lvCB.ustawGrupy();
 		if (lvGrupa != null)
 		{
-			ObslugaGrup.ustawGrupePracownikowi(mOkno.getPracownika().getLvID(), lvGrupa);
+			ObslugaGrup.ustawGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
 		}
 		mOkno.getLblGrupy().setText(grupyPracownika());
 	}
@@ -101,7 +101,7 @@ public class ObslugaOknaPracownika
 		GrupaDTO lvGrupa = (GrupaDTO) lvCB.ustawGrupy();
 		if (lvGrupa != null)
 		{
-			ObslugaGrup.usunGrupePracownikowi(mOkno.getPracownika().getLvID(), lvGrupa);
+			ObslugaGrup.usunGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
 		}
 		mOkno.getLblGrupy().setText(grupyPracownika());
 	}
@@ -116,7 +116,7 @@ public class ObslugaOknaPracownika
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date lvData = null;
 			lvData = sdf.parse(lvUrlop);
-			mRepo.ustawDateUrodzenia(mOkno.getPracownika(), lvData);
+			mRepo.ustawDateUrodzenia(mOkno.getPracownika().getId(), lvData);
 
 		} catch (ParseException e)
 		{
@@ -124,17 +124,17 @@ public class ObslugaOknaPracownika
 		}
 	}
 
-	public String getDataUrodzenia(ZestawienieBean pmPracownik)
+	public String getDataUrodzenia(PracownikDTO pmPracownik)
 	{
-		Object[][] lvDane = mRepo.getDataUrodzenia(pmPracownik);
+		Object[][] lvDane = mRepo.getDataUrodzenia(pmPracownik.getId());
 		if (lvDane[0][0] == null)
 			return "";
 		return lvDane[0][0].toString().split(" ")[0];
 	}
 
-	public String getUrlop(ZestawienieBean pmPracownik)
+	public String getUrlop(PracownikDTO pmPracownik)
 	{
-		Object[][] lvDane = mRepo.getUrlopNalezny(pmPracownik);
+		Object[][] lvDane = mRepo.getUrlopNalezny(pmPracownik.getId());
 		if (lvDane[0][0] == null)
 			return "";
 		return lvDane[0][0].toString();
@@ -147,7 +147,7 @@ public class ObslugaOknaPracownika
 		try
 		{
 			lvWartosc = Integer.parseInt(lvUrlop);
-			mRepo.ustawUrlopNalezny(mOkno.getPracownika(), lvWartosc);
+			mRepo.ustawUrlopNalezny(mOkno.getPracownika().getId(), lvWartosc);
 
 		} catch (NumberFormatException e)
 		{

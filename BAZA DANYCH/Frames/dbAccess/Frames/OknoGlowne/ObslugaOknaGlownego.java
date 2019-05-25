@@ -57,7 +57,7 @@ public class ObslugaOknaGlownego
 		if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
 			return;
 
-		mRepo.usunPracownikaDB(mOkno.getPracownikZTabeli());
+		mRepo.usunPracownikaDB(mOkno.getPracownikZTabeli().getId());
 		mOkno.odswiezTabele();
 
 	}
@@ -130,7 +130,7 @@ public class ObslugaOknaGlownego
 		{
 			Date lvData = new DatePicker().setPickedDate();
 			if (lvData != null)
-				mRepo.zwolnijPracownika(mOkno.getPracownikZTabeli(), lvData);
+				mRepo.zwolnijPracownika(mOkno.getPracownikZTabeli().getId(), lvData);
 			mOkno.odswiezTabele();
 		} else
 		{

@@ -21,16 +21,16 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import Enums.SLRodzajeAbsencji;
+import PrzygotowanieDanych.PracownikDTO;
 import dbAccess.Absencja;
 import dbAccess.AbsencjaBean;
-import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 import dbAccess.dbAccess.MyTableModel;
 
 @SuppressWarnings("serial")
 public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 {
-	private ZestawienieBean mPracownik;
+	private PracownikDTO mPracownik;
 	private JLabel lblDataUrodzenia;
 	private JLabel lblUrlopNalezny;
 	private JPanel contentPane;
@@ -55,7 +55,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 		lblGrupy = pmLblGrupy;
 	}
 
-	public OknoPracownika(ZestawienieBean pmPracownik)
+	public OknoPracownika(PracownikDTO pmPracownik)
 	{
 		mObsluga = new ObslugaOknaPracownika(this);
 
@@ -64,7 +64,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 		setPracownik(pmPracownik);
 		utworzOkno();
 		ustawTabele(tbAbsencje, pmPracownik);
-		lblPracownik.setText(lblPracownik.getText() + getPracownik().getLvNazwa());
+		lblPracownik.setText(lblPracownik.getText() + getPracownik().getNazwa());
 		lblGrupy.setText(mObsluga.grupyPracownika());
 
 		JButton btnUsunGrupe = new JButton("Usu\u0144 grup\u0119");
@@ -220,7 +220,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 
 	}
 
-	public ZestawienieBean getPracownik()
+	public PracownikDTO getPracownik()
 	{
 		return mPracownik;
 	}
@@ -230,12 +230,12 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 		ustawTabele(tbAbsencje, mPracownik);
 	}
 
-	public void setPracownik(ZestawienieBean pmPracownik)
+	public void setPracownik(PracownikDTO pmPracownik)
 	{
 		mPracownik = pmPracownik;
 	}
 
-	private JTable ustawTabele(JTable pmTabela, ZestawienieBean pmPracownik)
+	private JTable ustawTabele(JTable pmTabela, PracownikDTO pmPracownik)
 	{
 		try
 		{
@@ -245,7 +245,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 					+ Absencja.kolumnaOdKiedy + ","//
 					+ Absencja.kolumnaDoKiedy//
 					+ " from " + AbsencjaBean.NazwaTabeli + " where "//
-					+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getLvID()//
+					+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getId()//
 					+ " AND (Year([" + AbsencjaBean.kolumnaDoKiedy + "]) = " + spnRok.getValue()//
 					+ " OR Year([" + AbsencjaBean.kolumnaOdKiedy + "]) = " + spnRok.getValue() + ")";
 			MyTableModel lvDTM = dbAccess.modelTabeliDB(lvZapytanie);
@@ -271,7 +271,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 	}
 
 	@Override
-	public ZestawienieBean getPracownika()
+	public PracownikDTO getPracownika()
 	{
 		return mPracownik;
 	}
@@ -290,7 +290,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 		lvAbsencja.setId((Integer) tbAbsencje.getModel().getValueAt(lvRow, 0));
 		lvAbsencja.setDataOd((Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 2));
 		lvAbsencja.setDataDo((Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3));
-		lvAbsencja.setIdPracownika(mPracownik.getLvID());
+		lvAbsencja.setIdPracownika(mPracownik.getId());
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji
 				.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
 		lvAbsencja.setRodzajAbsencji(lvRodzajAbs);

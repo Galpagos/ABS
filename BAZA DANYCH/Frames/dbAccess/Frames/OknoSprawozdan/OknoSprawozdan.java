@@ -25,7 +25,7 @@ public class OknoSprawozdan extends JDialog
 	{
 		setTitle("Wyb\u00F3r sprawozdania");
 		mObsluga = new ObslugaOknaSprawozdan();
-		setBounds(100, 100, 287, 245);
+		setBounds(100, 100, 285, 310);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -68,6 +68,18 @@ public class OknoSprawozdan extends JDialog
 		contentPanel.add(mlabel);
 		contentPanel.add(mlabel_1);
 		contentPanel.add(mbtnSprawozdanieMiesiczne);
+
+		JButton btnRoczneUrlopy = new JButton("Sprawozdanie Roczne Urlopy");
+		btnRoczneUrlopy.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				mObsluga.sprawozdanieRoczneUrlopy();
+				dispose();
+			}
+		});
+		btnRoczneUrlopy.setBounds(28, 153, 205, 42);
+		contentPanel.add(btnRoczneUrlopy);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

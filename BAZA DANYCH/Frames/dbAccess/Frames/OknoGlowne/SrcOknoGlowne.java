@@ -30,6 +30,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import PrzygotowanieDanych.PracownikDTO;
 import Wersja.Przekod;
 import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
@@ -63,14 +64,14 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 	private JButton btnPokazPracownika;
 	private JButton btnUsunPracownika;
 	private JScrollPane mScrollPane;
-	private ZestawienieBean mPracownik;
+	private PracownikDTO mPracownik;
 	private JTextField mFiltrPracownika;
 
 	public SrcOknoGlowne() throws SQLException
 	{
 		addWindowListener(new WindowListener()
 		{
-			
+
 			@Override
 			public void windowOpened(WindowEvent pmArg0)
 			{
@@ -82,49 +83,49 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
-			
+
 			@Override
 			public void windowIconified(WindowEvent pmArg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowDeiconified(WindowEvent pmArg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowDeactivated(WindowEvent pmArg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowClosing(WindowEvent pmArg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowClosed(WindowEvent pmArg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowActivated(WindowEvent pmArg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		JPanel contentPane;
@@ -176,7 +177,7 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 				mObsluga.dodajPracownika();
 			}
 		});
-		
+
 		btnDodajPracownika.setBounds(46, 40, 191, 39);
 		mButtonPanel.add(btnDodajPracownika);
 
@@ -308,7 +309,7 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 		return mFiltrPracownika;
 	}
 
-	public ZestawienieBean getPracownik()
+	public PracownikDTO getPracownik()
 	{
 		return mPracownik;
 	}
@@ -338,7 +339,7 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 		mFiltrPracownika = pmFiltrPracownika;
 	}
 
-	public void setPracownik(ZestawienieBean pmPracownik)
+	public void setPracownik(PracownikDTO pmPracownik)
 	{
 		mPracownik = pmPracownik;
 	}
@@ -394,12 +395,12 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 	}
 
 	@Override
-	public ZestawienieBean getPracownikZTabeli()
+	public PracownikDTO getPracownikZTabeli()
 	{
-		ZestawienieBean lvPracownik = new ZestawienieBean();
+		PracownikDTO lvPracownik = new PracownikDTO();
 		int lvRow = tbPracownicy.convertRowIndexToModel(getZaznaczenieTabeli());
-		lvPracownik.setLvID((Integer) tbPracownicy.getModel().getValueAt(lvRow, 0));
-		lvPracownik.setLvNazwa((String) tbPracownicy.getModel().getValueAt(lvRow, 1));
+		lvPracownik.setId((Integer) tbPracownicy.getModel().getValueAt(lvRow, 0));
+		lvPracownik.setNazwa((String) tbPracownicy.getModel().getValueAt(lvRow, 1));
 
 		return lvPracownik;
 	}

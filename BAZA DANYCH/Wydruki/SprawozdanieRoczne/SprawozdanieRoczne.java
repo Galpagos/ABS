@@ -37,11 +37,23 @@ public class SprawozdanieRoczne
 		mRepo = new SprawozdaniaRepository();
 		mDane = pmDane;
 		mDniWolneWRoku = utworzListeDniWolnych();
-		przygotujNaglowekMiesieczny();
+		przygotujNaglowekMiesieczny(false);
 		uzupelnijAbsencje();
-		utworzWierszeTabeli();
+		utworzWierszeTabeli(false);
 		pokazResult();
 
+	}
+
+	public SprawozdanieRoczne(DaneDoSprawozdaniaMiesiecznego pmDane, boolean pmB)
+	{
+		mRepo = new SprawozdaniaRepository();
+		mDane = pmDane;
+		mDniWolneWRoku = utworzListeDniWolnych();
+		przygotujNaglowekMiesieczny(pmB);
+		uzupelnijUrlopNalezny();
+		uzupelnijAbsencje();
+		utworzWierszeTabeli(pmB);
+		pokazResult();
 	}
 
 	private void pokazResult()
@@ -54,25 +66,43 @@ public class SprawozdanieRoczne
 		mOknoWyniku.pokazWynik();
 	}
 
-	private void utworzWierszeTabeli()
+	private void utworzWierszeTabeli(boolean pmB)
 	{
-		for (PracownikDTO lvPrac : mDane.getListaPracownikow())
+		int lvIloscKolumn;
+		if (pmB)
 		{
-			Object[] lvRekord = new Object[14];
+			lvIloscKolumn = 16;
+
+		} else
+		{
+			lvIloscKolumn = 14;
+		}
+
+		for (
+
+		PracownikDTO lvPrac : mDane.getListaPracownikow())
+		{
+			Object[] lvRekord = new Object[lvIloscKolumn];
 			lvRekord[0] = lvPrac.getNazwa();
 			lvRekord[13] = "Suma";
 			for (int i = 1; i <= 12; i++)
 			{
 				lvRekord[i] = przeliczKomorke(lvPrac.getListaAbsencji(), i);
 			}
-			sumujPole13(lvRekord);
 
+			uzupelnijPoleSuma(lvRekord);
+			if (pmB)
+			{
+				lvRekord[14] = lvPrac.getUrlopNalezny();
+				Integer lvRoznica = Integer.parseInt((String) lvRekord[14]) - (Integer) lvRekord[13];
+				lvRekord[15] = lvRoznica;
+			}
 			mModel.addRow(lvRekord);
 		}
 
 	}
 
-	private void sumujPole13(Object[] pmRekord)
+	private void uzupelnijPoleSuma(Object[] pmRekord)
 	{
 		int lvSuma = 0;
 		for (int i = 1; i <= 12; i++)
@@ -170,14 +200,27 @@ public class SprawozdanieRoczne
 
 	}
 
-	private void przygotujNaglowekMiesieczny()
+	private void uzupelnijUrlopNalezny()
+	{
+		for (PracownikDTO lvPrac : mDane.getListaPracownikow())
+		{
+			lvPrac.setUrlopNalezny(mRepo.getUrlopNalezny(lvPrac.getId()));
+		}
+	}
+
+	private void przygotujNaglowekMiesieczny(boolean pmB)
 	{
 		mModel.addColumn("Pracownik");
 
 		for (int i = 0; i < 12; i++)
 			mModel.addColumn(SLMiesiace.values()[i].toString());
-		mModel.addColumn("Suma");
 
+		mModel.addColumn("Wykorzystano");
+		if (pmB)
+		{
+			mModel.addColumn("Nale¿ny Urlop");
+			mModel.addColumn("Ró¿nica");
+		}
 	}
 
 	private List<Interval> utworzListeDniWolnych()

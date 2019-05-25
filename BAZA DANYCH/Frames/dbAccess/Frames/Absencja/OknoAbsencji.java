@@ -16,9 +16,9 @@ import javax.swing.border.EmptyBorder;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Parsery.ParseryDB;
+import PrzygotowanieDanych.PracownikDTO;
 import dbAccess.Absencja;
 import dbAccess.AbsencjaBean;
-import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 import dbAccess.Components.DatePicker;
 
@@ -31,7 +31,7 @@ public class OknoAbsencji extends JDialog
 	private JFormattedTextField mDataDo;
 	private OknoAbsencji mOknoAbsencji;
 
-	public OknoAbsencji(Absencja pmAbsencja, ZestawienieBean pmPracownik)
+	public OknoAbsencji(Absencja pmAbsencja, PracownikDTO pmPracownik)
 	{
 		mOknoAbsencji = this;
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -39,7 +39,7 @@ public class OknoAbsencji extends JDialog
 		setVisible(true);
 	}
 
-	public void ustawOkno(JDialog pmFrameDiagog, Absencja pmAbsencja, ZestawienieBean pmPracownik)
+	public void ustawOkno(JDialog pmFrameDiagog, Absencja pmAbsencja, PracownikDTO pmPracownik)
 	{
 		contentPane = new JPanel();
 		pmFrameDiagog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -77,29 +77,31 @@ public class OknoAbsencji extends JDialog
 				String lvDelete = //
 						"Delete from " + Absencja.NazwaTabeli//
 								+ " where " + Absencja.kolumnaID + "= " + pmAbsencja.getId();
-			
-				if(!(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != "+pmAbsencja.getId()+ " and id_pracownika="+pmAbsencja.getIdPracownika()+" and Od_kiedy <= "+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataDo())//
-				+" and Do_Kiedy>="+ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataOd()))==0))
-				{	
+
+				if (!(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != " + pmAbsencja.getId()
+						+ " and id_pracownika=" + pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
+						+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataDo())//
+						+ " and Do_Kiedy>=" + ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataOd())) == 0))
+				{
 					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
 					return;
 				}
-				if(pmAbsencja.getDataDo().before(pmAbsencja.getDataOd())) { Komunikat.DataPoPrzedDataPrzed.pokaz();return;}
-			
+				if (pmAbsencja.getDataDo().before(pmAbsencja.getDataOd()))
+				{
+					Komunikat.DataPoPrzedDataPrzed.pokaz();
+					return;
+				}
+
 				dbAccess.Zapisz(lvDelete);
 				dbAccess.Zapisz(pmAbsencja.ZapiszDataSet());
 				pmFrameDiagog.dispose();
-					
-				
-			
-				
 
 			}
 		});
 		btnZapisz.setBounds(206, 187, 97, 25);
 		contentPane.add(btnZapisz);
 
-		lblAbsencjaPracownika = new JLabel("Absencja pracownika: " + pmPracownik.getLvNazwa());
+		lblAbsencjaPracownika = new JLabel("Absencja pracownika: " + pmPracownik.getNazwa());
 		lblAbsencjaPracownika.setBounds(13, 0, 298, 25);
 		contentPane.add(lblAbsencjaPracownika);
 
@@ -148,9 +150,9 @@ public class OknoAbsencji extends JDialog
 				Date lvData = new DatePicker().setPickedDate();
 				if (lvData == null)
 					return;
-				
+
 				mDataDo.setValue(lvData);
-				
+
 			}
 		});
 		contentPane.add(btnPickDate2);

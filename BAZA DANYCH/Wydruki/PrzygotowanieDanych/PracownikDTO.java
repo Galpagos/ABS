@@ -7,6 +7,17 @@ public class PracownikDTO
 	private int mId;
 	private String mNazwa;
 	private List<AbsencjaDTO> mListaAbsencji;
+	private String mUrlopNalezny;
+
+	public String getUrlopNalezny()
+	{
+		return mUrlopNalezny;
+	}
+
+	public void setUrlopNalezny(String pmUrlopNalezny)
+	{
+		mUrlopNalezny = pmUrlopNalezny;
+	}
 
 	public int getId()
 	{
@@ -41,5 +52,10 @@ public class PracownikDTO
 	public String toString()
 	{
 		return this.mNazwa;
+	}
+
+	public String ZapisDataSetu()
+	{
+		return "INSERT INTO Zestawienie (ID_tabeli, Pracownik) VALUES (" + getId() + ",\"" + getNazwa() + "\")";
 	}
 }

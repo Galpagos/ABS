@@ -54,4 +54,10 @@ public class SprawozdaniaRepository
 		return lvWarunek.toString();
 
 	}
+
+	public String getUrlopNalezny(int pmId)
+	{
+		return dbAccess.getRecordSets("Select Urlop_Nalezny from Zestawienie where id_tabeli=" + pmId)[0][0].toString();
+
+	}
 }

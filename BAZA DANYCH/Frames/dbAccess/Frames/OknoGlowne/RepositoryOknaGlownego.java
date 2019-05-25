@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 import Parsery.ParseryDB;
+import PrzygotowanieDanych.PracownikDTO;
 import dbAccess.AbsencjaBean;
 import dbAccess.DniWolneBean;
 import dbAccess.ZestawienieBean;
@@ -14,23 +15,23 @@ public class RepositoryOknaGlownego
 {
 	public void dodajPracownikaDB(String pmNazwa)
 	{
-		ZestawienieBean lvPracownik = new ZestawienieBean();
-		lvPracownik.setLvID(dbAccess.GetNextID(ZestawienieBean.getNazwaTabeli()));
-		lvPracownik.setLvNazwa(pmNazwa);
+		PracownikDTO lvPracownik = new PracownikDTO();
+		lvPracownik.setId(dbAccess.GetNextID("Zestawienie"));
+		lvPracownik.setNazwa(pmNazwa);
 		dbAccess.Zapisz(lvPracownik.ZapisDataSetu());
 	}
 
-	public void usunPracownikaDB(ZestawienieBean pmPracownik)
+	public void usunPracownikaDB(int pmId)
 	{
-		int liczbaAbsencji = dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika
-				+ " = " + pmPracownik.getLvID());
+		int liczbaAbsencji = dbAccess
+				.GetCount(AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika + " = " + pmId);
 		JOptionPane.showMessageDialog(null,
-				"Usunieto pracownika " + pmPracownik.getLvNazwa() + "\n oraz " + liczbaAbsencji + " jego absencji!",
-				"Usuwanie Pracownika", JOptionPane.INFORMATION_MESSAGE);
+				"Usunieto pracownika " + pmId + "\n oraz " + liczbaAbsencji + " jego absencji!", "Usuwanie Pracownika",
+				JOptionPane.INFORMATION_MESSAGE);
 		dbAccess.Zapisz("Delete * from " + AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika
-				+ " = " + pmPracownik.getLvID());
+				+ " = " + pmId);
 		dbAccess.Zapisz("Delete * from " + ZestawienieBean.getNazwaTabeli() + " where " + ZestawienieBean.getKolumnaID()
-				+ " = " + pmPracownik.getLvID());
+				+ " = " + pmId);
 	}
 
 	public Object[][] pobierzNieobecnych(Date pmNaKiedy)
@@ -60,11 +61,11 @@ public class RepositoryOknaGlownego
 		return dbAccess.getRecordSets(lvZapytanie);
 	}
 
-	public void zwolnijPracownika(ZestawienieBean pmPracownikZTabeli, Date pmData)
+	public void zwolnijPracownika(int pmId, Date pmData)
 	{
 		String lvZapytanie = //
 				"UPDATE ZESTAWIENIE SET Data_Zwolnienia = " + ParseryDB.DateParserToSQL_INSERT(pmData)
-						+ " where ID_tabeli = " + pmPracownikZTabeli.getLvID();
+						+ " where ID_tabeli = " + pmId;
 		dbAccess.Zapisz(lvZapytanie);
 
 	}

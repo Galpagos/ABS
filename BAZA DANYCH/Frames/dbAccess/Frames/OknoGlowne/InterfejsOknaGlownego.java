@@ -1,6 +1,6 @@
 package dbAccess.Frames.OknoGlowne;
 
-import dbAccess.ZestawienieBean;
+import PrzygotowanieDanych.PracownikDTO;
 
 public interface InterfejsOknaGlownego
 {
@@ -9,6 +9,6 @@ public interface InterfejsOknaGlownego
 
 	int getZaznaczenieTabeli();
 
-	ZestawienieBean getPracownikZTabeli();
+	PracownikDTO getPracownikZTabeli();
 
 }

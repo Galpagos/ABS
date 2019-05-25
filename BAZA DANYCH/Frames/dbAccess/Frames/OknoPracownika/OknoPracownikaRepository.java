@@ -4,7 +4,6 @@ import java.util.Date;
 
 import Parsery.ParseryDB;
 import dbAccess.AbsencjaBean;
-import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 
 public class OknoPracownikaRepository
@@ -15,28 +14,26 @@ public class OknoPracownikaRepository
 				+ pmIdAbsencji);
 	}
 
-	public void ustawDateUrodzenia(ZestawienieBean pmPracownika, Date pmDataUrodzenia)
+	public void ustawDateUrodzenia(int pmId, Date pmDataUrodzenia)
 	{
 		dbAccess.Zapisz("Update Zestawienie set Data_Urodzenia=" + ParseryDB.DateParserToSQL_INSERT(pmDataUrodzenia)
-				+ " where id_tabeli =" + pmPracownika.getLvID());
+				+ " where id_tabeli =" + pmId);
 
 	}
 
-	public Object[][] getDataUrodzenia(ZestawienieBean pmPracownik)
+	public Object[][] getDataUrodzenia(int pmId)
 	{
-		return dbAccess
-				.getRecordSets("Select Data_Urodzenia from Zestawienie where ID_tabeli=" + pmPracownik.getLvID());
+		return dbAccess.getRecordSets("Select Data_Urodzenia from Zestawienie where ID_tabeli=" + pmId);
 	}
 
-	public Object[][] getUrlopNalezny(ZestawienieBean pmPracownik)
+	public Object[][] getUrlopNalezny(int pmId)
 	{
-		return dbAccess.getRecordSets("Select Urlop_Nalezny from Zestawienie where ID_tabeli=" + pmPracownik.getLvID());
+		return dbAccess.getRecordSets("Select Urlop_Nalezny from Zestawienie where ID_tabeli=" + pmId);
 	}
 
-	public void ustawUrlopNalezny(ZestawienieBean pmPracownika, int pmUrlop)
+	public void ustawUrlopNalezny(int pmId, int pmUrlop)
 	{
-		dbAccess.Zapisz(
-				"Update Zestawienie set Urlop_Nalezny=" + pmUrlop + " where id_tabeli =" + pmPracownika.getLvID());
+		dbAccess.Zapisz("Update Zestawienie set Urlop_Nalezny=" + pmUrlop + " where id_tabeli =" + pmId);
 
 	}
 }

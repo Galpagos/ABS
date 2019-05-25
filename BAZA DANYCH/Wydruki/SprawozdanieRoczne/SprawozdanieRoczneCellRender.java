@@ -49,6 +49,13 @@ public class SprawozdanieRoczneCellRender extends JLabel implements TableCellRen
 		setText(mOpis[0]);
 		if (mOpis.length > 1 && !mOpis[1].equals("<html></html>"))
 			setToolTipText(mOpis[1]);
+
+		if (pmColumn == 15)
+		{
+			if (((Integer) pmValue).intValue() < 0)
+				setBackground(Color.RED);
+		}
 		return this;
+
 	}
 }
