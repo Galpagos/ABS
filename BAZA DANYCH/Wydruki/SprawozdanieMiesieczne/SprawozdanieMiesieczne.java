@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 
-import Enums.SLRodzajeAbsencji;
+import Absencja.ObslugaAbsencji;
 import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import PrzygotowanieDanych.PracownikDTO;
@@ -125,7 +125,7 @@ public class SprawozdanieMiesieczne
 			{
 				for (int i = lvAbs.getOkres().getStart().getDayOfMonth(); i <= lvAbs.getOkres().getEnd()
 						.getDayOfMonth(); i++)
-					pmRekord[i] = lvAbs.getRodzaj().toString();
+					pmRekord[i] = lvAbs;// .getRodzaj().toString();
 
 			}
 		}
@@ -150,22 +150,10 @@ public class SprawozdanieMiesieczne
 
 	private void uzupelnijAbsencje()
 	{
+		ObslugaAbsencji lvObsluga = new ObslugaAbsencji();
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow())
 		{
-			List<AbsencjaDTO> lvListaAbs = new ArrayList<AbsencjaDTO>();
-			Object[][] lvDanePracownika = mRepo.getAbsencjeDlaPracownika(lvPrac.getId(), mDane.getListaAbsencji());
-			for (int i = 0; i < lvDanePracownika.length; i++)
-			{
-				AbsencjaDTO lvAbs = new AbsencjaDTO();
-				lvAbs.setId((int) lvDanePracownika[i][0]);
-				lvAbs.setIdPracownika((int) lvDanePracownika[i][1]);
-				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
-				lvAbs.setRodzaj(SLRodzajeAbsencji.AbsencjaPoNazwie((String) lvDanePracownika[i][4]));
-				lvAbs.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDanePracownika[i][2], lvDanePracownika[i][3]));
-				
-				lvListaAbs.add(lvAbs);
-			}
-			lvPrac.setListaAbsencji(lvListaAbs);
+			lvPrac.setListaAbsencji(lvObsluga.pobierzAbsencjePracownika(lvPrac.getId()));
 		}
 
 	}
@@ -190,5 +178,6 @@ public class SprawozdanieMiesieczne
 		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()
 				+ " do " + mDane.getOkresSprawozdawczy().getEnd().toLocalDate());
 		mOknoWyniku.pokazWynik();
+
 	}
 }

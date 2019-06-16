@@ -6,12 +6,17 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
+import Absencja.ObslugaAbsencji;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
+import Pracownik.ObslugaPracownka;
+import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.PracownikDTO;
-import dbAccess.Absencja;
 import dbAccess.AbsencjaBean;
 import dbAccess.dbAccess;
 import dbAccess.Components.ComboPicker;
@@ -21,6 +26,8 @@ public class ObslugaOknaPracownika
 {
 	InterfejsOknaPracownika mOkno;
 	OknoPracownikaRepository mRepo;
+	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
+	ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
 
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika)
 	{
@@ -31,18 +38,16 @@ public class ObslugaOknaPracownika
 
 	public void DodajAbsencje()
 	{
-		Absencja lvAbsencja = new Absencja();
-		long lvTime = System.currentTimeMillis();
-		java.sql.Date lvCurrentDate = new java.sql.Date(lvTime);
+		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.urlop_wypoczynkowy;
 
 		lvAbsencja.setId(dbAccess.GetNextID(AbsencjaBean.NazwaTabeli));
 		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
-		lvAbsencja.setDataOd(lvCurrentDate);
-		lvAbsencja.setDataDo(lvCurrentDate);
-		lvAbsencja.setRodzajAbsencji(lvRodzajAbs);
+		lvAbsencja.setOkres(new Interval(DateTime.now().withTimeAtStartOfDay(),
+				DateTime.now().withTimeAtStartOfDay().plusHours(2)));
+		lvAbsencja.setRodzaj(lvRodzajAbs);
 
-		new OknoAbsencji(lvAbsencja, mOkno.getPracownika());
+		mObslugaAbsencji.modyfikujAbsencje(lvAbsencja);
 		mOkno.odswiezTabele();
 	}
 
@@ -50,7 +55,7 @@ public class ObslugaOknaPracownika
 	{
 		if (mOkno.getZaznaczenieTabeli() >= 0)
 		{
-			new OknoAbsencji(mOkno.getAbsencjeZTabeli(), mOkno.getPracownika());
+			new OknoAbsencji(mOkno.getAbsencjeZTabeli());
 			mOkno.odswiezTabele();
 		} else
 		{
@@ -116,8 +121,7 @@ public class ObslugaOknaPracownika
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date lvData = null;
 			lvData = sdf.parse(lvUrlop);
-			mRepo.ustawDateUrodzenia(mOkno.getPracownika().getId(), lvData);
-
+			mObslugaPracownika.ustawDateUrodzeniaPracownikowi(mOkno.getPracownika().getId(), lvData);
 		} catch (ParseException e)
 		{
 			JOptionPane.showMessageDialog(null, "Podaj datê w odpowiednim formacie!");

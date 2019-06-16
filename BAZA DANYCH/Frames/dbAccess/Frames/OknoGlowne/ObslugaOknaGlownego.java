@@ -5,8 +5,11 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import org.joda.time.DateTime;
+
 import Enums.Komunikat;
 import Parsery.ParseryDB;
+import Pracownik.ObslugaPracownka;
 import dbAccess.DniWolneBean;
 import dbAccess.Components.DatePicker;
 import dbAccess.Frames.OknoPracownika.OknoPracownika;
@@ -16,6 +19,7 @@ public class ObslugaOknaGlownego
 {
 	InterfejsOknaGlownego mOkno;
 	RepositoryOknaGlownego mRepo;
+	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 
 	public ObslugaOknaGlownego(InterfejsOknaGlownego pmSrcOknoGlowne)
 	{
@@ -37,14 +41,9 @@ public class ObslugaOknaGlownego
 
 	public void dodajPracownika()
 	{
-		String lvNazwa = JOptionPane.showInputDialog("Podaj nazwê pracownika: ");
-		if (lvNazwa != null)
-		{
-			mRepo.dodajPracownikaDB(lvNazwa);
-			JOptionPane.showMessageDialog(null, "Dodano Pracownika " + lvNazwa, "Dodano Pracownika",
-					JOptionPane.INFORMATION_MESSAGE);
-			mOkno.odswiezTabele();
-		}
+		mObslugaPracownika.dodajNowegoPracownika();
+		mOkno.odswiezTabele();
+
 	}
 
 	public void usunPracownika()
@@ -54,10 +53,7 @@ public class ObslugaOknaGlownego
 			Komunikat.oknoGlowneBrakZaznaczeniaWTabeli.pokaz();
 			return;
 		}
-		if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
-			return;
-
-		mRepo.usunPracownikaDB(mOkno.getPracownikZTabeli().getId());
+		mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
 		mOkno.odswiezTabele();
 
 	}
@@ -88,11 +84,19 @@ public class ObslugaOknaGlownego
 	public void dodajDzienWolny()
 	{
 		DniWolneBean lvDzienWolny = new DniWolneBean();
-		Date lvData = new DatePicker().setPickedDate();
+		DateTime lvData = new DatePicker().setPickedDateTime();
 		if (lvData == null)
 			return;
 		else
-			lvDzienWolny.setData(lvData);
+		{
+			if (lvData.getDayOfWeek() == 6 || lvData.getDayOfWeek() == 7)
+			{
+				JOptionPane.showMessageDialog(null, "Nie mo¿na dodaæ dnia wolnego w weekend!", "B³¹d",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			} else
+				lvDzienWolny.setData(lvData.toDate());
+		}
 
 		lvDzienWolny.setOpis(JOptionPane.showInputDialog("Podaj powód dnia wolnego: "));
 		if (lvDzienWolny.getOpis() == null)
@@ -114,7 +118,7 @@ public class ObslugaOknaGlownego
 			lvWynik = lvWynik + lvDane[i][0].toString() + " z powodu " + lvDane[i][1].toString() + "\n";
 		lvWynik = lvWynik.replaceAll("00:00:00.0", "");
 
-		JOptionPane.showMessageDialog(null, "Ostatnio wprowadzone 5 dni: \n" + lvWynik, "Dni Wolne",
+		JOptionPane.showMessageDialog(null, "Ostatnio wprowadzone 20 dni: \n" + lvWynik, "Dni Wolne",
 				JOptionPane.INFORMATION_MESSAGE);
 
 	}
@@ -126,16 +130,14 @@ public class ObslugaOknaGlownego
 
 	public void zwolnijPracownika()
 	{
-		if (mOkno.getZaznaczenieTabeli() >= 0)
-		{
-			Date lvData = new DatePicker().setPickedDate();
-			if (lvData != null)
-				mRepo.zwolnijPracownika(mOkno.getPracownikZTabeli().getId(), lvData);
-			mOkno.odswiezTabele();
-		} else
+		if (mOkno.getZaznaczenieTabeli() < 0)
 		{
 			JOptionPane.showMessageDialog(null, "Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE);
+			return;
 		}
+
+		mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
+		mOkno.odswiezTabele();
 
 	}
 }

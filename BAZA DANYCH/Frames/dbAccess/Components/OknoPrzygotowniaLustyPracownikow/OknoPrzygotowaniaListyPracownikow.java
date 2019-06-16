@@ -2,8 +2,6 @@ package dbAccess.Components.OknoPrzygotowniaLustyPracownikow;
 
 import java.awt.Component;
 import java.awt.Dialog.ModalityType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import Grupy.GrupaDTO;
 import PrzygotowanieDanych.PracownikDTO;
 
 public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowaniaListyPracownikow
@@ -58,50 +57,22 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 			mArrowPanel.setLayout(null);
 
 			JButton btnWszyscyWybrani = new JButton("==>");
-			btnWszyscyWybrani.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent arg0)
-				{
-					mOblsluga.wszyscyWPrawo();
-				}
-			});
+			btnWszyscyWybrani.addActionListener(e -> mOblsluga.wszyscyWPrawo());
 			btnWszyscyWybrani.setBounds(12, 122, 64, 25);
 			mArrowPanel.add(btnWszyscyWybrani);
 
 			JButton btnJedenWybrany = new JButton("-->");
-			btnJedenWybrany.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent arg0)
-				{
-					mOblsluga.dodajWPrawo();
-				}
-			});
+			btnJedenWybrany.addActionListener(e -> mOblsluga.dodajWPrawo());
 			btnJedenWybrany.setBounds(12, 160, 64, 25);
 			mArrowPanel.add(btnJedenWybrany);
 
 			JButton btnJedenOdrzucony = new JButton("<--");
-			btnJedenOdrzucony.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent pmArg0)
-				{
-					mOblsluga.dodajWLewo();
-				}
-			});
+			btnJedenOdrzucony.addActionListener(e -> mOblsluga.dodajWLewo());
 			btnJedenOdrzucony.setBounds(12, 199, 64, 25);
 			mArrowPanel.add(btnJedenOdrzucony);
 
 			JButton btnWszyscyOdrzuceni = new JButton("<==");
-			btnWszyscyOdrzuceni.addActionListener(new ActionListener()
-			{
-
-				@Override
-				public void actionPerformed(ActionEvent pmE)
-				{
-					mOblsluga.wszyscyWLewo();
-
-				}
-			});
+			btnWszyscyOdrzuceni.addActionListener(e -> mOblsluga.wszyscyWLewo());
 			btnWszyscyOdrzuceni.setBounds(12, 237, 64, 25);
 			mArrowPanel.add(btnWszyscyOdrzuceni);
 		}
@@ -127,47 +98,26 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 			buttonPane.setBounds(0, 433, 689, 52);
 			contentPanel.add(buttonPane);
 
-			JComboBox<?> cbWyborGrupy = new JComboBox(mOblsluga.pobierzGrupy());
+			JComboBox<GrupaDTO> cbWyborGrupy = new JComboBox(mOblsluga.pobierzGrupy());
 			cbWyborGrupy.setBounds(12, 13, 154, 25);
-			cbWyborGrupy.setSelectedIndex(1);
-			cbWyborGrupy.addActionListener(new ActionListener()
-			{
+			cbWyborGrupy.setSelectedItem(" ");
+			cbWyborGrupy.addActionListener(e -> {
+				mOblsluga.zasilTabele((GrupaDTO) cbWyborGrupy.getSelectedItem());
+				odswiezTabLewa();
 
-				@Override
-				public void actionPerformed(ActionEvent pmArg0)
-				{
-					mOblsluga.zasilTabele(cbWyborGrupy.getSelectedItem());
-					odswiezTabLewa();
-
-				}
 			});
 			{
 				mokButton = new JButton("OK");
 				mokButton.setBounds(487, 13, 77, 25);
 				mokButton.setActionCommand("OK");
-				mokButton.addActionListener(new ActionListener()
-				{
-
-					@Override
-					public void actionPerformed(ActionEvent pmE)
-					{
-						mOkno.dispose();
-
-					}
-				});
+				mokButton.addActionListener(e -> mOkno.dispose());
 				mOkno.getRootPane().setDefaultButton(mokButton);
 			}
 			{
 				mcancelButton = new JButton("Cancel");
-				mcancelButton.addActionListener(new ActionListener()
-				{
-
-					@Override
-					public void actionPerformed(ActionEvent pmArg0)
-					{
-						mListaPrawa = new ArrayList<PracownikDTO>();
-						mOkno.dispose();
-					}
+				mcancelButton.addActionListener(e -> {
+					mListaPrawa = new ArrayList<PracownikDTO>();
+					mOkno.dispose();
 				});
 				mcancelButton.setBounds(576, 12, 77, 25);
 				mcancelButton.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -182,14 +132,16 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 		}
 		mOkno.setTitle("Wybierz Pracowników:");
 		init();
+
 		mOkno.setVisible(true);
 	}
 
 	private void init()
 	{
-		mOblsluga.zasilTabele("Wszyscy");
+		GrupaDTO lvStart = new GrupaDTO();
+		lvStart.setNazwa("Wszyscy");
+		mOblsluga.zasilTabele(lvStart);
 		mOblsluga.wszyscyWPrawo();
-		mOblsluga.zasilTabele("Wszyscy");
 		odswiezTabLewa();
 		odswiezTabPrawa();
 

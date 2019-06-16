@@ -23,6 +23,7 @@ public class SprawozdanieMiesieczneCellRender extends JLabel implements TableCel
 	public Component getTableCellRendererComponent(JTable pmTable, Object pmValue, boolean pmIsSelected,
 			boolean pmHasFocus, int pmRow, int pmColumn)
 	{
+
 		if (pmColumn >= 1)
 			setHorizontalAlignment(SwingConstants.CENTER);
 		else

@@ -16,6 +16,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 public class DatePicker
 {
 	// define variables
@@ -159,8 +163,7 @@ public class DatePicker
 		l.setText(sdf.format(cal.getTime()));
 		// set title
 		d.setTitle(Miesiace[(36 + month) % 12]);
-			}
-	
+	}
 
 	public java.util.Date setPickedDate()
 	{
@@ -188,6 +191,18 @@ public class DatePicker
 			return null;
 
 		return LocalDate.of(year, (120 + (month)) % 12 + 1, Integer.parseInt(day));
+
+	}
+
+	public DateTime setPickedDateTime()
+	{
+		if (day.equals(""))
+			return null;
+
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+		int miesiac = (120 + (month)) % 12 + 1;
+		DateTime dt = formatter.parseDateTime(year + "-" + miesiac + "-" + Integer.parseInt(day));
+		return dt;
 
 	}
 }

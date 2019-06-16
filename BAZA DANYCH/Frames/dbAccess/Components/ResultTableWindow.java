@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +14,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import Absencja.ObslugaAbsencji;
+import PrzygotowanieDanych.AbsencjaDTO;
 
 @SuppressWarnings("serial")
 public class ResultTableWindow extends JFrame
@@ -26,7 +31,6 @@ public class ResultTableWindow extends JFrame
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(20, 20, 5, 20));
-		setAlwaysOnTop(true);
 
 		{
 			JScrollPane scrollPane = new JScrollPane();
@@ -68,6 +72,7 @@ public class ResultTableWindow extends JFrame
 						dispose();
 
 					}
+
 				});
 				buttonPane.add(cancelButton);
 			}
@@ -83,12 +88,32 @@ public class ResultTableWindow extends JFrame
 		mtable.setCellSelectionEnabled(false);
 		mtable.setColumnSelectionAllowed(true);
 		mtable.setRowSelectionAllowed(true);
+		mtable.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent pmE)
+			{
+				JTable target = (JTable) pmE.getSource();
+				int row = target.getSelectedRow();
+				int column = target.getSelectedColumn();
+				ObslugaAbsencji pmo = new ObslugaAbsencji();
+				if ((target.getValueAt(row, column) != null)
+						&& target.getValueAt(row, column).getClass() == AbsencjaDTO.class)
+				{
+					AbsencjaDTO abs = (AbsencjaDTO) target.getValueAt(row, column);
+					new ObslugaAbsencji().modyfikujAbsencje(abs);
+					repaint();
+				}
+			}
+		});
+
 	}
 
 	public void pokazWynik()
 	{
 		try
 		{
+			setAlwaysOnTop(true);
 			setVisible(true);
 		} catch (Exception e)
 		{

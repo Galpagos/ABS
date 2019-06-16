@@ -2,8 +2,8 @@ package dbAccess.Frames.OknoPracownika;
 
 import javax.swing.JLabel;
 
+import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.PracownikDTO;
-import dbAccess.Absencja;
 
 public interface InterfejsOknaPracownika
 {
@@ -11,7 +11,7 @@ public interface InterfejsOknaPracownika
 
 	public int getZaznaczenieTabeli();
 
-	public Absencja getAbsencjeZTabeli();
+	public AbsencjaDTO getAbsencjeZTabeli();
 
 	public void odswiezTabele();
 

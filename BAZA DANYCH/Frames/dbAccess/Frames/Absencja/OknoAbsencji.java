@@ -13,11 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Absencja.ObslugaAbsencji;
+import Datownik.JodaTime;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Parsery.ParseryDB;
-import PrzygotowanieDanych.PracownikDTO;
-import dbAccess.Absencja;
+import PrzygotowanieDanych.AbsencjaDTO;
 import dbAccess.AbsencjaBean;
 import dbAccess.dbAccess;
 import dbAccess.Components.DatePicker;
@@ -30,16 +31,17 @@ public class OknoAbsencji extends JDialog
 	private JFormattedTextField mDataOd;
 	private JFormattedTextField mDataDo;
 	private OknoAbsencji mOknoAbsencji;
+	private ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
 
-	public OknoAbsencji(Absencja pmAbsencja, PracownikDTO pmPracownik)
+	public OknoAbsencji(AbsencjaDTO pmABS)
 	{
 		mOknoAbsencji = this;
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		ustawOkno(mOknoAbsencji, pmAbsencja, pmPracownik);
+		ustawOkno(mOknoAbsencji, pmABS);
 		setVisible(true);
 	}
 
-	public void ustawOkno(JDialog pmFrameDiagog, Absencja pmAbsencja, PracownikDTO pmPracownik)
+	public void ustawOkno(JDialog pmFrameDiagog, AbsencjaDTO pmAbsencja)
 	{
 		contentPane = new JPanel();
 		pmFrameDiagog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -50,7 +52,7 @@ public class OknoAbsencji extends JDialog
 		contentPane.setLayout(null);
 
 		JComboBox<SLRodzajeAbsencji> cbRodzajAbsencji = new JComboBox<SLRodzajeAbsencji>(SLRodzajeAbsencji.values());
-		cbRodzajAbsencji.setSelectedItem(pmAbsencja.getRodzajAbsencji());
+		cbRodzajAbsencji.setSelectedItem(pmAbsencja.getRodzaj());
 		cbRodzajAbsencji.setBounds(169, 115, 214, 25);
 		contentPane.add(cbRodzajAbsencji);
 
@@ -70,30 +72,29 @@ public class OknoAbsencji extends JDialog
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				pmAbsencja.setDataDo((Date) mDataDo.getValue());
-				pmAbsencja.setDataOd((Date) mDataOd.getValue());
-				pmAbsencja.setRodzajAbsencji((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
+				Date lvOd = (Date) mDataOd.getValue();
+				Date lvDo = (Date) mDataDo.getValue();
 
-				String lvDelete = //
-						"Delete from " + Absencja.NazwaTabeli//
-								+ " where " + Absencja.kolumnaID + "= " + pmAbsencja.getId();
+				pmAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
+				pmAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
 
 				if (!(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != " + pmAbsencja.getId()
 						+ " and id_pracownika=" + pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
-						+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataDo())//
-						+ " and Do_Kiedy>=" + ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getDataOd())) == 0))
+						+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd().toDate()) //
+						+ " and Do_Kiedy>="
+						+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getStart().toDate())) == 0))
 				{
 					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
 					return;
 				}
-				if (pmAbsencja.getDataDo().before(pmAbsencja.getDataOd()))
+				if (!pmAbsencja.getOkres().getStart().isBefore(pmAbsencja.getOkres().getEndMillis()))
 				{
 					Komunikat.DataPoPrzedDataPrzed.pokaz();
 					return;
 				}
+				mObslugaAbsencji.usunAbsencje(pmAbsencja.getId(), true);
+				mObslugaAbsencji.dodajAbsencje(pmAbsencja);
 
-				dbAccess.Zapisz(lvDelete);
-				dbAccess.Zapisz(pmAbsencja.ZapiszDataSet());
 				pmFrameDiagog.dispose();
 
 			}
@@ -101,7 +102,7 @@ public class OknoAbsencji extends JDialog
 		btnZapisz.setBounds(206, 187, 97, 25);
 		contentPane.add(btnZapisz);
 
-		lblAbsencjaPracownika = new JLabel("Absencja pracownika: " + pmPracownik.getNazwa());
+		lblAbsencjaPracownika = new JLabel("Absencja pracownika ");
 		lblAbsencjaPracownika.setBounds(13, 0, 298, 25);
 		contentPane.add(lblAbsencjaPracownika);
 
@@ -117,12 +118,12 @@ public class OknoAbsencji extends JDialog
 		lblRodzajAbsencji.setBounds(13, 118, 128, 16);
 		contentPane.add(lblRodzajAbsencji);
 
-		mDataOd = new JFormattedTextField(pmAbsencja.getDataOd());
+		mDataOd = new JFormattedTextField(pmAbsencja.getOkres().getStart().toDate());
 		mDataOd.setBounds(169, 38, 116, 22);
 		contentPane.add(mDataOd);
 		mDataOd.setColumns(10);
 
-		mDataDo = new JFormattedTextField(pmAbsencja.getDataDo());
+		mDataDo = new JFormattedTextField(pmAbsencja.getOkres().getEnd().toDate());
 		mDataDo.setBounds(169, 75, 116, 22);
 		contentPane.add(mDataDo);
 		mDataDo.setColumns(10);

@@ -57,7 +57,7 @@ public class ObslugaOknaSprawozdan
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow().WybierzPracownikow());
 		DateTime lvStart = new DateTime().withMonthOfYear(1).withDayOfMonth(1).withYear(mRok).withTimeAtStartOfDay();
 		DateTime lvEnd = new DateTime().withMonthOfYear(12).withDayOfMonth(31).withYear(mRok).withTimeAtStartOfDay()
-				.plusHours(1);
+				.plusHours(2);
 		mDane.setOkresSprawozdawczy(new Interval(lvStart, lvEnd));
 	}
 
@@ -67,7 +67,7 @@ public class ObslugaOknaSprawozdan
 		if (lvData == null)
 			return;
 		DateTime lvStart = DateTime.parse(lvData.minusDays(lvData.getDayOfMonth() - 1).toString());
-		DateTime lvEnd = DateTime.parse(lvData.plusMonths(1).minusDays(lvData.getDayOfMonth()).toString()).plusHours(1);
+		DateTime lvEnd = DateTime.parse(lvData.plusMonths(1).minusDays(lvData.getDayOfMonth()).toString()).plusHours(2);
 		mDane.setOkresSprawozdawczy(new Interval(lvStart, lvEnd));
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow().WybierzPracownikow());
 		mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());

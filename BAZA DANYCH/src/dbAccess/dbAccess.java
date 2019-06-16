@@ -22,6 +22,7 @@ public class dbAccess
 		{
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 
+			System.out.println(instrukcja);
 			Statement s = conn.createStatement();
 			s.execute(instrukcja);
 			s.close();
@@ -235,7 +236,7 @@ public class dbAccess
 			String instrukcja = "SELECT Count(*) as total FROM " + Zapytanie;
 			Statement s = conn.createStatement();
 			s.execute(instrukcja);
-				rs = s.getResultSet();
+			rs = s.getResultSet();
 			rs.next();
 			int k = rs.getInt("total");
 

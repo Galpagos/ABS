@@ -5,12 +5,14 @@ import java.util.List;
 
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
+import Pracownik.ObslugaPracownka;
 import PrzygotowanieDanych.PracownikDTO;
 
 public class ObslugaPrzygotowaniaListyPracownikow
 {
 	OknoPrzygotowaniaListyPracownikow mOkno;
 	RepositoryPrzygotowaniaListyPracownikow mRepo;
+	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 
 	public ObslugaPrzygotowaniaListyPracownikow(OknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow)
 	{
@@ -50,18 +52,17 @@ public class ObslugaPrzygotowaniaListyPracownikow
 		mOkno.odswiezTabPrawa();
 	}
 
-	public void zasilTabele(Object pmObject)
+	public void zasilTabele(GrupaDTO pmObject)
 	{
-		List<PracownikDTO> lvDane = new ArrayList<PracownikDTO>();
-		Object[][] lvPobrane = mRepo.getListaPracownikow(pmObject);
-
-		for (Object[] lvRow : lvPobrane)
+		List<PracownikDTO> lvDane = new ArrayList<>();
+		if (pmObject.getNazwa().equals("Wszyscy"))
 		{
-			PracownikDTO lvPracownik = new PracownikDTO();
-			lvPracownik.setId((int) lvRow[0]);
-			lvPracownik.setNazwa((String) lvRow[1]);
-			lvDane.add(lvPracownik);
+			lvDane = mObslugaPracownika.getListaWszystkichPracownikow();
+		} else
+		{
+			lvDane = mObslugaPracownika.getListaPracownikowWGrupie(pmObject.getID());
 		}
+
 		mOkno.setListaLewa(lvDane);
 	}
 
@@ -100,15 +101,13 @@ public class ObslugaPrzygotowaniaListyPracownikow
 	}
 
 	public Object[] pobierzGrupy()
-	{		
-		List<GrupaDTO> lvListaCB=ObslugaGrup.getListaGrup();
-		GrupaDTO lvPusta=new GrupaDTO();
-		lvPusta.setNazwa("");
-		GrupaDTO lvWszyscy=new GrupaDTO();
-		lvPusta.setNazwa("Wszyscy");
-		
-		lvListaCB.add(0, lvPusta);
+	{
+		List<GrupaDTO> lvListaCB = ObslugaGrup.getListaGrup();
+
+		GrupaDTO lvWszyscy = new GrupaDTO();
+		lvWszyscy.setNazwa("Wszyscy");
 		lvListaCB.add(0, lvWszyscy);
+
 		return lvListaCB.toArray();
 	}
 }

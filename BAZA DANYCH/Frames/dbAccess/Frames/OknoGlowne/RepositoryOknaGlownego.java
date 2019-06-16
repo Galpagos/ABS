@@ -26,8 +26,8 @@ public class RepositoryOknaGlownego
 		int liczbaAbsencji = dbAccess
 				.GetCount(AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika + " = " + pmId);
 		JOptionPane.showMessageDialog(null,
-				"Usunieto pracownika " + pmId + "\n oraz " + liczbaAbsencji + " jego absencji!", "Usuwanie Pracownika",
-				JOptionPane.INFORMATION_MESSAGE);
+				"Usunieto pracownika o ID " + pmId + "\n oraz " + liczbaAbsencji + " jego absencji!",
+				"Usuwanie Pracownika", JOptionPane.INFORMATION_MESSAGE);
 		dbAccess.Zapisz("Delete * from " + AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika
 				+ " = " + pmId);
 		dbAccess.Zapisz("Delete * from " + ZestawienieBean.getNazwaTabeli() + " where " + ZestawienieBean.getKolumnaID()
@@ -56,8 +56,8 @@ public class RepositoryOknaGlownego
 	public Object[][] pobierzDniWolne()
 	{
 		String lvZapytanie = //
-				"SELECT top 5 TB.* from " + DniWolneBean.NazwaTabeli + " TB order by " + DniWolneBean.kolumnaData
-						+ " DESC";
+				"SELECT top 20 TB.Data, TB.Opis from " + DniWolneBean.NazwaTabeli + " TB order by "
+						+ DniWolneBean.kolumnaData + " DESC";
 		return dbAccess.getRecordSets(lvZapytanie);
 	}
 

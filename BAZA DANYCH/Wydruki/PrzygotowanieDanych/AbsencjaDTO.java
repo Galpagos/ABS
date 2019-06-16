@@ -16,9 +16,10 @@ public class AbsencjaDTO
 		return mOkres;
 	}
 
-	public void setOkres(Interval pmOkres)
+	public AbsencjaDTO setOkres(Interval pmOkres)
 	{
 		mOkres = pmOkres;
+		return this;
 	}
 
 	public SLRodzajeAbsencji getRodzaj()
@@ -26,9 +27,10 @@ public class AbsencjaDTO
 		return mRodzaj;
 	}
 
-	public void setRodzaj(SLRodzajeAbsencji pmRodzaj)
+	public AbsencjaDTO setRodzaj(SLRodzajeAbsencji pmRodzaj)
 	{
 		mRodzaj = pmRodzaj;
+		return this;
 	}
 
 	public int getId()
@@ -36,9 +38,10 @@ public class AbsencjaDTO
 		return mId;
 	}
 
-	public void setId(int pmId)
+	public AbsencjaDTO setId(int pmId)
 	{
 		mId = pmId;
+		return this;
 	}
 
 	public int getIdPracownika()
@@ -46,9 +49,10 @@ public class AbsencjaDTO
 		return mIdPracownika;
 	}
 
-	public void setIdPracownika(int pmIdPracownika)
+	public AbsencjaDTO setIdPracownika(int pmIdPracownika)
 	{
 		mIdPracownika = pmIdPracownika;
+		return this;
 	}
 
 	public String getNazwaPracownika()
@@ -56,14 +60,22 @@ public class AbsencjaDTO
 		return mNazwaPracownika;
 	}
 
-	public void setNazwaPracownika(String pmNazwaPracownika)
+	public AbsencjaDTO setNazwaPracownika(String pmNazwaPracownika)
 	{
 		mNazwaPracownika = pmNazwaPracownika;
+		return this;
 	}
 
 	private String mNazwaPracownika;
+
 	public String toString()
 	{
-		return mRodzaj +": "+mOkres.getStart() +" - " + mOkres.getEnd();
+		return mRodzaj.toString();
+	}
+
+	public static AbsencjaDTO builder()
+	{
+
+		return new AbsencjaDTO();
 	}
 }

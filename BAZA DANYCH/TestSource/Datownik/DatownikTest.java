@@ -6,8 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.junit.jupiter.api.Test;
 
 class DatownikTest
@@ -84,21 +82,4 @@ class DatownikTest
 		assertEquals(22, LicznikDaty.ileDniRobotnych(lvFirstDate, lvSecondDate));
 	}
 
-	@Test
-	void dniwolne() throws ParseException
-	{
-		SimpleDateFormat lvFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date lvFirstDate = lvFormat.parse("04/01/2019");
-		Date lvSecondDate = lvFormat.parse("04/30/2019");
-		assertEquals(3, LicznikDaty.ileDniWolnych(lvFirstDate, lvSecondDate));
-	}
-
-	@Test
-	void jedenDzienInterwal() throws ParseException
-	{
-
-		DateTime lvData = DateTime.now();
-		Interval lvOkres = new Interval(lvData, lvData);
-		assertEquals(5, lvOkres.getStart().getDayOfMonth());
-	}
 }

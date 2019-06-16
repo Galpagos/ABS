@@ -84,22 +84,7 @@ public class OknoSprawozdan extends JDialog
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				okButton.addActionListener(new ActionListener()
-				{
 
-					@Override
-					public void actionPerformed(ActionEvent pmArg0)
-					{
-						dispose();
-
-					}
-				});
-				getRootPane().setDefaultButton(okButton);
-			}
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener()

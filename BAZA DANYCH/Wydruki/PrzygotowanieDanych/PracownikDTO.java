@@ -56,6 +56,7 @@ public class PracownikDTO
 
 	public String ZapisDataSetu()
 	{
-		return "INSERT INTO Zestawienie (ID_tabeli, Pracownik) VALUES (" + getId() + ",\"" + getNazwa() + "\")";
+		return "INSERT INTO Zestawienie (ID_tabeli, Pracownik, Urlop_Nalezny) VALUES (" + getId() + ",\"" + getNazwa()
+				+ "\", 26)";
 	}
 }

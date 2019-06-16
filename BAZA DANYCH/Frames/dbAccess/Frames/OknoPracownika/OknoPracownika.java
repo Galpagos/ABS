@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,9 +21,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import Datownik.JodaTime;
 import Enums.SLRodzajeAbsencji;
+import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.PracownikDTO;
-import dbAccess.Absencja;
 import dbAccess.AbsencjaBean;
 import dbAccess.dbAccess;
 import dbAccess.dbAccess.MyTableModel;
@@ -68,26 +70,15 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 		lblGrupy.setText(mObsluga.grupyPracownika());
 
 		JButton btnUsunGrupe = new JButton("Usu\u0144 grup\u0119");
-		btnUsunGrupe.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				mObsluga.usunGrupe();
-			}
-		});
+		btnUsunGrupe.addActionListener(e -> mObsluga.usunGrupe());
 		btnUsunGrupe.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnUsunGrupe.setBounds(737, 56, 160, 22);
 		contentPane.add(btnUsunGrupe);
 
 		JButton btnUstawDatUrodzenia = new JButton("Ustaw dat\u0119 urodzenia");
-		btnUstawDatUrodzenia.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				mObsluga.ustawDateUrodzenia();
-				odswiezLblDataUrodzenia();
-
-			}
+		btnUstawDatUrodzenia.addActionListener(e -> {
+			mObsluga.ustawDateUrodzenia();
+			odswiezLblDataUrodzenia();
 		});
 		btnUstawDatUrodzenia.setBounds(315, 20, 223, 25);
 		contentPane.add(btnUstawDatUrodzenia);
@@ -239,12 +230,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 	{
 		try
 		{
-			String lvZapytanie = "Select "//
-					+ Absencja.kolumnaID + ", "//
-					+ Absencja.kolumnaRodzajAbsencji + ", "//
-					+ Absencja.kolumnaOdKiedy + ","//
-					+ Absencja.kolumnaDoKiedy//
-					+ " from " + AbsencjaBean.NazwaTabeli + " where "//
+			String lvZapytanie = "Select ID_tabeli, Rodzaj_Absencji, Od_Kiedy,Do_kiedy from Absencje where "//
 					+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getId()//
 					+ " AND (Year([" + AbsencjaBean.kolumnaDoKiedy + "]) = " + spnRok.getValue()//
 					+ " OR Year([" + AbsencjaBean.kolumnaOdKiedy + "]) = " + spnRok.getValue() + ")";
@@ -283,17 +269,19 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika
 	}
 
 	@Override
-	public Absencja getAbsencjeZTabeli()
+	public AbsencjaDTO getAbsencjeZTabeli()
 	{
-		Absencja lvAbsencja = new Absencja();
+		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 		int lvRow = tbAbsencje.convertRowIndexToModel(getZaznaczenieTabeli());
 		lvAbsencja.setId((Integer) tbAbsencje.getModel().getValueAt(lvRow, 0));
-		lvAbsencja.setDataOd((Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 2));
-		lvAbsencja.setDataDo((Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3));
+		Date lvOd = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 2);
+		Date lvDo = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3);
+		lvAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
 		lvAbsencja.setIdPracownika(mPracownik.getId());
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji
 				.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
-		lvAbsencja.setRodzajAbsencji(lvRodzajAbs);
+		lvAbsencja.setRodzaj(lvRodzajAbs);
+		lvAbsencja.setIdPracownika(mPracownik.getId());
 		return lvAbsencja;
 	}
 
