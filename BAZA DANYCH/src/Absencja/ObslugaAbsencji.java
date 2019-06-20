@@ -37,6 +37,8 @@ public class ObslugaAbsencji
 	public AbsencjaDTO pobierzAbsencjePoId(int pmId)
 	{
 		Object[][] lvDane = mRepo.getAbsencjePoId(pmId);
+		if (lvDane.length < 1)
+			return null;
 		return AbsencjaDTO.builder()//
 				.setId((int) lvDane[0][0])//
 				.setIdPracownika((int) lvDane[0][1])//
@@ -97,12 +99,14 @@ public class ObslugaAbsencji
 
 	public void modyfikujAbsencje(AbsencjaDTO pmAbs)
 	{
-		new OknoAbsencji(pmAbs);
+		if (pmAbs != null)
+			new OknoAbsencji(pmAbs);
 	}
 
 	public void dodajAbsencje(AbsencjaDTO pmAbs)
 	{
-		mRepo.dodajAbsencje(pmAbs);
+		if (pmAbs != null)
+			mRepo.dodajAbsencje(pmAbs);
 	}
 
 	public void usunAbsencje(int pmID, boolean pmPotwierdzone)

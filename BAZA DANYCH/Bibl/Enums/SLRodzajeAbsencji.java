@@ -68,4 +68,5 @@ public enum SLRodzajeAbsencji
 	{
 		return mSkrot;
 	}
+
 }

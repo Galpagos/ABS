@@ -4,6 +4,7 @@ import java.util.Date;
 
 import Parsery.ParseryDB;
 import PrzygotowanieDanych.AbsencjaDTO;
+import dbAccess.AbsencjaBean;
 import dbAccess.DniWolneBean;
 import dbAccess.dbAccess;
 
@@ -43,5 +44,13 @@ public class AbsencjaRepository
 	public void usunAbsencje(int pmID)
 	{
 		dbAccess.Zapisz("Delete * from Absencje where Id_tabeli=" + pmID);
+	}
+
+	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja)
+	{
+		return dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != " + pmAbsencja.getId()
+				+ " and id_pracownika=" + pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
+				+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd().toDate()) //
+				+ " and Do_Kiedy>=" + ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getStart().toDate()));
 	}
 }

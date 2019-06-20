@@ -33,7 +33,7 @@ public enum SLMiesiace
 
 	public Interval getOkres(int pmRok)
 	{
-		if (pmRok > 0)
+		if (getMiesiacInt() > 0)
 		{
 			DateTime lvStart = new DateTime().withYear(pmRok).withMonthOfYear(getMiesiacInt()).withDayOfMonth(1)
 					.withTimeAtStartOfDay();

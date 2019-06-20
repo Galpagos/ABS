@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import Enums.Komunikat;
 import PrzygotowanieDanych.PracownikDTO;
 import dbAccess.Components.DatePicker;
+import dbAccess.Frames.OknoPracownika.OknoPracownika;
 
 public class ObslugaPracownka
 {
@@ -99,5 +100,10 @@ public class ObslugaPracownka
 	public void ustawUrlopNalezny(int pmId, int pmWartosc)
 	{
 		mRepo.ustawUrlopNalezny(pmId, pmWartosc);
+	}
+
+	public void pokazPracownika(PracownikDTO pmPracownik)
+	{
+		new OknoPracownika(pmPracownik);
 	}
 }

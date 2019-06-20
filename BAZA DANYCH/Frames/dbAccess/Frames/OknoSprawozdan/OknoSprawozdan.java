@@ -2,8 +2,6 @@ package dbAccess.Frames.OknoSprawozdan;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -31,16 +29,9 @@ public class OknoSprawozdan extends JDialog
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		mbtnSprawozdanieRoczne = new JButton("Sprawozdanie Roczne");
 		mbtnSprawozdanieRoczne.setBounds(28, 90, 205, 42);
-		mbtnSprawozdanieRoczne.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent pmE)
-			{
-				mObsluga.sprawozdanieRoczne();
-				dispose();
-
-			}
+		mbtnSprawozdanieRoczne.addActionListener(e -> {
+			mObsluga.sprawozdanieRoczne();
+			dispose();
 		});
 
 		{
@@ -53,13 +44,9 @@ public class OknoSprawozdan extends JDialog
 		}
 		{
 			mbtnSprawozdanieMiesiczne = new JButton("Sprawozdanie miesi\u0119czne");
-			mbtnSprawozdanieMiesiczne.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					mObsluga.sprawozdanieMiesieczne();
-					dispose();
-				}
+			mbtnSprawozdanieMiesiczne.addActionListener(e -> {
+				mObsluga.sprawozdanieMiesieczne();
+				dispose();
 			});
 			mbtnSprawozdanieMiesiczne.setBounds(28, 28, 205, 42);
 		}
@@ -70,37 +57,19 @@ public class OknoSprawozdan extends JDialog
 		contentPanel.add(mbtnSprawozdanieMiesiczne);
 
 		JButton btnRoczneUrlopy = new JButton("Sprawozdanie Roczne Urlopy");
-		btnRoczneUrlopy.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				mObsluga.sprawozdanieRoczneUrlopy();
-				dispose();
-			}
+		btnRoczneUrlopy.addActionListener(e -> {
+			mObsluga.sprawozdanieRoczneUrlopy();
+			dispose();
 		});
 		btnRoczneUrlopy.setBounds(28, 153, 205, 42);
 		contentPanel.add(btnRoczneUrlopy);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener()
-				{
-
-					@Override
-					public void actionPerformed(ActionEvent pmArg0)
-					{
-						dispose();
-
-					}
-				});
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
+		JPanel buttonPane = new JPanel();
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e -> dispose());
+		cancelButton.setActionCommand("Cancel");
+		buttonPane.add(cancelButton);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setVisible(true);
 	}

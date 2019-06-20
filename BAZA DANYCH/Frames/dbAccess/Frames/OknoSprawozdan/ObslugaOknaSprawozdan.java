@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-
+import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import SprawozdanieMiesieczne.SprawozdanieMiesieczne;
@@ -55,10 +53,7 @@ public class ObslugaOknaSprawozdan
 		}
 
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow().WybierzPracownikow());
-		DateTime lvStart = new DateTime().withMonthOfYear(1).withDayOfMonth(1).withYear(mRok).withTimeAtStartOfDay();
-		DateTime lvEnd = new DateTime().withMonthOfYear(12).withDayOfMonth(31).withYear(mRok).withTimeAtStartOfDay()
-				.plusHours(2);
-		mDane.setOkresSprawozdawczy(new Interval(lvStart, lvEnd));
+		mDane.setOkresSprawozdawczy(SLMiesiace.Rok.getOkres(mRok));
 	}
 
 	private void przygotujDaneMiesieczne()
@@ -66,9 +61,7 @@ public class ObslugaOknaSprawozdan
 		LocalDate lvData = new DatePicker().setPickedLocalDate();
 		if (lvData == null)
 			return;
-		DateTime lvStart = DateTime.parse(lvData.minusDays(lvData.getDayOfMonth() - 1).toString());
-		DateTime lvEnd = DateTime.parse(lvData.plusMonths(1).minusDays(lvData.getDayOfMonth()).toString()).plusHours(2);
-		mDane.setOkresSprawozdawczy(new Interval(lvStart, lvEnd));
+		mDane.setOkresSprawozdawczy(SLMiesiace.values()[lvData.getMonthValue() - 1].getOkres(lvData.getYear()));
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow().WybierzPracownikow());
 		mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());
 	}

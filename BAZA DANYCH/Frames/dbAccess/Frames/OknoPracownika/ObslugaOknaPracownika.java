@@ -6,10 +6,8 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-
 import Absencja.ObslugaAbsencji;
+import Datownik.JodaTime;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Grupy.GrupaDTO;
@@ -43,8 +41,7 @@ public class ObslugaOknaPracownika
 
 		lvAbsencja.setId(dbAccess.GetNextID(AbsencjaBean.NazwaTabeli));
 		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
-		lvAbsencja.setOkres(new Interval(DateTime.now().withTimeAtStartOfDay(),
-				DateTime.now().withTimeAtStartOfDay().plusHours(2)));
+		lvAbsencja.setOkres(JodaTime.okresOdDo(new Date(), new Date()));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
 
 		mObslugaAbsencji.modyfikujAbsencje(lvAbsencja);
@@ -53,13 +50,13 @@ public class ObslugaOknaPracownika
 
 	public void ModyfikujAbsencje()
 	{
-		if (mOkno.getZaznaczenieTabeli() >= 0)
+		if (mOkno.getZaznaczenieTabeli() < 0)
+		{
+			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
+		} else
 		{
 			new OknoAbsencji(mOkno.getAbsencjeZTabeli());
 			mOkno.odswiezTabele();
-		} else
-		{
-			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
 		}
 	}
 
@@ -113,7 +110,8 @@ public class ObslugaOknaPracownika
 
 	public void ustawDateUrodzenia()
 	{
-		String lvUrlop = new JOptionPane().showInputDialog("Podaj datê RRRR-MM-DD");
+		new JOptionPane();
+		String lvUrlop = JOptionPane.showInputDialog("Podaj datê RRRR-MM-DD");
 		if (lvUrlop == null)
 			return;
 		try
@@ -146,7 +144,8 @@ public class ObslugaOknaPracownika
 
 	public void ustawUrlopNalezny()
 	{
-		String lvUrlop = new JOptionPane().showInputDialog("Podaj Wartoœæ");
+		new JOptionPane();
+		String lvUrlop = JOptionPane.showInputDialog("Podaj Wartoœæ");
 		int lvWartosc;
 		try
 		{

@@ -12,7 +12,6 @@ import Parsery.ParseryDB;
 import Pracownik.ObslugaPracownka;
 import dbAccess.DniWolneBean;
 import dbAccess.Components.DatePicker;
-import dbAccess.Frames.OknoPracownika.OknoPracownika;
 import dbAccess.Frames.OknoSprawozdan.OknoSprawozdan;
 
 public class ObslugaOknaGlownego
@@ -29,13 +28,12 @@ public class ObslugaOknaGlownego
 
 	public void pokazPracownika()
 	{
-		if (mOkno.getZaznaczenieTabeli() >= 0)
-		{
-			new OknoPracownika(mOkno.getPracownikZTabeli());
-
-		} else
+		if (mOkno.getZaznaczenieTabeli() < 0)
 		{
 			Komunikat.oknoGlowneBrakZaznaczeniaWTabeli.pokaz();
+		} else
+		{
+			mObslugaPracownika.pokazPracownika(mOkno.getPracownikZTabeli());
 		}
 	}
 
@@ -43,7 +41,6 @@ public class ObslugaOknaGlownego
 	{
 		mObslugaPracownika.dodajNowegoPracownika();
 		mOkno.odswiezTabele();
-
 	}
 
 	public void usunPracownika()
@@ -51,11 +48,11 @@ public class ObslugaOknaGlownego
 		if (mOkno.getZaznaczenieTabeli() < 0)
 		{
 			Komunikat.oknoGlowneBrakZaznaczeniaWTabeli.pokaz();
-			return;
+		} else
+		{
+			mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
+			mOkno.odswiezTabele();
 		}
-		mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
-		mOkno.odswiezTabele();
-
 	}
 
 	public void pokazNieobecnych() throws ParseException
@@ -133,11 +130,10 @@ public class ObslugaOknaGlownego
 		if (mOkno.getZaznaczenieTabeli() < 0)
 		{
 			JOptionPane.showMessageDialog(null, "Wybierz pracownika!", "Ostrze¿enie", JOptionPane.WARNING_MESSAGE);
-			return;
+		} else
+		{
+			mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
+			mOkno.odswiezTabele();
 		}
-
-		mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
-		mOkno.odswiezTabele();
-
 	}
 }

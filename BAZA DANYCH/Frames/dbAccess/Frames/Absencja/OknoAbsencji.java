@@ -14,13 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Absencja.ObslugaAbsencji;
+import Absencja.WalidatorAbsenci;
 import Datownik.JodaTime;
-import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
-import Parsery.ParseryDB;
 import PrzygotowanieDanych.AbsencjaDTO;
-import dbAccess.AbsencjaBean;
-import dbAccess.dbAccess;
 import dbAccess.Components.DatePicker;
 
 @SuppressWarnings("serial")
@@ -32,6 +29,7 @@ public class OknoAbsencji extends JDialog
 	private JFormattedTextField mDataDo;
 	private OknoAbsencji mOknoAbsencji;
 	private ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
+	private WalidatorAbsenci mWalidator = new WalidatorAbsenci();
 
 	public OknoAbsencji(AbsencjaDTO pmABS)
 	{
@@ -57,46 +55,31 @@ public class OknoAbsencji extends JDialog
 		contentPane.add(cbRodzajAbsencji);
 
 		JButton btnWyjcie = new JButton("Wyj\u015Bcie");
-		btnWyjcie.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				pmFrameDiagog.dispose();
-			}
-		});
+		btnWyjcie.addActionListener(e -> pmFrameDiagog.dispose());
 		btnWyjcie.setBounds(323, 187, 97, 25);
 		contentPane.add(btnWyjcie);
 
 		JButton btnZapisz = new JButton("Zapisz");
-		btnZapisz.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
+		btnZapisz.addActionListener(e -> {
+			Date lvOd = (Date) mDataOd.getValue();
+			Date lvDo = (Date) mDataDo.getValue();
+
+			if (!mWalidator.czyPrawidloweDaty(lvOd, lvDo))
+				return;
+			pmAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
+			pmAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
+
+			if (mWalidator.czyWystepujeAbsencjaWOkresie(pmAbsencja))
+				return;
+			AbsencjaDTO lvUsuwana = mObslugaAbsencji.pobierzAbsencjePoId(pmAbsencja.getId());
+			mObslugaAbsencji.usunAbsencje(pmAbsencja.getId(), true);
+			if (mWalidator.czyPrzekraczaLimity(pmAbsencja))
 			{
-				Date lvOd = (Date) mDataOd.getValue();
-				Date lvDo = (Date) mDataDo.getValue();
-
-				pmAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
-				pmAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
-
-				if (!(dbAccess.GetCount(AbsencjaBean.NazwaTabeli + " where id_tabeli != " + pmAbsencja.getId()
-						+ " and id_pracownika=" + pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
-						+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd().toDate()) //
-						+ " and Do_Kiedy>="
-						+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getStart().toDate())) == 0))
-				{
-					Komunikat.Nachodz¹NaSiebieOkresy.pokaz();
-					return;
-				}
-				if (!pmAbsencja.getOkres().getStart().isBefore(pmAbsencja.getOkres().getEndMillis()))
-				{
-					Komunikat.DataPoPrzedDataPrzed.pokaz();
-					return;
-				}
-				mObslugaAbsencji.usunAbsencje(pmAbsencja.getId(), true);
+				mObslugaAbsencji.dodajAbsencje(lvUsuwana);
+			} else
+			{
 				mObslugaAbsencji.dodajAbsencje(pmAbsencja);
-
 				pmFrameDiagog.dispose();
-
 			}
 		});
 		btnZapisz.setBounds(206, 187, 97, 25);

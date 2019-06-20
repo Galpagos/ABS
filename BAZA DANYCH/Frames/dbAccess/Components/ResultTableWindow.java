@@ -113,8 +113,8 @@ public class ResultTableWindow extends JFrame
 	{
 		try
 		{
-			setAlwaysOnTop(true);
 			setVisible(true);
+
 		} catch (Exception e)
 		{
 			e.printStackTrace();
