@@ -66,19 +66,24 @@ public class OknoAbsencji extends JDialog
 
 			if (!mWalidator.czyPrawidloweDaty(lvOd, lvDo))
 				return;
-			pmAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
-			pmAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
+			new AbsencjaDTO();
+			AbsencjaDTO lvNowaAbsencja = AbsencjaDTO.builder().setId(pmAbsencja.getId())
+					.setIdPracownika(pmAbsencja.getIdPracownika());
+			lvNowaAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
+			lvNowaAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
 
-			if (mWalidator.czyWystepujeAbsencjaWOkresie(pmAbsencja))
+			if (mWalidator.czyWystepujeAbsencjaWOkresie(lvNowaAbsencja))
 				return;
 			AbsencjaDTO lvUsuwana = mObslugaAbsencji.pobierzAbsencjePoId(pmAbsencja.getId());
 			mObslugaAbsencji.usunAbsencje(pmAbsencja.getId(), true);
-			if (mWalidator.czyPrzekraczaLimity(pmAbsencja))
+			if (mWalidator.czyPrzekraczaLimity(lvNowaAbsencja))
 			{
 				mObslugaAbsencji.dodajAbsencje(lvUsuwana);
 			} else
 			{
-				mObslugaAbsencji.dodajAbsencje(pmAbsencja);
+				mObslugaAbsencji.dodajAbsencje(lvNowaAbsencja);
+				pmAbsencja.setOkres(lvNowaAbsencja.getOkres());
+				pmAbsencja.setRodzaj(lvNowaAbsencja.getRodzaj());
 				pmFrameDiagog.dispose();
 			}
 		});

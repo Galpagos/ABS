@@ -1,6 +1,7 @@
 package Absencja;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,7 +10,9 @@ import javax.swing.JOptionPane;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 
+import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import PrzygotowanieDanych.AbsencjaDTO;
 import dbAccess.Frames.Absencja.OknoAbsencji;
@@ -94,7 +97,11 @@ public class ObslugaAbsencji
 
 		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres)));
 
-		return zliczDniRoboczeWAbsencjach(lvLista).get(pmRodzaj);
+		int lvWynik = 0;
+		Map<SLRodzajeAbsencji, Integer> lvMapa = zliczDniKalendarzoweWAbsencjach(lvLista);
+		if (lvMapa.containsKey(pmRodzaj))
+			lvWynik = lvMapa.get(pmRodzaj);
+		return lvWynik;
 	}
 
 	public void modyfikujAbsencje(AbsencjaDTO pmAbs)
@@ -113,5 +120,60 @@ public class ObslugaAbsencji
 	{
 		if (pmPotwierdzone || JOptionPane.showConfirmDialog(null, "Czy na pewno usun¹æ?") == JOptionPane.YES_OPTION)
 			mRepo.usunAbsencje(pmID);
+	}
+
+	public int ileDniKalendarzowychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj,
+			Interval pmOkres)
+	{
+		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmIdPracownika).stream()//
+				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
+				.collect(Collectors.toList());
+
+		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres)));
+		int lvWynik = 0;
+		Map<SLRodzajeAbsencji, Integer> lvMapa = zliczDniKalendarzoweWAbsencjach(lvLista);
+		if (lvMapa.containsKey(pmRodzaj))
+			lvWynik = lvMapa.get(pmRodzaj);
+		return lvWynik;
+	}
+
+	public Map<SLRodzajeAbsencji, Integer> zliczDniKalendarzoweWAbsencjach(List<AbsencjaDTO> pmLista)
+	{
+		return pmLista //
+				.stream() //
+				.collect(Collectors.groupingBy(AbsencjaDTO::getRodzaj,
+						Collectors.summingInt(this::ileDniKalendarzowych)));
+	}
+
+	public int ileDniKalendarzowych(AbsencjaDTO pmAbsencja)
+	{
+		if (pmAbsencja.getOkres() == null)
+			return 0;
+		return Math.toIntExact(pmAbsencja.getOkres().toDuration().getStandardDays()) + 1;
+	}
+
+	private DateTime lvDataGraniczna = null;
+	private int licznik = 33;
+
+	public LocalDate dzienKoncaWynagrodzeniaChorobowego(AbsencjaDTO pmAbsencja, int pmLimit)
+	{
+		licznik = pmLimit;
+		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
+		lvLista.add(pmAbsencja);
+		lvLista = lvLista.stream()//
+				.filter(lvAbs -> lvAbs.getRodzaj() == SLRodzajeAbsencji.szpital
+						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4 || lvAbs.getRodzaj() == SLRodzajeAbsencji.ci¹¿a)//
+				.sorted(Comparator.comparing(AbsencjaDTO::getStart)).collect(Collectors.toList());
+
+		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(
+				lvAbs2.getOkres().overlap(SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))));
+
+		lvLista.stream().forEach(lvAbs -> {
+			licznik = licznik - ileDniKalendarzowych(lvAbs);
+			if (licznik <= 0)
+				lvDataGraniczna = lvAbs.getOkres().getEnd().plusDays(licznik);
+
+		});
+		return lvDataGraniczna.toLocalDate();
 	}
 }

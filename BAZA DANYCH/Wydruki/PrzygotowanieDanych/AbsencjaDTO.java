@@ -1,5 +1,6 @@
 package PrzygotowanieDanych;
 
+import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 import Enums.SLRodzajeAbsencji;
@@ -14,6 +15,11 @@ public class AbsencjaDTO
 	public Interval getOkres()
 	{
 		return mOkres;
+	}
+
+	public DateTime getStart()
+	{
+		return getOkres().getStart();
 	}
 
 	public AbsencjaDTO setOkres(Interval pmOkres)

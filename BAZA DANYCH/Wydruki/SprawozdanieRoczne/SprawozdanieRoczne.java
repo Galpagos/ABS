@@ -20,9 +20,10 @@ import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import PrzygotowanieDanych.PracownikDTO;
 import SprawozdanieMiesieczne.SprawozdaniaRepository;
+import SprawozdanieMiesieczne.wynikWResultTableWindow;
 import dbAccess.Components.ResultTableWindow;
 
-public class SprawozdanieRoczne
+public class SprawozdanieRoczne implements wynikWResultTableWindow
 {
 	DefaultTableModel mModel = new DefaultTableModel();
 	ResultTableWindow mOknoWyniku;
@@ -32,14 +33,17 @@ public class SprawozdanieRoczne
 	private List<Interval> mDniWolneWRoku;
 	private List<SLRodzajeAbsencji> mListaAbsWMiesiacu;
 
+	private boolean mCzyWersjaRozszerzona;
+
 	public SprawozdanieRoczne(DaneDoSprawozdaniaMiesiecznego pmDane)
 	{
 		mRepo = new SprawozdaniaRepository();
 		mDane = pmDane;
 		mDniWolneWRoku = utworzListeDniWolnych();
-		przygotujNaglowekMiesieczny(false);
+		mCzyWersjaRozszerzona = false;
+		przygotujNaglowekMiesieczny();
 		uzupelnijAbsencje();
-		utworzWierszeTabeli(false);
+		utworzWierszeTabeli();
 		pokazResult();
 
 	}
@@ -49,10 +53,12 @@ public class SprawozdanieRoczne
 		mRepo = new SprawozdaniaRepository();
 		mDane = pmDane;
 		mDniWolneWRoku = utworzListeDniWolnych();
-		przygotujNaglowekMiesieczny(pmB);
+		mCzyWersjaRozszerzona = true;
+		przygotujNaglowekMiesieczny();
 		uzupelnijUrlopNalezny();
 		uzupelnijAbsencje();
-		utworzWierszeTabeli(pmB);
+
+		utworzWierszeTabeli();
 		pokazResult();
 	}
 
@@ -60,16 +66,17 @@ public class SprawozdanieRoczne
 	{
 		mOknoWyniku = new ResultTableWindow();
 		mOknoWyniku.ustawTabele(mModel);
+		mOknoWyniku.setDane(this);
 		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieRoczneCellRender());
 		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()
 				+ " do " + mDane.getOkresSprawozdawczy().getEnd().toLocalDate());
 		mOknoWyniku.pokazWynik();
 	}
 
-	private void utworzWierszeTabeli(boolean pmB)
+	private void utworzWierszeTabeli()
 	{
 		int lvIloscKolumn;
-		if (pmB)
+		if (mCzyWersjaRozszerzona)
 		{
 			lvIloscKolumn = 16;
 
@@ -91,7 +98,7 @@ public class SprawozdanieRoczne
 			}
 
 			uzupelnijPoleSuma(lvRekord);
-			if (pmB)
+			if (mCzyWersjaRozszerzona)
 			{
 				lvRekord[14] = lvPrac.getUrlopNalezny();
 				Integer lvRoznica = Integer.parseInt((String) lvRekord[14]) - (Integer) lvRekord[13];
@@ -208,7 +215,7 @@ public class SprawozdanieRoczne
 		}
 	}
 
-	private void przygotujNaglowekMiesieczny(boolean pmB)
+	private void przygotujNaglowekMiesieczny()
 	{
 		mModel.addColumn("Pracownik");
 
@@ -216,7 +223,7 @@ public class SprawozdanieRoczne
 			mModel.addColumn(SLMiesiace.values()[i].toString());
 
 		mModel.addColumn("Wykorzystano");
-		if (pmB)
+		if (mCzyWersjaRozszerzona)
 		{
 			mModel.addColumn("Nale¿ny Urlop");
 			mModel.addColumn("Ró¿nica");
@@ -235,6 +242,38 @@ public class SprawozdanieRoczne
 		}
 		return lvDniWolne;
 
+	}
+
+	@Override
+	public Object[] przeliczWierszTabeli(PracownikDTO pmPrac)
+	{
+		uzupelnijAbsencje();
+		int lvIloscKolumn;
+		if (mCzyWersjaRozszerzona)
+		{
+			lvIloscKolumn = 16;
+
+		} else
+		{
+			lvIloscKolumn = 14;
+		}
+
+		Object[] lvRekord = new Object[lvIloscKolumn];
+		lvRekord[0] = pmPrac.getNazwa();
+		lvRekord[13] = "Suma";
+		for (int i = 1; i <= 12; i++)
+		{
+			lvRekord[i] = przeliczKomorke(pmPrac.getListaAbsencji(), i);
+		}
+
+		uzupelnijPoleSuma(lvRekord);
+		if (mCzyWersjaRozszerzona)
+		{
+			lvRekord[14] = pmPrac.getUrlopNalezny();
+			Integer lvRoznica = Integer.parseInt((String) lvRekord[14]) - (Integer) lvRekord[13];
+			lvRekord[15] = lvRoznica;
+		}
+		return lvRekord;
 	}
 
 }

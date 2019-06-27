@@ -18,7 +18,7 @@ import PrzygotowanieDanych.PracownikDTO;
 import PrzygotowanieDanych.SprawozdanieMiesieczneCellRender;
 import dbAccess.Components.ResultTableWindow;
 
-public class SprawozdanieMiesieczne
+public class SprawozdanieMiesieczne implements wynikWResultTableWindow
 {
 	DefaultTableModel mModel = new DefaultTableModel();
 	DaneDoSprawozdaniaMiesiecznego mDane;
@@ -44,7 +44,6 @@ public class SprawozdanieMiesieczne
 
 	private void utworzWierszeTabeli()
 	{
-
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow())
 		{
 			Object[] lvRekord = new Object[mLiczbaDniWMiesiacu + 1];
@@ -52,7 +51,25 @@ public class SprawozdanieMiesieczne
 			uwzglednijAbsencjePracowniow(lvRekord, lvPrac);
 			mModel.addRow(lvRekord);
 		}
+	}
 
+	public Object[] przeliczWierszTabeli(PracownikDTO lvPrac)
+	{
+		ObslugaAbsencji lvObsluga = new ObslugaAbsencji();
+		lvPrac.setListaAbsencji(lvObsluga.pobierzAbsencjePracownika(lvPrac.getId()));
+		if (lvPrac.getListaAbsencji() != null)
+		{
+			for (AbsencjaDTO lvAbs : lvPrac.getListaAbsencji())
+			{
+				Interval lvNowyOkres = lvAbs.getOkres().overlap(mDane.getOkresSprawozdawczy());
+				lvAbs.setOkres(lvNowyOkres);
+			}
+		}
+
+		Object[] lvRekord = new Object[mLiczbaDniWMiesiacu + 1];
+		uwzglednijDniWolneiWeekendy(lvRekord);
+		uwzglednijAbsencjePracowniow(lvRekord, lvPrac);
+		return lvRekord;
 	}
 
 	private void uwzglednijDniWolneiWeekendy(Object[] pmRekord)
@@ -117,7 +134,7 @@ public class SprawozdanieMiesieczne
 
 	private void uwzglednijAbsencjePracowniow(Object[] pmRekord, PracownikDTO pmPrac)
 	{
-		pmRekord[0] = pmPrac.getNazwa();
+		pmRekord[0] = pmPrac;
 
 		for (AbsencjaDTO lvAbs : pmPrac.getListaAbsencji())
 		{
@@ -173,6 +190,7 @@ public class SprawozdanieMiesieczne
 	public void pokazResult()
 	{
 		mOknoWyniku = new ResultTableWindow();
+		mOknoWyniku.setDane(this);
 		mOknoWyniku.ustawTabele(mModel);
 		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieMiesieczneCellRender());
 		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()

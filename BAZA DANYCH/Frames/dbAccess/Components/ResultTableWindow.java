@@ -15,8 +15,10 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import Absencja.ObslugaAbsencji;
+import Pracownik.ObslugaPracownka;
 import PrzygotowanieDanych.AbsencjaDTO;
+import PrzygotowanieDanych.PracownikDTO;
+import SprawozdanieMiesieczne.wynikWResultTableWindow;
 
 @SuppressWarnings("serial")
 public class ResultTableWindow extends JFrame
@@ -24,6 +26,17 @@ public class ResultTableWindow extends JFrame
 
 	private final JPanel contentPanel;
 	private JTable mtable;
+	private wynikWResultTableWindow mDane;
+
+	public wynikWResultTableWindow getDane()
+	{
+		return mDane;
+	}
+
+	public void setDane(wynikWResultTableWindow pmDane)
+	{
+		mDane = pmDane;
+	}
 
 	public ResultTableWindow()
 	{
@@ -96,12 +109,30 @@ public class ResultTableWindow extends JFrame
 				JTable target = (JTable) pmE.getSource();
 				int row = target.getSelectedRow();
 				int column = target.getSelectedColumn();
-				ObslugaAbsencji pmo = new ObslugaAbsencji();
+
+				if ((target.getValueAt(row, column) != null)
+						&& target.getValueAt(row, column).getClass() == PracownikDTO.class)
+				{
+					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, column);
+					new ObslugaPracownka().pokazPracownika(lvPracownik);
+					int k = target.getModel().getColumnCount();
+					Object[] lvPrzeliczonyWiersz = mDane.przeliczWierszTabeli(lvPracownik);
+					for (int i = 0; i < k; i++)
+					{
+						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
+					}
+				}
 				if ((target.getValueAt(row, column) != null)
 						&& target.getValueAt(row, column).getClass() == AbsencjaDTO.class)
 				{
-					AbsencjaDTO abs = (AbsencjaDTO) target.getValueAt(row, column);
-					new ObslugaAbsencji().modyfikujAbsencje(abs);
+					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, 0);
+					new ObslugaPracownka().pokazPracownika(lvPracownik);
+					int k = target.getModel().getColumnCount();
+					Object[] lvPrzeliczonyWiersz = mDane.przeliczWierszTabeli(lvPracownik);
+					for (int i = 0; i < k; i++)
+					{
+						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
+					}
 					repaint();
 				}
 			}

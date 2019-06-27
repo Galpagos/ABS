@@ -89,12 +89,28 @@ public class ObslugaPracownka
 		return (Date) lvDane[0][0];
 	}
 
+	public Date getDataUrodzenia(int pmPracownikID)
+	{
+		Object[][] lvDane = mRepo.getDataUrodzenia(pmPracownikID);
+		if (lvDane[0][0] == null)
+			return null;
+		return (Date) lvDane[0][0];
+	}
+
 	public String getUrlop(PracownikDTO pmPracownik)
 	{
 		Object[][] lvDane = mRepo.getUrlopNalezny(pmPracownik.getId());
 		if (lvDane[0][0] == null)
 			return "";
 		return lvDane[0][0].toString();
+	}
+
+	public int getUrlop(int pmPracownikID)
+	{
+		Object[][] lvDane = mRepo.getUrlopNalezny(pmPracownikID);
+		if (lvDane[0][0] == null)
+			return 0;
+		return Integer.valueOf(lvDane[0][0].toString());
 	}
 
 	public void ustawUrlopNalezny(int pmId, int pmWartosc)
