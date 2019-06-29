@@ -54,8 +54,7 @@ public class ResultTableWindow extends JFrame
 			contentPanel.add(scrollPane, BorderLayout.CENTER);
 			{
 				mtable = new JTable();
-				// mtable.setDefaultRenderer(Object.class, new
-				// SprawozdanieMiesieczneCellRender());
+
 				scrollPane.setViewportView(mtable);
 			}
 		}

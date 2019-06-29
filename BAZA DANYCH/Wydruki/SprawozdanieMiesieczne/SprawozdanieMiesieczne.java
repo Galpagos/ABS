@@ -16,7 +16,6 @@ import Enums.SLRodzajeAbsencji;
 import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import PrzygotowanieDanych.PracownikDTO;
-import PrzygotowanieDanych.SprawozdanieMiesieczneCellRender;
 import dbAccess.Components.ResultTableWindow;
 
 public class SprawozdanieMiesieczne implements wynikWResultTableWindow

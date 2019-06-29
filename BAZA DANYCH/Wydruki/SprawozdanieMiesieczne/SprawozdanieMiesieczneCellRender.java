@@ -1,4 +1,4 @@
-package PrzygotowanieDanych;
+package SprawozdanieMiesieczne;
 
 import java.awt.Color;
 import java.awt.Component;
