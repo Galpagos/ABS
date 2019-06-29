@@ -12,6 +12,7 @@ import org.joda.time.Duration;
 import org.joda.time.Interval;
 
 import Absencja.ObslugaAbsencji;
+import Enums.SLRodzajeAbsencji;
 import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import PrzygotowanieDanych.PracownikDTO;
@@ -170,7 +171,19 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow
 		ObslugaAbsencji lvObsluga = new ObslugaAbsencji();
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow())
 		{
-			lvPrac.setListaAbsencji(lvObsluga.pobierzAbsencjePracownika(lvPrac.getId()));
+			List<AbsencjaDTO> lvListaAbs = new ArrayList<>();
+			Object[][] lvDanePracownika = mRepo.getAbsencjeDlaPracownika(lvPrac.getId(), mDane.getListaAbsencji());
+			for (int i = 0; i < lvDanePracownika.length; i++)
+			{
+				AbsencjaDTO lvAbs = new AbsencjaDTO();
+				lvAbs.setId((int) lvDanePracownika[i][0]);
+				lvAbs.setIdPracownika((int) lvDanePracownika[i][1]);
+				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
+				lvAbs.setRodzaj(SLRodzajeAbsencji.AbsencjaPoNazwie((String) lvDanePracownika[i][4]));
+				lvAbs.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDanePracownika[i][2], lvDanePracownika[i][3]));
+				lvListaAbs.add(lvAbs);
+			}
+			lvPrac.setListaAbsencji(lvListaAbs);
 		}
 
 	}

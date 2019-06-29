@@ -2,10 +2,13 @@ package dbAccess.Components;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
+import java.text.MessageFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -69,6 +72,26 @@ public class ResultTableWindow extends JFrame
 						dispose();
 					}
 				});
+				{
+					JButton btnPrint = new JButton("Drukuj");
+
+					btnPrint.addActionListener(e -> {
+						try
+						{
+							MessageFormat header = new MessageFormat("Sprawozdanie miesiêczne");
+							mtable.print(JTable.PrintMode.FIT_WIDTH, header, null, true, null, false);
+						} catch (HeadlessException e1)
+						{
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (PrinterException e1)
+						{
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					});
+					buttonPane.add(btnPrint);
+				}
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
