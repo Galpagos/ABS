@@ -21,7 +21,6 @@ import PrzygotowanieDanych.PracownikDTO;
 
 public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowaniaListyPracownikow
 {
-
 	JDialog mOkno;
 	JList<PracownikDTO> mTabLewa;
 	JList<PracownikDTO> mTabPrawa;
@@ -68,12 +67,12 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 			mArrowPanel.add(btnJedenWybrany);
 
 			JButton btnJedenOdrzucony = new JButton("Usu\u0144");
-			btnJedenOdrzucony.addActionListener(e -> mOblsluga.dodajWLewo());
+			btnJedenOdrzucony.addActionListener(e -> mOblsluga.usunZPrawa());
 			btnJedenOdrzucony.setBounds(12, 199, 165, 25);
 			mArrowPanel.add(btnJedenOdrzucony);
 
 			JButton btnWszyscyOdrzuceni = new JButton("Wyczy\u015B\u0107");
-			btnWszyscyOdrzuceni.addActionListener(e -> mOblsluga.wszyscyWLewo());
+			btnWszyscyOdrzuceni.addActionListener(e -> mOblsluga.wyczyscLewa());
 			btnWszyscyOdrzuceni.setBounds(12, 237, 165, 25);
 			mArrowPanel.add(btnWszyscyOdrzuceni);
 

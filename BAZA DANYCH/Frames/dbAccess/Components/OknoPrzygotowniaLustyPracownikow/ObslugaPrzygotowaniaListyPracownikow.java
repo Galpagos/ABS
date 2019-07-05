@@ -32,7 +32,7 @@ public class ObslugaPrzygotowaniaListyPracownikow
 		mOkno.odswiezTabPrawa();
 	}
 
-	public void wszyscyWLewo()
+	public void wyczyscLewa()
 	{
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
 
@@ -70,7 +70,7 @@ public class ObslugaPrzygotowaniaListyPracownikow
 		mOkno.odswiezTabPrawa();
 	}
 
-	public void dodajWLewo()
+	public void usunZPrawa()
 	{
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
 		int[] lvLista = mOkno.getSelectionPrawaInt();
