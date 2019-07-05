@@ -24,9 +24,10 @@ public class PracownikDTO
 		return mId;
 	}
 
-	public void setId(int pmId)
+	public PracownikDTO setId(int pmId)
 	{
 		mId = pmId;
+		return this;
 	}
 
 	public String getNazwa()
@@ -34,9 +35,10 @@ public class PracownikDTO
 		return mNazwa;
 	}
 
-	public void setNazwa(String pmNazwa)
+	public PracownikDTO setNazwa(String pmNazwa)
 	{
 		mNazwa = pmNazwa;
+		return this;
 	}
 
 	public List<AbsencjaDTO> getListaAbsencji()

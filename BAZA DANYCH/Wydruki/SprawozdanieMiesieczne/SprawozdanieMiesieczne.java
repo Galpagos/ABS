@@ -1,10 +1,13 @@
 package SprawozdanieMiesieczne;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.joda.time.DateTime;
@@ -13,6 +16,7 @@ import org.joda.time.Interval;
 
 import Absencja.ObslugaAbsencji;
 import Enums.SLRodzajeAbsencji;
+import Pracownik.ObslugaPracownka;
 import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import PrzygotowanieDanych.PracownikDTO;
@@ -167,7 +171,6 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow
 
 	private void uzupelnijAbsencje()
 	{
-		ObslugaAbsencji lvObsluga = new ObslugaAbsencji();
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow())
 		{
 			List<AbsencjaDTO> lvListaAbs = new ArrayList<>();
@@ -205,6 +208,42 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow
 		mOknoWyniku.setDane(this);
 		mOknoWyniku.ustawTabele(mModel);
 		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieMiesieczneCellRender());
+		mOknoWyniku.getMtable().addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent pmE)
+			{
+				JTable target = (JTable) pmE.getSource();
+				int row = target.getSelectedRow();
+				int column = target.getSelectedColumn();
+
+				if ((target.getValueAt(row, column) != null)
+						&& target.getValueAt(row, column).getClass() == PracownikDTO.class)
+				{
+					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, column);
+					new ObslugaPracownka().pokazPracownika(lvPracownik);
+					int k = target.getModel().getColumnCount();
+					Object[] lvPrzeliczonyWiersz = przeliczWierszTabeli(lvPracownik);
+					for (int i = 0; i < k; i++)
+					{
+						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
+					}
+				}
+				if ((target.getValueAt(row, column) != null)
+						&& target.getValueAt(row, column).getClass() == AbsencjaDTO.class)
+				{
+					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, 0);
+					new ObslugaPracownka().pokazPracownika(lvPracownik);
+					int k = target.getModel().getColumnCount();
+					Object[] lvPrzeliczonyWiersz = przeliczWierszTabeli(lvPracownik);
+					for (int i = 0; i < k; i++)
+					{
+						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
+					}
+					mOknoWyniku.repaint();
+				}
+			}
+		});
 		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()
 				+ " do " + mDane.getOkresSprawozdawczy().getEnd().toLocalDate());
 		mOknoWyniku.pokazWynik();

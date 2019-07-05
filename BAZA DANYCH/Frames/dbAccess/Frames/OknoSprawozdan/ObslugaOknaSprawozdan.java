@@ -4,9 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
+import ListaObecnosci.ListaObecnosci;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
+import PrzygotowanieDanych.PracownikDTO;
 import SprawozdanieMiesieczne.SprawozdanieMiesieczne;
 import SprawozdanieRoczne.SprawozdanieRoczne;
 import dbAccess.Components.DatePicker;
@@ -25,8 +29,8 @@ public class ObslugaOknaSprawozdan
 
 	public void sprawozdanieMiesieczne()
 	{
-		przygotujDaneMiesieczne();
-		if (mDane.getListaAbsencji() == null)
+
+		if (!przygotujDaneMiesieczne())
 			return;
 		new SprawozdanieMiesieczne(mDane);
 
@@ -52,24 +56,44 @@ public class ObslugaOknaSprawozdan
 			mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());
 		}
 
-		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow().WybierzPracownikow());
+		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow("Wybierz pracowników").WybierzPracownikow());
 		mDane.setOkresSprawozdawczy(SLMiesiace.Rok.getOkres(mRok));
 	}
 
-	private void przygotujDaneMiesieczne()
+	private boolean przygotujDaneMiesieczne()
 	{
 		LocalDate lvData = new DatePicker().setPickedLocalDate();
 		if (lvData == null)
-			return;
+			return false;
 		mDane.setOkresSprawozdawczy(SLMiesiace.values()[lvData.getMonthValue() - 1].getOkres(lvData.getYear()));
-		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow().WybierzPracownikow());
+		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow("Wybierz pracowników").WybierzPracownikow());
+		if (mDane.getListaPracownikow().size() == 0)
+			return false;
 		mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());
+		if (mDane.getListaAbsencji().size() == 0)
+			return false;
+		return true;
 	}
 
 	public void sprawozdanieRoczneUrlopy()
 	{
 		przygotujDaneRoczne(true);
 		new SprawozdanieRoczne(mDane, true);
+
+	}
+
+	public void generujListeObecnosci()
+	{
+		DateTime lvDataObecnosci = new DatePicker().setPickedDateTime();
+		if (lvDataObecnosci == null)
+			return;
+		List<PracownikDTO> lvLewaLista = new OknoPrzygotowaniaListyPracownikow("Wybierz listê po lewej")
+				.getListaPrawa();
+		if (lvLewaLista.size() == 0)
+			return;
+		List<PracownikDTO> lvListaPrawa = new OknoPrzygotowaniaListyPracownikow("wybierz listê po prawej")
+				.getListaPrawa();
+		new ListaObecnosci(lvDataObecnosci, lvLewaLista, lvListaPrawa);
 
 	}
 }

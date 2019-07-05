@@ -5,8 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
@@ -18,9 +17,6 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import Pracownik.ObslugaPracownka;
-import PrzygotowanieDanych.AbsencjaDTO;
-import PrzygotowanieDanych.PracownikDTO;
 import SprawozdanieMiesieczne.wynikWResultTableWindow;
 
 @SuppressWarnings("serial")
@@ -30,10 +26,32 @@ public class ResultTableWindow extends JFrame
 	private final JPanel contentPanel;
 	private JTable mtable;
 	private wynikWResultTableWindow mDane;
+	private MessageFormat mheader = new MessageFormat("Sprawozdanie");
+	private MessageFormat mFinal = new MessageFormat("");
+
+	public MessageFormat getFinal()
+	{
+		return mFinal;
+	}
+
+	public void setFinal(MessageFormat pmFinal)
+	{
+		mFinal = pmFinal;
+	}
 
 	public wynikWResultTableWindow getDane()
 	{
 		return mDane;
+	}
+
+	public MessageFormat getHeader()
+	{
+		return mheader;
+	}
+
+	public void setHeader(MessageFormat pmMheader)
+	{
+		mheader = pmMheader;
 	}
 
 	public void setDane(wynikWResultTableWindow pmDane)
@@ -53,11 +71,20 @@ public class ResultTableWindow extends JFrame
 
 			contentPanel.add(scrollPane, BorderLayout.CENTER);
 			{
-				mtable = new JTable();
+				mtable = new javax.swing.JTable()
+				{
+					@Override
+					public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat,
+							MessageFormat footerFormat)
+					{
+						return new TablePrintable(this, printMode, headerFormat, footerFormat);
+					}
+				};
 
 				scrollPane.setViewportView(mtable);
 			}
 		}
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -77,8 +104,8 @@ public class ResultTableWindow extends JFrame
 					btnPrint.addActionListener(e -> {
 						try
 						{
-							MessageFormat header = new MessageFormat("Sprawozdanie miesiêczne");
-							mtable.print(JTable.PrintMode.FIT_WIDTH, header, null, true, null, false);
+
+							mtable.print(JTable.PrintMode.FIT_WIDTH, mheader, mFinal, true, null, false);
 						} catch (HeadlessException e1)
 						{
 							// TODO Auto-generated catch block
@@ -112,8 +139,11 @@ public class ResultTableWindow extends JFrame
 				buttonPane.add(cancelButton);
 			}
 		}
+
 		pack();
+
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		pack();
 	}
 
 	public void ustawTabele(DefaultTableModel pmTab)
@@ -123,42 +153,6 @@ public class ResultTableWindow extends JFrame
 		mtable.setCellSelectionEnabled(false);
 		mtable.setColumnSelectionAllowed(true);
 		mtable.setRowSelectionAllowed(true);
-		mtable.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent pmE)
-			{
-				JTable target = (JTable) pmE.getSource();
-				int row = target.getSelectedRow();
-				int column = target.getSelectedColumn();
-
-				if ((target.getValueAt(row, column) != null)
-						&& target.getValueAt(row, column).getClass() == PracownikDTO.class)
-				{
-					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, column);
-					new ObslugaPracownka().pokazPracownika(lvPracownik);
-					int k = target.getModel().getColumnCount();
-					Object[] lvPrzeliczonyWiersz = mDane.przeliczWierszTabeli(lvPracownik);
-					for (int i = 0; i < k; i++)
-					{
-						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
-					}
-				}
-				if ((target.getValueAt(row, column) != null)
-						&& target.getValueAt(row, column).getClass() == AbsencjaDTO.class)
-				{
-					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, 0);
-					new ObslugaPracownka().pokazPracownika(lvPracownik);
-					int k = target.getModel().getColumnCount();
-					Object[] lvPrzeliczonyWiersz = mDane.przeliczWierszTabeli(lvPracownik);
-					for (int i = 0; i < k; i++)
-					{
-						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
-					}
-					repaint();
-				}
-			}
-		});
 
 	}
 

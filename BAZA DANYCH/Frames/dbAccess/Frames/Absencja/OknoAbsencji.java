@@ -81,6 +81,7 @@ public class OknoAbsencji extends JDialog
 				mObslugaAbsencji.dodajAbsencje(lvUsuwana);
 			} else
 			{
+				mWalidator.czyDniL4Ciagiem(lvNowaAbsencja);
 				mObslugaAbsencji.dodajAbsencje(lvNowaAbsencja);
 				pmAbsencja.setOkres(lvNowaAbsencja.getOkres());
 				pmAbsencja.setRodzaj(lvNowaAbsencja.getRodzaj());

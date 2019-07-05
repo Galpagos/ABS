@@ -28,27 +28,18 @@ public class ObslugaPrzygotowaniaListyPracownikow
 		{
 			lvListaPrawa.add(lvIndeks);
 		}
-		for (int lvIndeks = lvListaLewa.size() - 1; lvIndeks >= 0; lvIndeks--)
-		{
-			lvListaLewa.remove(lvIndeks);
-		}
-		mOkno.odswiezTabLewa();
+
 		mOkno.odswiezTabPrawa();
 	}
 
 	public void wszyscyWLewo()
 	{
-		List<PracownikDTO> lvListaLewa = mOkno.getListaLewa();
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
-		for (PracownikDTO lvIndeks : lvListaPrawa)
-		{
-			lvListaLewa.add(lvIndeks);
-		}
+
 		for (int lvIndeks = lvListaPrawa.size() - 1; lvIndeks >= 0; lvIndeks--)
 		{
 			lvListaPrawa.remove(lvIndeks);
 		}
-		mOkno.odswiezTabLewa();
 		mOkno.odswiezTabPrawa();
 	}
 
@@ -64,39 +55,31 @@ public class ObslugaPrzygotowaniaListyPracownikow
 		}
 
 		mOkno.setListaLewa(lvDane);
+		mOkno.odswiezTabLewa();
 	}
 
 	public void dodajWPrawo()
 	{
-		List<PracownikDTO> lvListaLewa = mOkno.getListaLewa();
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
 		int[] lvLista = mOkno.getSelectionLewaInt();
 		for (int lvIndeks : lvLista)
 		{
 			lvListaPrawa.add(mOkno.getListaLewa().get(lvIndeks));
 		}
-		for (int lvIndeks = lvLista.length - 1; lvIndeks >= 0; lvIndeks--)
-		{
-			lvListaLewa.remove(lvLista[lvIndeks]);
-		}
-		mOkno.odswiezTabLewa();
+
 		mOkno.odswiezTabPrawa();
 	}
 
 	public void dodajWLewo()
 	{
-		List<PracownikDTO> lvListaLewa = mOkno.getListaLewa();
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
 		int[] lvLista = mOkno.getSelectionPrawaInt();
-		for (int lvIndeks : lvLista)
-		{
-			lvListaLewa.add(mOkno.getListaPrawa().get(lvIndeks));
-		}
+
 		for (int lvIndeks = lvLista.length - 1; lvIndeks >= 0; lvIndeks--)
 		{
 			lvListaPrawa.remove(lvLista[lvIndeks]);
 		}
-		mOkno.odswiezTabLewa();
+
 		mOkno.odswiezTabPrawa();
 	}
 
@@ -109,5 +92,15 @@ public class ObslugaPrzygotowaniaListyPracownikow
 		lvListaCB.add(0, lvWszyscy);
 
 		return lvListaCB.toArray();
+	}
+
+	public void dodajPrzerwe()
+	{
+
+		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
+
+		lvListaPrawa.add(new PracownikDTO().setNazwa("----------"));
+
+		mOkno.odswiezTabPrawa();
 	}
 }

@@ -23,7 +23,7 @@ public class OknoSprawozdan extends JDialog
 	{
 		setTitle("Wyb\u00F3r sprawozdania");
 		mObsluga = new ObslugaOknaSprawozdan();
-		setBounds(100, 100, 285, 310);
+		setBounds(100, 100, 285, 387);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -63,6 +63,14 @@ public class OknoSprawozdan extends JDialog
 		});
 		btnRoczneUrlopy.setBounds(28, 153, 205, 42);
 		contentPanel.add(btnRoczneUrlopy);
+
+		JButton btnListaObecnosci = new JButton("Lista obecnosci");
+		btnListaObecnosci.addActionListener(e -> {
+			mObsluga.generujListeObecnosci();
+			dispose();
+		});
+		btnListaObecnosci.setBounds(28, 218, 205, 42);
+		contentPanel.add(btnListaObecnosci);
 		JPanel buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);

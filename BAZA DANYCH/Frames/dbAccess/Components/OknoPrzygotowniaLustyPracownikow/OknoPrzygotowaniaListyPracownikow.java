@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,7 +33,7 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 	private JButton mokButton;
 	private JButton mcancelButton;
 
-	public OknoPrzygotowaniaListyPracownikow()
+	public OknoPrzygotowaniaListyPracownikow(String pmNazwa)
 	{
 
 		mListaLewa = new ArrayList<PracownikDTO>();
@@ -41,7 +42,7 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 
 		mOkno = new JDialog();
 		mOkno.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		mOkno.setTitle("Wybierz Pracownik\u00F3w");
+		mOkno.setTitle(pmNazwa);
 		mOkno.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		mOkno.setBounds(100, 100, 681, 525);
@@ -52,33 +53,43 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 		contentPanel.setLayout(null);
 		{
 			JPanel mArrowPanel = new JPanel();
-			mArrowPanel.setBounds(299, 0, 88, 434);
+			mArrowPanel.setBounds(243, 0, 189, 434);
 			contentPanel.add(mArrowPanel);
 			mArrowPanel.setLayout(null);
 
-			JButton btnWszyscyWybrani = new JButton("==>");
+			JButton btnWszyscyWybrani = new JButton("Dodaj wszystkich");
 			btnWszyscyWybrani.addActionListener(e -> mOblsluga.wszyscyWPrawo());
-			btnWszyscyWybrani.setBounds(12, 122, 64, 25);
+			btnWszyscyWybrani.setBounds(12, 122, 165, 25);
 			mArrowPanel.add(btnWszyscyWybrani);
 
-			JButton btnJedenWybrany = new JButton("-->");
+			JButton btnJedenWybrany = new JButton("Dodaj wybranych");
 			btnJedenWybrany.addActionListener(e -> mOblsluga.dodajWPrawo());
-			btnJedenWybrany.setBounds(12, 160, 64, 25);
+			btnJedenWybrany.setBounds(12, 160, 165, 25);
 			mArrowPanel.add(btnJedenWybrany);
 
-			JButton btnJedenOdrzucony = new JButton("<--");
+			JButton btnJedenOdrzucony = new JButton("Usu\u0144");
 			btnJedenOdrzucony.addActionListener(e -> mOblsluga.dodajWLewo());
-			btnJedenOdrzucony.setBounds(12, 199, 64, 25);
+			btnJedenOdrzucony.setBounds(12, 199, 165, 25);
 			mArrowPanel.add(btnJedenOdrzucony);
 
-			JButton btnWszyscyOdrzuceni = new JButton("<==");
+			JButton btnWszyscyOdrzuceni = new JButton("Wyczy\u015B\u0107");
 			btnWszyscyOdrzuceni.addActionListener(e -> mOblsluga.wszyscyWLewo());
-			btnWszyscyOdrzuceni.setBounds(12, 237, 64, 25);
+			btnWszyscyOdrzuceni.setBounds(12, 237, 165, 25);
 			mArrowPanel.add(btnWszyscyOdrzuceni);
+
+			JButton btnPuste = new JButton("Dodaj przerw\u0119");
+			btnPuste.addActionListener(e -> mOblsluga.dodajPrzerwe());
+			btnPuste.setBounds(12, 275, 165, 25);
+			mArrowPanel.add(btnPuste);
+
+			JLabel lblAbyZaznaczyKilka = new JLabel(
+					"<html>Aby zaznaczy\u0107 kilka os\u00F3b \r\nwybierz <b>Ctrl</b> lub <b>Ctrl<b/>+<b>Shitft</b></html>");
+			lblAbyZaznaczyKilka.setBounds(12, 13, 165, 97);
+			mArrowPanel.add(lblAbyZaznaczyKilka);
 		}
 
 		JScrollPane mScrollPane1 = new JScrollPane();
-		mScrollPane1.setBounds(12, 13, 288, 418);
+		mScrollPane1.setBounds(12, 13, 230, 418);
 		contentPanel.add(mScrollPane1);
 
 		mTabLewa = new JList<PracownikDTO>();
@@ -87,7 +98,7 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 		mScrollPane1.setViewportView(mTabLewa);
 
 		JScrollPane mScrollPane2 = new JScrollPane();
-		mScrollPane2.setBounds(388, 13, 266, 421);
+		mScrollPane2.setBounds(430, 13, 230, 421);
 		contentPanel.add(mScrollPane2);
 
 		mTabPrawa = new JList<PracownikDTO>();
@@ -130,10 +141,11 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 			buttonPane.add(mokButton);
 			buttonPane.add(mcancelButton);
 		}
-		mOkno.setTitle("Wybierz Pracowników:");
+
 		init();
 
 		mOkno.setVisible(true);
+
 	}
 
 	private void init()
@@ -141,10 +153,7 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 		GrupaDTO lvStart = new GrupaDTO();
 		lvStart.setNazwa("Wszyscy");
 		mOblsluga.zasilTabele(lvStart);
-		mOblsluga.wszyscyWPrawo();
 		odswiezTabLewa();
-		odswiezTabPrawa();
-
 	}
 
 	public List<PracownikDTO> getListaLewa()

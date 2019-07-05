@@ -122,4 +122,23 @@ public class ObslugaPracownka
 	{
 		new OknoPracownika(pmPracownik);
 	}
+
+	public List<PracownikDTO> getListaNieobecnych(Date pmNaKiedy)
+	{
+		List<PracownikDTO> lvLista = new ArrayList<>();
+		Object[][] lvDane = mRepo.pobierzNieobecnych(pmNaKiedy);
+		if (lvDane.length == 0)
+			return lvLista;
+		else
+		{
+			for (int i = 0; i < lvDane.length; i++)
+			{
+				PracownikDTO lvPracownik = new PracownikDTO().setNazwa((String) lvDane[i][1]).setId((int) lvDane[i][0]);
+				lvLista.add(lvPracownik);
+
+			}
+
+		}
+		return lvLista;
+	}
 }

@@ -16,9 +16,11 @@ import org.joda.time.LocalDate;
 import Datownik.JodaTime;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
+import ListaObecnosci.CellRenderPustePole;
 import PrzygotowanieDanych.AbsencjaDTO;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import PrzygotowanieDanych.PracownikDTO;
+import PrzygotowanieDanych.PustePole;
 import SprawozdanieMiesieczne.SprawozdaniaRepository;
 import SprawozdanieMiesieczne.wynikWResultTableWindow;
 import dbAccess.Components.ResultTableWindow;
@@ -68,6 +70,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow
 		mOknoWyniku.ustawTabele(mModel);
 		mOknoWyniku.setDane(this);
 		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieRoczneCellRender());
+		mOknoWyniku.getMtable().setDefaultRenderer(PustePole.class, new CellRenderPustePole());
 		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()
 				+ " do " + mDane.getOkresSprawozdawczy().getEnd().toLocalDate());
 		mOknoWyniku.pokazWynik();

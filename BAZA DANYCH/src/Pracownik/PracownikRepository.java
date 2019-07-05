@@ -82,4 +82,18 @@ public class PracownikRepository
 		dbAccess.Zapisz("Update Zestawienie set Urlop_Nalezny=" + pmUrlop + " where id_tabeli =" + pmId);
 
 	}
+
+	public Object[][] pobierzNieobecnych(Date pmNaKiedy)
+	{
+		String lvZapytanie = //
+				"SELECT zz.id_tabeli, zz." + ZestawienieBean.getKolumnaNazwaPracownika() + ", ab."
+						+ AbsencjaBean.kolumnaOdKiedy + ", ab." + AbsencjaBean.kolumnaDoKiedy + ",ab."
+						+ AbsencjaBean.kolumnaRodzajAbsencji + //
+						" from " + AbsencjaBean.NazwaTabeli + " ab  "//
+						+ "INNER JOIN " + ZestawienieBean.getNazwaTabeli() + " zz on ab."
+						+ AbsencjaBean.GetKolumnIdPracownika() + "=zz." + ZestawienieBean.getKolumnaID() + //
+						" WHERE ab." + AbsencjaBean.kolumnaOdKiedy + " <=" + ParseryDB.DateParserToSQL_SELECT(pmNaKiedy)//
+						+ " and ab." + AbsencjaBean.kolumnaDoKiedy + ">=" + ParseryDB.DateParserToSQL_SELECT(pmNaKiedy);
+		return dbAccess.getRecordSets(lvZapytanie);
+	}
 }

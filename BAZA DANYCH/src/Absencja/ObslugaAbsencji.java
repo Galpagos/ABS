@@ -19,7 +19,7 @@ import dbAccess.Frames.Absencja.OknoAbsencji;
 
 public class ObslugaAbsencji
 {
-	AbsencjaRepository mRepo = new AbsencjaRepository();
+	AbsencjaRepositor mRepo = new AbsencjaRepository();
 
 	public List<AbsencjaDTO> pobierzAbsencjePracownika(int pmId)
 	{
@@ -113,7 +113,10 @@ public class ObslugaAbsencji
 	public void dodajAbsencje(AbsencjaDTO pmAbs)
 	{
 		if (pmAbs != null)
+		{
+
 			mRepo.dodajAbsencje(pmAbs);
+		}
 	}
 
 	public void usunAbsencje(int pmID, boolean pmPotwierdzone)

@@ -20,7 +20,7 @@ import PrzygotowanieDanych.AbsencjaDTO;
 class ObslugaAbsencjiTest
 {
 	@Mock
-	AbsencjaRepository mRepo;
+	AbsencjaRepositor mRepo;
 	Object[][] mObj;
 	Object[][] mObj2;
 

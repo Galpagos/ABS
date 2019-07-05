@@ -1,8 +1,11 @@
 package Absencja;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
@@ -17,7 +20,7 @@ import PrzygotowanieDanych.AbsencjaDTO;
 
 public class WalidatorAbsenci
 {
-	private AbsencjaRepository mRepo = new AbsencjaRepository();
+	private AbsencjaRepositor mRepo = new AbsencjaRepository();
 	private ObslugaAbsencji mObsluga = new ObslugaAbsencji();
 	private ObslugaPracownka mObsPrac = new ObslugaPracownka();
 
@@ -193,6 +196,43 @@ public class WalidatorAbsenci
 		if (pmRok - lvCalendarz.get(Calendar.YEAR) <= 50)
 			return 33;
 		return 14;
+	}
+
+	public boolean czyDniL4Ciagiem(AbsencjaDTO pmAbsencja)
+	{
+		int lvDni = 33;
+		List<AbsencjaDTO> lvLista = mObsluga.pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
+		lvLista.add(pmAbsencja);
+		List<AbsencjaDTO> lvOgraniczona = lvLista.stream()//
+				.filter(lvAbs -> lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4
+						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.szpital
+						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.ci¹¿a)//
+				.sorted(Comparator.comparing(AbsencjaDTO::getStart))//
+				.collect(Collectors.toList());
+
+		lvOgraniczona.stream()
+				.forEach(lvAbs -> lvAbs.setOkres(lvAbs.getOkres()
+						.overlap(JodaTime.okresOdDo(pmAbsencja.getOkres().getStart().minusDays(lvDni).toDate(),
+								pmAbsencja.getOkres().getEnd().plusDays(lvDni).toDate()))));
+
+		lvOgraniczona.removeIf(lvAbs -> lvAbs.getOkres() == null);
+		int licznik = 0;
+		for (int i = lvOgraniczona.size() - 1; i >= 0; i--)
+		{
+			licznik = licznik + mObsluga.ileDniKalendarzowych(lvOgraniczona.get(i));
+			if (licznik >= lvDni)
+			{
+				JOptionPane.showMessageDialog(null,
+						"Dla pracownika nale¿y wykonaæ nowe badania lekarskie ze wzglêdu na d³ug¹ niedyspozycyjnoœæ");
+				return true;
+			}
+			if (i > 0 && lvOgraniczona.get(i).getOkres().getStart().minusDays(1).minusHours(10)
+					.isAfter(lvOgraniczona.get(i - 1).getOkres().getEnd()))
+				licznik = 0;
+		}
+
+		return false;
+
 	}
 
 }
