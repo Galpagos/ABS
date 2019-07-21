@@ -1,14 +1,20 @@
 package dbAccess.Components;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.MediaPrintableArea;
+import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.sun.org.apache.xerces.internal.dom.AbortException;
 
 import SprawozdanieMiesieczne.wynikWResultTableWindow;
 
@@ -28,6 +36,7 @@ public class ResultTableWindow extends JFrame
 	private wynikWResultTableWindow mDane;
 	private MessageFormat mheader = new MessageFormat("Sprawozdanie");
 	private MessageFormat mFinal = new MessageFormat("");
+	private Object mDaneDoPowrotu = null;
 
 	public MessageFormat getFinal()
 	{
@@ -87,10 +96,11 @@ public class ResultTableWindow extends JFrame
 
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			buttonPane.setBounds(new Rectangle(0, 0, 300, 50));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 				okButton.addActionListener(new ActionListener()
 				{
 					public void actionPerformed(ActionEvent arg0)
@@ -100,12 +110,17 @@ public class ResultTableWindow extends JFrame
 				});
 				{
 					JButton btnPrint = new JButton("Drukuj");
+					btnPrint.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 					btnPrint.addActionListener(e -> {
+						setAlwaysOnTop(false);
 						try
 						{
+							PrintRequestAttributeSet lvWydruk = new HashPrintRequestAttributeSet();
+							lvWydruk.add(new MediaPrintableArea(10f, 10f, 190f, 277f, MediaPrintableArea.MM));
+							lvWydruk.add(OrientationRequested.LANDSCAPE);
 
-							mtable.print(JTable.PrintMode.FIT_WIDTH, mheader, mFinal, true, null, false);
+							mtable.print(JTable.PrintMode.FIT_WIDTH, mheader, mFinal, true, lvWydruk, false);
 						} catch (HeadlessException e1)
 						{
 							// TODO Auto-generated catch block
@@ -114,8 +129,13 @@ public class ResultTableWindow extends JFrame
 						{
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
+						} catch (AbortException e2)
+						{
+							e2.printStackTrace();
 						}
 					});
+					buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+
 					buttonPane.add(btnPrint);
 				}
 				okButton.setActionCommand("OK");
@@ -124,6 +144,7 @@ public class ResultTableWindow extends JFrame
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 				cancelButton.setActionCommand("Cancel");
 				cancelButton.addActionListener(new ActionListener()
 				{
@@ -161,6 +182,7 @@ public class ResultTableWindow extends JFrame
 		try
 		{
 			setVisible(true);
+			setAlwaysOnTop(true);
 
 		} catch (Exception e)
 		{

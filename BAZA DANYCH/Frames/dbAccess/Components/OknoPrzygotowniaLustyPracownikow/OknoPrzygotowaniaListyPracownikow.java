@@ -32,11 +32,11 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 	private JButton mokButton;
 	private JButton mcancelButton;
 
-	public OknoPrzygotowaniaListyPracownikow(String pmNazwa)
+	public OknoPrzygotowaniaListyPracownikow(String pmNazwa, List<PracownikDTO> pmListaPrawa)
 	{
 
 		mListaLewa = new ArrayList<PracownikDTO>();
-		mListaPrawa = new ArrayList<PracownikDTO>();
+		mListaPrawa = pmListaPrawa;
 		mOblsluga = new ObslugaPrzygotowaniaListyPracownikow(this);
 
 		mOkno = new JDialog();
@@ -147,12 +147,18 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 
 	}
 
+	public OknoPrzygotowaniaListyPracownikow(String pmString)
+	{
+		this(pmString, new ArrayList<PracownikDTO>());
+	}
+
 	private void init()
 	{
 		GrupaDTO lvStart = new GrupaDTO();
 		lvStart.setNazwa("Wszyscy");
 		mOblsluga.zasilTabele(lvStart);
 		odswiezTabLewa();
+		odswiezTabPrawa();
 	}
 
 	public List<PracownikDTO> getListaLewa()
@@ -193,6 +199,7 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 	public void setListaPrawa(List<PracownikDTO> pmListaPrawa)
 	{
 		mListaPrawa = pmListaPrawa;
+
 	}
 
 	@Override

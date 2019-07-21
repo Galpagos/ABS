@@ -2,15 +2,13 @@ package ListaObecnosci;
 
 import java.awt.Dimension;
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import Pracownik.ObslugaPracownka;
 import PrzygotowanieDanych.PracownikDTO;
@@ -22,15 +20,31 @@ public class ListaObecnosci
 	private DefaultTableModel mModel = new DefaultTableModel();
 	private List<PracownikDTO> mListaLewa;
 	private List<PracownikDTO> mListaPrawa;
-	private DateTime mDataObecnosci;
+	private LocalDate mDataObecnosci;
 	private List<PracownikDTO> mListaNieobecnosci;
+	private iDaneDoListyObecnosci mDane;
+	private ResultTableWindow mOknoWyniku;
 
-	public ListaObecnosci(DateTime pmDataObecnosci, List<PracownikDTO> pmLewaLista, List<PracownikDTO> pmListaPrawa)
+	public ListaObecnosci(LocalDate pmDataObecnosci, List<PracownikDTO> pmLewaLista, List<PracownikDTO> pmListaPrawa)
 	{
 		mListaLewa = pmLewaLista;
 		mListaPrawa = pmListaPrawa;
 		mDataObecnosci = pmDataObecnosci;
-		mListaNieobecnosci = new ObslugaPracownka().getListaNieobecnych(mDataObecnosci.toDate());
+		mListaNieobecnosci = new ObslugaPracownka().getListaNieobecnych(mDataObecnosci);
+
+		wyrownajListy();
+		utworzNaglowek();
+		uzupelnijRecordy();
+		pokazResult();
+	}
+
+	public ListaObecnosci(iDaneDoListyObecnosci pmDane)
+	{
+		mDane = pmDane;
+		mListaNieobecnosci = new ObslugaPracownka().getListaNieobecnych(mDane.getData());
+		mListaLewa = mDane.getListaLewa();
+		mListaPrawa = mDane.getListaPrawa();
+		mDataObecnosci = mDane.getData();
 
 		wyrownajListy();
 		utworzNaglowek();
@@ -115,26 +129,24 @@ public class ListaObecnosci
 
 	}
 
-	public void pokazResult()
+	private void formatujOknoWyniku()
 	{
-		ResultTableWindow mOknoWyniku = new ResultTableWindow();
+		mOknoWyniku = new ResultTableWindow();
 		mOknoWyniku.getMtable().setShowGrid(false);
 		mOknoWyniku.getMtable().setIntercellSpacing(new Dimension(0, 0));
 		mOknoWyniku.ustawTabele(mModel);
 		mOknoWyniku.getMtable().setBorder(BorderFactory.createEmptyBorder());
-		mOknoWyniku.getMtable().setRowHeight(40);
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("EEEE, d MMMM yyyy");
-		String lvData = mDataObecnosci.toString(fmt);
+		mOknoWyniku.getMtable().setRowHeight(Integer.valueOf(mDane.getWysokoscWiersza()));
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy");
+		String lvData = mDataObecnosci.format(fmt);
 
-		mOknoWyniku
-				.setHeader(new MessageFormat("Lista obecnoœci                                              " + lvData));
-		mOknoWyniku.setFinal(new MessageFormat(
-				"Proszê nie podpisywaæ innych pracowników. Ka¿dy z pracowników ma obowi¹zek potwierdziæ swoj¹ obecnoœæ w³asnorêcznym podpisem. "));
+		mOknoWyniku.setHeader(new MessageFormat(mDane.getNaglowek().replaceAll("<DATA>", mDane.getData().toString())));
+		mOknoWyniku.setFinal(new MessageFormat(mDane.getStopka()));
 		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new CellRenderListyObecnosci());
 		JTableHeader header = mOknoWyniku.getMtable().getTableHeader();
 		header.setDefaultRenderer(new CellRenderListyObecnosci());
 		mOknoWyniku.getMtable().setRowSelectionAllowed(false);
-		mOknoWyniku.setTytul("Lista obecnoœci");
+		mOknoWyniku.setTytul("Lista obecnoœci " + lvData);
 
 		mOknoWyniku.getMtable().getColumnModel().getColumn(3).setPreferredWidth(350);
 		mOknoWyniku.getMtable().getColumnModel().getColumn(8).setPreferredWidth(350);
@@ -142,6 +154,11 @@ public class ListaObecnosci
 		mOknoWyniku.getMtable().getColumnModel().getColumn(5).setPreferredWidth(200);
 		mOknoWyniku.getMtable().getColumnModel().getColumn(4).setPreferredWidth(250);
 
+	}
+
+	public void pokazResult()
+	{
+		formatujOknoWyniku();
 		mOknoWyniku.pokazWynik();
 	}
 

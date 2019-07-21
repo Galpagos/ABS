@@ -4,13 +4,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
-import ListaObecnosci.ListaObecnosci;
+import ListaObecnosci.OknoListaObecnosci;
 import PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
-import PrzygotowanieDanych.PracownikDTO;
 import SprawozdanieMiesieczne.SprawozdanieMiesieczne;
 import SprawozdanieRoczne.SprawozdanieRoczne;
 import dbAccess.Components.DatePicker;
@@ -84,16 +81,7 @@ public class ObslugaOknaSprawozdan
 
 	public void generujListeObecnosci()
 	{
-		DateTime lvDataObecnosci = new DatePicker().setPickedDateTime();
-		if (lvDataObecnosci == null)
-			return;
-		List<PracownikDTO> lvLewaLista = new OknoPrzygotowaniaListyPracownikow("Wybierz listê po lewej")
-				.getListaPrawa();
-		if (lvLewaLista.size() == 0)
-			return;
-		List<PracownikDTO> lvListaPrawa = new OknoPrzygotowaniaListyPracownikow("wybierz listê po prawej")
-				.getListaPrawa();
-		new ListaObecnosci(lvDataObecnosci, lvLewaLista, lvListaPrawa);
+		new OknoListaObecnosci().main(null);
 
 	}
 }

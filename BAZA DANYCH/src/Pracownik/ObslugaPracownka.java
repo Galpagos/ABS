@@ -1,5 +1,6 @@
 package Pracownik;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -123,10 +124,10 @@ public class ObslugaPracownka
 		new OknoPracownika(pmPracownik);
 	}
 
-	public List<PracownikDTO> getListaNieobecnych(Date pmNaKiedy)
+	public List<PracownikDTO> getListaNieobecnych(LocalDate pmDataObecnosci)
 	{
 		List<PracownikDTO> lvLista = new ArrayList<>();
-		Object[][] lvDane = mRepo.pobierzNieobecnych(pmNaKiedy);
+		Object[][] lvDane = mRepo.pobierzNieobecnych(pmDataObecnosci);
 		if (lvDane.length == 0)
 			return lvLista;
 		else

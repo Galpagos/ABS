@@ -239,13 +239,7 @@ public class SrcOknoGlowne extends JFrame implements InterfejsOknaGlownego
 		mButtonPanel.add(btnPokazDniWolne);
 
 		JButton btnSprawozdanie = new JButton("Sprawozdanie");
-		btnSprawozdanie.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				mObsluga.sprawozdanie();
-			}
-		});
+		btnSprawozdanie.addActionListener(e -> mObsluga.sprawozdanie());
 		btnSprawozdanie.setBounds(282, 151, 140, 25);
 		mButtonPanel.add(btnSprawozdanie);
 

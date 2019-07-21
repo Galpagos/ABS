@@ -1,5 +1,6 @@
 package Pracownik;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -83,7 +84,7 @@ public class PracownikRepository
 
 	}
 
-	public Object[][] pobierzNieobecnych(Date pmNaKiedy)
+	public Object[][] pobierzNieobecnych(LocalDate pmDataObecnosci)
 	{
 		String lvZapytanie = //
 				"SELECT zz.id_tabeli, zz." + ZestawienieBean.getKolumnaNazwaPracownika() + ", ab."
@@ -92,8 +93,10 @@ public class PracownikRepository
 						" from " + AbsencjaBean.NazwaTabeli + " ab  "//
 						+ "INNER JOIN " + ZestawienieBean.getNazwaTabeli() + " zz on ab."
 						+ AbsencjaBean.GetKolumnIdPracownika() + "=zz." + ZestawienieBean.getKolumnaID() + //
-						" WHERE ab." + AbsencjaBean.kolumnaOdKiedy + " <=" + ParseryDB.DateParserToSQL_SELECT(pmNaKiedy)//
-						+ " and ab." + AbsencjaBean.kolumnaDoKiedy + ">=" + ParseryDB.DateParserToSQL_SELECT(pmNaKiedy);
+						" WHERE ab." + AbsencjaBean.kolumnaOdKiedy + " <="
+						+ ParseryDB.DateParserToSQL_SELECT(pmDataObecnosci)//
+						+ " and ab." + AbsencjaBean.kolumnaDoKiedy + ">="
+						+ ParseryDB.DateParserToSQL_SELECT(pmDataObecnosci);
 		return dbAccess.getRecordSets(lvZapytanie);
 	}
 }
