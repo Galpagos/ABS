@@ -9,9 +9,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-@SuppressWarnings("serial")
 public class OknoSprawozdan extends JDialog
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton mbtnSprawozdanieRoczne;
 	private JLabel mlabel;

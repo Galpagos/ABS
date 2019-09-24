@@ -36,7 +36,6 @@ public class ResultTableWindow extends JFrame
 	private wynikWResultTableWindow mDane;
 	private MessageFormat mheader = new MessageFormat("Sprawozdanie");
 	private MessageFormat mFinal = new MessageFormat("");
-	private Object mDaneDoPowrotu = null;
 
 	public MessageFormat getFinal()
 	{
@@ -182,7 +181,7 @@ public class ResultTableWindow extends JFrame
 		try
 		{
 			setVisible(true);
-			setAlwaysOnTop(true);
+			setAlwaysOnTop(false);
 
 		} catch (Exception e)
 		{
