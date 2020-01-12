@@ -8,25 +8,21 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 import Enums.Komunikat;
-import dbAccess.Components.ObsluzenieComboPicker;
+import Frames.dbAccess.Components.ObsluzenieComboPicker;
 
-public class ObslugaGrup implements ObsluzenieComboPicker
-{
+public class ObslugaGrup implements ObsluzenieComboPicker {
 	static RepoGrupy mRepo = new RepoGrupy();
 
-	public void dodaj()
-	{
+	public void dodaj() {
 		String lvNazwa = JOptionPane.showInputDialog("Podaj nazwe Grupy");
 		mRepo.dodajGrupe(lvNazwa);
 	}
 
-	public static List<GrupaDTO> getListaGrup()
-	{
+	public static List<GrupaDTO> getListaGrup() {
 		List<GrupaDTO> lvLista = new ArrayList<>();
 
 		Object[][] lvDane = mRepo.getGrupy();
-		for (Object[] ob : lvDane)
-		{
+		for (Object[] ob : lvDane) {
 			GrupaDTO lvGrupa = new GrupaDTO();
 			lvGrupa.setID((int) ob[0]);
 			lvGrupa.setNazwa((String) ob[1]);
@@ -35,8 +31,7 @@ public class ObslugaGrup implements ObsluzenieComboPicker
 		return lvLista;
 	}
 
-	public static String getGrupyPracownikaText(int pmId)
-	{
+	public static String getGrupyPracownikaText(int pmId) {
 		StringBuilder lvText = new StringBuilder();
 		Object[][] lvDane = mRepo.pobierzGrupy(pmId);
 		for (Object[] ob : lvDane)
@@ -46,29 +41,24 @@ public class ObslugaGrup implements ObsluzenieComboPicker
 		return lvText.toString();
 	}
 
-	public void usun(Object pmObject)
-	{
-		if (pmObject != null)
-		{
+	public void usun(Object pmObject) {
+		if (pmObject != null) {
 			if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
 				return;
 			mRepo.usunGrupe((GrupaDTO) pmObject);
 		}
 	}
 
-	public static void ustawGrupePracownikowi(int lvIdPracownika, Object pmGrupa)
-	{
+	public static void ustawGrupePracownikowi(int lvIdPracownika, Object pmGrupa) {
 		mRepo.ustawGrupePracownikowi(lvIdPracownika, (GrupaDTO) pmGrupa);
 	}
 
-	public static void usunGrupePracownikowi(int lvIdPracownika, Object pmGrupa)
-	{
+	public static void usunGrupePracownikowi(int lvIdPracownika, Object pmGrupa) {
 		mRepo.usunGrupePracownikowi(lvIdPracownika, (GrupaDTO) pmGrupa);
 	}
 
 	@Override
-	public ComboBoxModel<Object> getComboBoxModel()
-	{
+	public ComboBoxModel<Object> getComboBoxModel() {
 		ComboBoxModel<Object> mModel = new DefaultComboBoxModel<Object>(getListaGrup().toArray());
 
 		return mModel;

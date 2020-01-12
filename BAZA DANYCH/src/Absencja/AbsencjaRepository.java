@@ -11,16 +11,13 @@ import java.util.List;
 import java.util.Vector;
 
 import Parsery.ParseryDB;
-import PrzygotowanieDanych.AbsencjaDTO;
+import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
-public class AbsencjaRepository implements AbsencjaRepositor
-{
+public class AbsencjaRepository implements AbsencjaRepositor {
 	public static String mSciezkaDoBazy = "jdbc:ucanaccess://BAZA.accdb";
 
-	public static void Zapisz(String instrukcja)
-	{
-		try
-		{
+	public static void Zapisz(String instrukcja) {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 
 			System.out.println(instrukcja);
@@ -28,16 +25,13 @@ public class AbsencjaRepository implements AbsencjaRepositor
 			s.execute(instrukcja);
 			s.close();
 			conn.close();
-		} catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	public static int GetCount(String Zapytanie)
-	{
-		try
-		{
+	public static int GetCount(String Zapytanie) {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 			ResultSet rs;
 			String instrukcja = "SELECT Count(*) as total FROM " + Zapytanie;
@@ -52,17 +46,14 @@ public class AbsencjaRepository implements AbsencjaRepositor
 			return k;
 		}
 
-		catch (Exception ex)
-		{
+		catch (Exception ex) {
 			ex.printStackTrace();
 			return 0;
 		}
 	}
 
-	public static int GetNextID(String tabela)
-	{
-		try
-		{
+	public static int GetNextID(String tabela) {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 			ResultSet rs;
 			Statement s = conn.createStatement();
@@ -77,18 +68,15 @@ public class AbsencjaRepository implements AbsencjaRepositor
 			return k;
 		}
 
-		catch (Exception ex)
-		{
+		catch (Exception ex) {
 			ex.printStackTrace();
 			return 0;
 		}
 	}
 
-	public static Object[][] getRecordSets(String pmZapytanie)
-	{
+	public static Object[][] getRecordSets(String pmZapytanie) {
 		Object[][] lvData;
-		try
-		{
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 
 			Statement s = conn.createStatement();
@@ -99,19 +87,16 @@ public class AbsencjaRepository implements AbsencjaRepositor
 			Vector<String> columnNames = new Vector<String>();
 			int columnCount = metaData.getColumnCount();
 			ArrayList<Integer> lvListaKolumn = new ArrayList<Integer>();
-			for (int column = 1; column <= columnCount; column++)
-			{
+			for (int column = 1; column <= columnCount; column++) {
 				columnNames.add(metaData.getColumnName(column).replace('_', ' '));
 				lvListaKolumn.add(column);
 			}
 
 			Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-			while (rs.next())
-			{
+			while (rs.next()) {
 				Vector<Object> vector = new Vector<Object>();
 
-				for (int columnIndex : lvListaKolumn)
-				{
+				for (int columnIndex : lvListaKolumn) {
 					vector.add(rs.getObject(columnIndex));
 				}
 				data.add(vector);
@@ -119,43 +104,37 @@ public class AbsencjaRepository implements AbsencjaRepositor
 			lvData = data.stream().map(List::toArray).toArray(Object[][]::new);
 			s.close();
 			conn.close();
-		} catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
 		}
 		return lvData;
 	}
 
-	public static void DeleteRow(String tabela, int id)
-	{
+	public static void DeleteRow(String tabela, int id) {
 		String zapytanie = "Delete from " + tabela + " where ID_tabeli=" + id;
 		Zapisz(zapytanie);
 	}
 
-	public Object[][] getAbsencjePracownika(int pmId)
-	{
+	public Object[][] getAbsencjePracownika(int pmId) {
 		return getRecordSets(
 				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,Rodzaj_absencji from Absencje where id_pracownika="
 						+ pmId);
 	}
 
-	public Object[][] getAbsencjePoId(int pmId)
-	{
+	public Object[][] getAbsencjePoId(int pmId) {
 		return getRecordSets(
 				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,Rodzaj_absencji from Absencje where id_tabeli="
 						+ pmId);
 	}
 
-	public int ileDniWolnych(Date pmDataOd, Date pmDataDo)
-	{
+	public int ileDniWolnych(Date pmDataOd, Date pmDataDo) {
 		return GetCount("DniWolne"//
 				+ " where DATA BEtween " + ParseryDB.DateParserToSQL_SELECT(pmDataOd) + " and "
 				+ ParseryDB.DateParserToSQL_SELECT(pmDataDo));
 	}
 
-	public void dodajAbsencje(AbsencjaDTO pmAbs)
-	{
+	public void dodajAbsencje(AbsencjaDTO pmAbs) {
 		Zapisz("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , Rodzaj_absencji ) "//
 				+ " VALUES (" + pmAbs.getId() + " , " + pmAbs.getIdPracownika() + " ,"
 				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getStart().toDate()) + " , "
@@ -163,13 +142,11 @@ public class AbsencjaRepository implements AbsencjaRepositor
 				+ pmAbs.getRodzaj().toString() + "\")");
 	}
 
-	public void usunAbsencje(int pmID)
-	{
+	public void usunAbsencje(int pmID) {
 		Zapisz("Delete * from Absencje where Id_tabeli=" + pmID);
 	}
 
-	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja)
-	{
+	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja) {
 		return GetCount("Absencje where id_tabeli != " + pmAbsencja.getId() + " and id_pracownika="
 				+ pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
 				+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd().toDate()) //
