@@ -16,16 +16,14 @@ import Enums.Komunikat;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Pracownik.ObslugaPracownka;
-import PrzygotowanieDanych.AbsencjaDTO;
+import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
-public class WalidatorAbsenci
-{
+public class WalidatorAbsenci {
 	private AbsencjaRepositor mRepo = new AbsencjaRepository();
 	private ObslugaAbsencji mObsluga = new ObslugaAbsencji();
 	private ObslugaPracownka mObsPrac = new ObslugaPracownka();
 
-	public boolean czyWystepujeAbsencjaWOkresie(AbsencjaDTO pmAbsencja)
-	{
+	public boolean czyWystepujeAbsencjaWOkresie(AbsencjaDTO pmAbsencja) {
 		boolean lvWynik = !(mRepo.zliczAbsencjePracownikaWOkresie(pmAbsencja) == 0);
 		if (!lvWynik)
 			return false;
@@ -34,11 +32,9 @@ public class WalidatorAbsenci
 		return true;
 	}
 
-	public boolean czyPrawidloweDaty(Date pmOd, Date pmDo)
-	{
+	public boolean czyPrawidloweDaty(Date pmOd, Date pmDo) {
 		boolean lvWynik = pmDo.before(pmOd);
-		if (lvWynik)
-		{
+		if (lvWynik) {
 			Komunikat.DataPoPrzedDataPrzed.pokaz();
 			return false;
 		}
@@ -48,8 +44,7 @@ public class WalidatorAbsenci
 		lvCalOd.setTime(pmOd);
 		lvCalDo.setTime(pmDo);
 
-		if (lvCalOd.get(Calendar.YEAR) != lvCalDo.get(Calendar.YEAR))
-		{
+		if (lvCalOd.get(Calendar.YEAR) != lvCalDo.get(Calendar.YEAR)) {
 			Komunikat.DatayWtymSamymRoku.pokaz();
 			return false;
 		}
@@ -57,16 +52,14 @@ public class WalidatorAbsenci
 
 	}
 
-	public boolean czyPrzekraczaLimity(AbsencjaDTO pmAbsencja)
-	{
+	public boolean czyPrzekraczaLimity(AbsencjaDTO pmAbsencja) {
 		int lvWykorzystany_urlop = 0;
 		int lvWykorzystaneDniRobocze = mObsluga.ileDniRoboczych(pmAbsencja);
 		int lvWykorzystaneDniKalendarzowe = mObsluga.ileDniKalendarzowych(pmAbsencja);
 		int lvLimit = 0;
 		boolean lvWynik;
 
-		switch (pmAbsencja.getRodzaj())
-		{
+		switch (pmAbsencja.getRodzaj()) {
 		case urlop_wypoczynkowy:
 
 			lvLimit = mObsPrac.getUrlop(pmAbsencja.getIdPracownika());
@@ -152,8 +145,7 @@ public class WalidatorAbsenci
 							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.L_4, SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
-			if (lvLimit <= lvWykorzystany_urlop)
-			{
+			if (lvLimit <= lvWykorzystany_urlop) {
 				JOptionPane.showMessageDialog(null,
 						"Przekroczono limit " + lvLimit + " dni (Wynagrodzenie chorobowe) z dniem: "
 								+ mObsluga.dzienKoncaWynagrodzeniaChorobowego(pmAbsencja, lvLimit));
@@ -171,26 +163,22 @@ public class WalidatorAbsenci
 
 		if (lvWynik && pmAbsencja.getRodzaj() != SLRodzajeAbsencji.ci¹¿a
 				&& pmAbsencja.getRodzaj() != SLRodzajeAbsencji.L_4
-				&& pmAbsencja.getRodzaj() != SLRodzajeAbsencji.szpital)
-		{
+				&& pmAbsencja.getRodzaj() != SLRodzajeAbsencji.szpital) {
 			int reply = JOptionPane.showConfirmDialog(null,
 					"Przekroczono limit " + lvLimit + " dni dla absencji " + pmAbsencja.getRodzaj().getNazwa()
 							+ ".\n Uwzglêdniaj¹c wprowadzon¹ absencje liczba dni nieobecnoœci wynosi "
 							+ lvWykorzystany_urlop + "!\n Czy kontynuowaæ wprowadzanie? ",
 					"Potwierdzenie operacji", JOptionPane.YES_NO_OPTION);
-			if (reply == JOptionPane.YES_OPTION)
-			{
+			if (reply == JOptionPane.YES_OPTION) {
 				return false;
-			} else
-			{
+			} else {
 				return true;
 			}
 		}
 		return lvWynik;
 	}
 
-	private int wyznaczLimitChorobowy(int pmIdPracownika, int pmRok)
-	{
+	private int wyznaczLimitChorobowy(int pmIdPracownika, int pmRok) {
 		Calendar lvCalendarz = new GregorianCalendar();
 		lvCalendarz.setTime(mObsPrac.getDataUrodzenia(pmIdPracownika));
 		if (pmRok - lvCalendarz.get(Calendar.YEAR) <= 50)
@@ -198,8 +186,7 @@ public class WalidatorAbsenci
 		return 14;
 	}
 
-	public boolean czyDniL4Ciagiem(AbsencjaDTO pmAbsencja)
-	{
+	public boolean czyDniL4Ciagiem(AbsencjaDTO pmAbsencja) {
 		int lvDni = 33;
 		List<AbsencjaDTO> lvLista = mObsluga.pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
 		lvLista.add(pmAbsencja);
@@ -217,11 +204,9 @@ public class WalidatorAbsenci
 
 		lvOgraniczona.removeIf(lvAbs -> lvAbs.getOkres() == null);
 		int licznik = 0;
-		for (int i = lvOgraniczona.size() - 1; i >= 0; i--)
-		{
+		for (int i = lvOgraniczona.size() - 1; i >= 0; i--) {
 			licznik = licznik + mObsluga.ileDniKalendarzowych(lvOgraniczona.get(i));
-			if (licznik >= lvDni)
-			{
+			if (licznik >= lvDni) {
 				JOptionPane.showMessageDialog(null,
 						"Dla pracownika nale¿y wykonaæ nowe badania lekarskie ze wzglêdu na d³ug¹ niedyspozycyjnoœæ");
 				return true;

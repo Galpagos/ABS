@@ -2,10 +2,9 @@ package Absencja;
 
 import java.util.Date;
 
-import PrzygotowanieDanych.AbsencjaDTO;
+import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
-public interface AbsencjaRepositor
-{
+public interface AbsencjaRepositor {
 
 	Object[][] getAbsencjePracownika(int pmId);
 
