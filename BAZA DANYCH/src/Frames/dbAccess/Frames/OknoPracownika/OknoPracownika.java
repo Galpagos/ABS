@@ -113,7 +113,7 @@ public class OknoPracownika extends JDialog implements InterfejsOknaPracownika {
 		setContentPane(contentPane);
 
 		spnRok = new JSpinner();
-		spnRok.setModel(new SpinnerNumberModel(2019, 2016, 2020, 1));
+		spnRok.setModel(new SpinnerNumberModel(2020, 2016, 2025, 1));
 		spnRok.setBounds(118, 397, 97, 22);
 
 		tbAbsencje.setAutoCreateRowSorter(true);
