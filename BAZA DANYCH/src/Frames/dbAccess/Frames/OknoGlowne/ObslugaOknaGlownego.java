@@ -1,6 +1,5 @@
 package Frames.dbAccess.Frames.OknoGlowne;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -46,7 +45,7 @@ public class ObslugaOknaGlownego {
 		}
 	}
 
-	public void pokazNieobecnych() throws ParseException {
+	public void pokazNieobecnych() {
 		String lvNieobecni = "";
 		Date lvNaKiedy = new DatePicker().setPickedDate();
 		if (lvNaKiedy == null)

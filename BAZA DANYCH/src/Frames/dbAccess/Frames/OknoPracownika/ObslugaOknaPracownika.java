@@ -11,7 +11,7 @@ import Datownik.JodaTime;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ComboPicker;
-import Frames.dbAccess.Frames.Absencja.OknoAbsencji;
+import Frames.dbAccess.Frames.Absencja.SrcOknoAbsencji;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
@@ -42,15 +42,13 @@ public class ObslugaOknaPracownika {
 		lvAbsencja.setRodzaj(lvRodzajAbs);
 
 		mObslugaAbsencji.modyfikujAbsencje(lvAbsencja);
-		mOkno.odswiezTabele();
 	}
 
 	public void ModyfikujAbsencje() {
 		if (mOkno.getZaznaczenieTabeli() < 0) {
 			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
 		} else {
-			new OknoAbsencji(mOkno.getAbsencjeZTabeli());
-			mOkno.odswiezTabele();
+			new SrcOknoAbsencji(mOkno.getAbsencjeZTabeli());
 		}
 	}
 
@@ -64,7 +62,6 @@ public class ObslugaOknaPracownika {
 
 		int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();
 		mRepo.usunAbsencje(lvIdAbsencji);
-		mOkno.odswiezTabele();
 
 	}
 
@@ -81,7 +78,7 @@ public class ObslugaOknaPracownika {
 		if (lvGrupa != null) {
 			ObslugaGrup.ustawGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
 		}
-		mOkno.getLblGrupy().setText(grupyPracownika());
+
 	}
 
 	public void usunGrupe() {
@@ -92,7 +89,6 @@ public class ObslugaOknaPracownika {
 		if (lvGrupa != null) {
 			ObslugaGrup.usunGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
 		}
-		mOkno.getLblGrupy().setText(grupyPracownika());
 	}
 
 	public void ustawDateUrodzenia() {

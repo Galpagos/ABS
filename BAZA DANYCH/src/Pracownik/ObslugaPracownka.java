@@ -9,7 +9,9 @@ import javax.swing.JOptionPane;
 
 import Enums.Komunikat;
 import Frames.dbAccess.Components.DatePicker;
+import Frames.dbAccess.Components.ScriptParams;
 import Frames.dbAccess.Frames.OknoPracownika.OknoPracownika;
+import Frames.dbAccess.Frames.OknoPracownika.OknoPracownikaParams;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public class ObslugaPracownka {
@@ -92,7 +94,7 @@ public class ObslugaPracownka {
 		return lvDane[0][0].toString();
 	}
 
-	public int getUrlop(int pmPracownikID) {
+	public int getUrlopNal(int pmPracownikID) {
 		Object[][] lvDane = mRepo.getUrlopNalezny(pmPracownikID);
 		if (lvDane[0][0] == null)
 			return 0;
@@ -104,7 +106,9 @@ public class ObslugaPracownka {
 	}
 
 	public void pokazPracownika(PracownikDTO pmPracownik) {
-		new OknoPracownika(pmPracownik);
+		ScriptParams lvParams = new ScriptParams();
+		lvParams.add(OknoPracownikaParams.PRACOWNIK_DTO, pmPracownik);
+		new OknoPracownika(lvParams);
 	}
 
 	public List<PracownikDTO> getListaNieobecnych(LocalDate pmDataObecnosci) {

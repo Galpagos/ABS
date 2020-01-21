@@ -12,35 +12,28 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-public class dbAccess
-{
+public class dbAccess {
 	public static String mSciezkaDoBazy = "jdbc:ucanaccess://BAZA.accdb";
 
-	public static void Zapisz(String instrukcja)
-	{
-		try
-		{
+	public static void Zapisz(String instrukcja) {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 
-			System.out.println(instrukcja);
 			Statement s = conn.createStatement();
 			s.execute(instrukcja);
 			s.close();
 			conn.close();
-		} catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	public static int GetNextID(String tabela)
-	{
-		try
-		{
+	public static int GetNextID(String pmNazwaTabeli) {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 			ResultSet rs;
 			Statement s = conn.createStatement();
-			s.execute("SELECT TOP 1 ID_tabeli FROM " + tabela + " ORDER BY ID_tabeli DESC");
+			s.execute("SELECT TOP 1 ID_tabeli FROM " + pmNazwaTabeli + " ORDER BY ID_tabeli DESC");
 			rs = s.getResultSet();
 			if (!rs.next())
 				return 1;
@@ -51,21 +44,18 @@ public class dbAccess
 			return k;
 		}
 
-		catch (Exception ex)
-		{
+		catch (Exception ex) {
 			ex.printStackTrace();
 			return 0;
 		}
 	}
 
-	public static Object[][] getRecordSets(String pmZapytanie)
-	{
+	public static Object[][] getRecordSets(String pmZapytanie) {
 		Object[][] lvData;
-		try
-		{
-			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
+		try {
+			Connection lvCon = DriverManager.getConnection(mSciezkaDoBazy);
 
-			Statement s = conn.createStatement();
+			Statement s = lvCon.createStatement();
 			s.execute(pmZapytanie);
 			ResultSet rs = s.getResultSet();
 			ResultSetMetaData metaData = rs.getMetaData();
@@ -74,8 +64,7 @@ public class dbAccess
 			Vector<String> columnNames = new Vector<String>();
 			int columnCount = metaData.getColumnCount();
 			ArrayList<Integer> lvListaKolumn = new ArrayList<Integer>();
-			for (int column = 1; column <= columnCount; column++)
-			{
+			for (int column = 1; column <= columnCount; column++) {
 				// if (!metaData.getColumnName(column).contains("ID"))
 				// {
 				columnNames.add(metaData.getColumnName(column).replace('_', ' '));
@@ -85,21 +74,18 @@ public class dbAccess
 
 			// data of the table
 			Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-			while (rs.next())
-			{
+			while (rs.next()) {
 				Vector<Object> vector = new Vector<Object>();
 
-				for (int columnIndex : lvListaKolumn)
-				{
+				for (int columnIndex : lvListaKolumn) {
 					vector.add(rs.getObject(columnIndex));
 				}
 				data.add(vector);
 			}
 			lvData = data.stream().map(List::toArray).toArray(Object[][]::new);
 			s.close();
-			conn.close();
-		} catch (Exception ex)
-		{
+			lvCon.close();
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
 		}
@@ -107,16 +93,13 @@ public class dbAccess
 		return lvData;
 	}
 
-	public static void DeleteRow(String tabela, int id)
-	{
+	public static void DeleteRow(String tabela, int id) {
 		String zapytanie = "Delete from " + tabela + " where ID_tabeli=" + id;
 		Zapisz(zapytanie);
 	}
 
-	public static MyTableModel modelTabeliDB(String pmZapytanie) throws SQLException
-	{
-		try
-		{
+	public static MyTableModel modelTabeliDB(String pmZapytanie) throws SQLException {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 
 			Statement s = conn.createStatement();
@@ -128,8 +111,7 @@ public class dbAccess
 			Vector<String> columnNames = new Vector<String>();
 			int columnCount = metaData.getColumnCount();
 			ArrayList<Integer> lvListaKolumn = new ArrayList<Integer>();
-			for (int column = 1; column <= columnCount; column++)
-			{
+			for (int column = 1; column <= columnCount; column++) {
 				// if (!metaData.getColumnName(column).contains("ID"))
 				// {
 				columnNames.add(metaData.getColumnName(column).replace('_', ' '));
@@ -139,12 +121,10 @@ public class dbAccess
 
 			// data of the table
 			Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-			while (rs.next())
-			{
+			while (rs.next()) {
 				Vector<Object> vector = new Vector<Object>();
 
-				for (int columnIndex : lvListaKolumn)
-				{
+				for (int columnIndex : lvListaKolumn) {
 					vector.add(rs.getObject(columnIndex));
 				}
 				data.add(vector);
@@ -155,16 +135,14 @@ public class dbAccess
 			s.close();
 			conn.close();
 			return mt;
-		} catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
 		}
 
 	}
 
-	public static class MyTableModel extends AbstractTableModel
-	{
+	public static class MyTableModel extends AbstractTableModel {
 		/**
 		 * 
 		 */
@@ -172,36 +150,28 @@ public class dbAccess
 		private String[] columnNames;
 		private Object[][] data;
 
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return columnNames.length;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			return data.length;
 		}
 
-		public String getColumnName(int col)
-		{
+		public String getColumnName(int col) {
 			return columnNames[col];
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			return data[row][col];
 		}
 
-		@SuppressWarnings(
-		{ "unchecked", "rawtypes" })
-		public Class getColumnClass(int c)
-		{
-			for (int row = 0; row < getRowCount(); row++)
-			{
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		public Class getColumnClass(int c) {
+			for (int row = 0; row < getRowCount(); row++) {
 				Object o = getValueAt(row, c);
 
-				if (o != null)
-				{
+				if (o != null) {
 					return o.getClass();
 				}
 			}
@@ -209,28 +179,23 @@ public class dbAccess
 			return Object.class;
 		}
 
-		public boolean isCellEditable(int row, int col)
-		{
+		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
 
-		public void setValueAt(Object value, int row, int col)
-		{
+		public void setValueAt(Object value, int row, int col) {
 			data[row][col] = value;
 			fireTableCellUpdated(row, col);
 		}
 
-		public MyTableModel(Object[][] pmData, String[] pmColumnNames)
-		{
+		public MyTableModel(Object[][] pmData, String[] pmColumnNames) {
 			columnNames = pmColumnNames;
 			data = pmData.clone();
 		}
 	}
 
-	public static int GetCount(String Zapytanie)
-	{
-		try
-		{
+	public static int GetCount(String Zapytanie) {
+		try {
 			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
 			ResultSet rs;
 			String instrukcja = "SELECT Count(*) as total FROM " + Zapytanie;
@@ -245,15 +210,13 @@ public class dbAccess
 			return k;
 		}
 
-		catch (Exception ex)
-		{
+		catch (Exception ex) {
 			ex.printStackTrace();
 			return 0;
 		}
 	}
 
-	public static String WarunekZListy(List<String> pmLista)
-	{
+	public static String WarunekZListy(List<String> pmLista) {
 		String lvResult = "IN (";
 		for (String elem : pmLista)
 			lvResult = lvResult + elem + ",";

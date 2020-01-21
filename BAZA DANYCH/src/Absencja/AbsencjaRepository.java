@@ -1,7 +1,6 @@
 package Absencja;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
@@ -12,72 +11,20 @@ import java.util.Vector;
 
 import Parsery.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import pl.home.Database.components.AccessDB;
 
-public class AbsencjaRepository implements AbsencjaRepositor {
-	public static String mSciezkaDoBazy = "jdbc:ucanaccess://BAZA.accdb";
+public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 
-	public static void Zapisz(String instrukcja) {
-		try {
-			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
+	public static int GetCount(String pmTabela) {
 
-			System.out.println(instrukcja);
-			Statement s = conn.createStatement();
-			s.execute(instrukcja);
-			s.close();
-			conn.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	public static int GetCount(String Zapytanie) {
-		try {
-			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
-			ResultSet rs;
-			String instrukcja = "SELECT Count(*) as total FROM " + Zapytanie;
-			Statement s = conn.createStatement();
-			s.execute(instrukcja);
-			rs = s.getResultSet();
-			rs.next();
-			int k = rs.getInt("total");
-
-			s.close();
-			conn.close();
-			return k;
-		}
-
-		catch (Exception ex) {
-			ex.printStackTrace();
-			return 0;
-		}
-	}
-
-	public static int GetNextID(String tabela) {
-		try {
-			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
-			ResultSet rs;
-			Statement s = conn.createStatement();
-			s.execute("SELECT TOP 1 ID_tabeli FROM " + tabela + " ORDER BY ID_tabeli DESC");
-			rs = s.getResultSet();
-			if (!rs.next())
-				return 1;
-			int k = rs.getInt(1) + 1;
-
-			s.close();
-			conn.close();
-			return k;
-		}
-
-		catch (Exception ex) {
-			ex.printStackTrace();
-			return 0;
-		}
+		String lvZapytanie = "SELECT Count(*) as TOTAL FROM " + pmTabela;
+		return executeQuery(lvZapytanie).get(0).getAsInteger("TOTAL");
 	}
 
 	public static Object[][] getRecordSets(String pmZapytanie) {
 		Object[][] lvData;
 		try {
-			Connection conn = DriverManager.getConnection(mSciezkaDoBazy);
+			Connection conn = init();
 
 			Statement s = conn.createStatement();
 			s.execute(pmZapytanie);
@@ -113,7 +60,7 @@ public class AbsencjaRepository implements AbsencjaRepositor {
 
 	public static void DeleteRow(String tabela, int id) {
 		String zapytanie = "Delete from " + tabela + " where ID_tabeli=" + id;
-		Zapisz(zapytanie);
+		executeUpdate(zapytanie);
 	}
 
 	public Object[][] getAbsencjePracownika(int pmId) {
@@ -135,7 +82,7 @@ public class AbsencjaRepository implements AbsencjaRepositor {
 	}
 
 	public void dodajAbsencje(AbsencjaDTO pmAbs) {
-		Zapisz("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , Rodzaj_absencji ) "//
+		executeUpdate("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , Rodzaj_absencji ) "//
 				+ " VALUES (" + pmAbs.getId() + " , " + pmAbs.getIdPracownika() + " ,"
 				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getStart().toDate()) + " , "
 				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getEnd().toDate()) + " ,\""
@@ -143,7 +90,7 @@ public class AbsencjaRepository implements AbsencjaRepositor {
 	}
 
 	public void usunAbsencje(int pmID) {
-		Zapisz("Delete * from Absencje where Id_tabeli=" + pmID);
+		executeUpdate("Delete * from Absencje where Id_tabeli=" + pmID);
 	}
 
 	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja) {

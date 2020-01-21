@@ -62,7 +62,7 @@ public class WalidatorAbsenci {
 		switch (pmAbsencja.getRodzaj()) {
 		case urlop_wypoczynkowy:
 
-			lvLimit = mObsPrac.getUrlop(pmAbsencja.getIdPracownika());
+			lvLimit = mObsPrac.getUrlopNal(pmAbsencja.getIdPracownika());
 
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
@@ -74,7 +74,7 @@ public class WalidatorAbsenci {
 			break;
 		case urlop_w_pracy:
 
-			lvLimit = mObsPrac.getUrlop(pmAbsencja.getIdPracownika());
+			lvLimit = mObsPrac.getUrlopNal(pmAbsencja.getIdPracownika());
 
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),

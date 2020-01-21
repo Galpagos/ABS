@@ -20,42 +20,42 @@ import Enums.SLRodzajeAbsencji;
 public class PobieranieModulow {
 	JDialog mOkno;
 	private final JPanel contentPanel = new JPanel();
-	List<SLRodzajeAbsencji> mLista;
-	List<JCheckBox> lvListaCheckboxow;
-	JCheckBox chckbxWszystkie;
+	List<SLRodzajeAbsencji> mListaAbsencji;
+	List<JCheckBox> mListaCheckboxow;
+	JCheckBox cbWszystkie;
 
 	public PobieranieModulow() {
-		mLista = new ArrayList<SLRodzajeAbsencji>();
+		mListaAbsencji = new ArrayList<SLRodzajeAbsencji>();
 		mOkno = new JDialog();
 		mOkno.setModalityType(ModalityType.APPLICATION_MODAL);
-		mOkno.setBounds(100, 100, 597, 307);
+		mOkno.setBounds(100, 100, 697, 307);
 		mOkno.getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mOkno.getContentPane().add(contentPanel, BorderLayout.CENTER);
-		lvListaCheckboxow = new ArrayList<JCheckBox>();
+		mListaCheckboxow = new ArrayList<JCheckBox>();
 		contentPanel.setLayout(new GridLayout(0, 3));
 		for (SLRodzajeAbsencji lvAbs : SLRodzajeAbsencji.values()) {
 			JCheckBox lvBox = new JCheckBox(lvAbs.toString());
 			lvBox.setSelected(true);
-			lvListaCheckboxow.add(lvBox);
+			mListaCheckboxow.add(lvBox);
 			contentPanel.add(lvBox);
 		}
-		JPanel buttonPane = new JPanel();
-		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		mOkno.getContentPane().add(buttonPane, BorderLayout.SOUTH);
+		JPanel lvButtonPane = new JPanel();
+		lvButtonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		mOkno.getContentPane().add(lvButtonPane, BorderLayout.SOUTH);
 
-		chckbxWszystkie = new JCheckBox("Wszystkie");
-		chckbxWszystkie.setSelected(true);
-		chckbxWszystkie.addActionListener(new ActionListener() {
+		cbWszystkie = new JCheckBox("Wszystkie");
+		cbWszystkie.setSelected(true);
+		cbWszystkie.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent pmE) {
-				for (JCheckBox lvBox : lvListaCheckboxow)
-					lvBox.setSelected(chckbxWszystkie.isSelected());
+				for (JCheckBox lvBox : mListaCheckboxow)
+					lvBox.setSelected(cbWszystkie.isSelected());
 
 			}
 		});
-		buttonPane.add(chckbxWszystkie);
+		lvButtonPane.add(cbWszystkie);
 		{
 			JButton okButton = new JButton("OK");
 			okButton.setActionCommand("OK");
@@ -63,9 +63,9 @@ public class PobieranieModulow {
 
 				@Override
 				public void actionPerformed(ActionEvent pmE) {
-					for (JCheckBox lvBox : lvListaCheckboxow) {
+					for (JCheckBox lvBox : mListaCheckboxow) {
 						if (lvBox.isSelected()) {
-							mLista.add(SLRodzajeAbsencji.AbsencjaPoNazwie(lvBox.getText()));
+							mListaAbsencji.add(SLRodzajeAbsencji.AbsencjaPoNazwie(lvBox.getText()));
 						}
 
 					}
@@ -73,28 +73,28 @@ public class PobieranieModulow {
 
 				}
 			});
-			buttonPane.add(okButton);
+			lvButtonPane.add(okButton);
 			mOkno.getRootPane().setDefaultButton(okButton);
 		}
 		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.setActionCommand("Cancel");
-			cancelButton.addActionListener(new ActionListener() {
+			JButton lvCancelButton = new JButton("Cancel");
+			lvCancelButton.setActionCommand("Cancel");
+			lvCancelButton.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent pmE) {
-					mLista = new ArrayList<SLRodzajeAbsencji>();
+					mListaAbsencji = new ArrayList<SLRodzajeAbsencji>();
 					mOkno.dispose();
 
 				}
 			});
-			buttonPane.add(cancelButton);
+			lvButtonPane.add(lvCancelButton);
 		}
 		mOkno.setVisible(true);
 	}
 
 	public List<SLRodzajeAbsencji> ZwrocModuly() {
-		return mLista;
+		return mListaAbsencji;
 	}
 
 }
