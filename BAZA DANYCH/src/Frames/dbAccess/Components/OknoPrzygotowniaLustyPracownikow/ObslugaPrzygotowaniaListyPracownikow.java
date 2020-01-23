@@ -70,14 +70,14 @@ public class ObslugaPrzygotowaniaListyPracownikow {
 		mOkno.odswiezTabPrawa();
 	}
 
-	public Object[] pobierzGrupy() {
+	public GrupaDTO[] pobierzGrupy() {
 		List<GrupaDTO> lvListaCB = ObslugaGrup.getListaGrup();
 
 		GrupaDTO lvWszyscy = new GrupaDTO();
 		lvWszyscy.setNazwa("Wszyscy");
 		lvListaCB.add(0, lvWszyscy);
 
-		return lvListaCB.toArray();
+		return lvListaCB.toArray(new GrupaDTO[0]);
 	}
 
 	public void dodajPrzerwe() {

@@ -106,7 +106,7 @@ public class OknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowania
 			buttonPane.setBounds(0, 433, 689, 52);
 			contentPanel.add(buttonPane);
 
-			JComboBox<GrupaDTO> cbWyborGrupy = new JComboBox(mOblsluga.pobierzGrupy());
+			JComboBox<GrupaDTO> cbWyborGrupy = new JComboBox<GrupaDTO>(mOblsluga.pobierzGrupy());
 			cbWyborGrupy.setBounds(12, 13, 154, 25);
 			cbWyborGrupy.setSelectedItem(" ");
 			cbWyborGrupy.addActionListener(e -> {

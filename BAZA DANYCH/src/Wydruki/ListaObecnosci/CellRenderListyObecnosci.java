@@ -21,7 +21,7 @@ public class CellRenderListyObecnosci extends JLabel implements TableCellRendere
 	@Override
 	public Component getTableCellRendererComponent(JTable pmTable, Object pmValue, boolean pmIsSelected,
 			boolean pmHasFocus, int pmRow, int pmColumn) {
-		if (pmValue.getClass() == PustePole.class || (pmRow == -1 && pmColumn == 4)) {
+		if (pmValue != null && (pmValue.getClass() == PustePole.class || (pmRow == -1 && pmColumn == 4))) {
 			setBorder(BorderFactory.createEmptyBorder());
 			setText("");
 		} else
@@ -41,7 +41,7 @@ public class CellRenderListyObecnosci extends JLabel implements TableCellRendere
 			setHorizontalAlignment(CENTER);
 		}
 
-		if (pmValue.equals("NB")) {
+		if ("NB".equals(pmValue)) {
 			setFont(new Font("TimesRoman", Font.BOLD, mSize));
 			setForeground(Color.red);
 			setHorizontalAlignment(CENTER);

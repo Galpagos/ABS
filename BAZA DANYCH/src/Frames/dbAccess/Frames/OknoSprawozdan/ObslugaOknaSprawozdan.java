@@ -71,7 +71,9 @@ public class ObslugaOknaSprawozdan {
 	}
 
 	public void generujListeObecnosci() {
-		new OknoListaObecnosci().main(null);
+
+		String[] lvArg = new String[0];
+		OknoListaObecnosci.main(lvArg);
 
 	}
 }

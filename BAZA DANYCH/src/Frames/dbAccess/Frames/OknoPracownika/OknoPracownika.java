@@ -29,11 +29,10 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	}
 
 	@Override
-	protected void budujOkno() {
-		super.budujOkno();
+	protected void readParams() {
+		super.readParams();
 		setPracownik(mParams);
 		mObsluga = new ObslugaOknaPracownika(this);
-
 	}
 
 	@Override

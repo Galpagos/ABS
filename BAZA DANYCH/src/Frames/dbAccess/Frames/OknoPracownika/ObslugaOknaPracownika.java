@@ -11,7 +11,9 @@ import Datownik.JodaTime;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ComboPicker;
-import Frames.dbAccess.Frames.Absencja.SrcOknoAbsencji;
+import Frames.dbAccess.Components.ScriptParams;
+import Frames.dbAccess.Frames.Absencja.OknoAbsencji;
+import Frames.dbAccess.Frames.Absencja.OknoAbsencjiParams;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
@@ -29,7 +31,6 @@ public class ObslugaOknaPracownika {
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika) {
 		mOkno = pmOknoPracownika;
 		mRepo = new OknoPracownikaRepository();
-
 	}
 
 	public void DodajAbsencje() {
@@ -48,7 +49,9 @@ public class ObslugaOknaPracownika {
 		if (mOkno.getZaznaczenieTabeli() < 0) {
 			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
 		} else {
-			new SrcOknoAbsencji(mOkno.getAbsencjeZTabeli());
+			ScriptParams lvParams = new ScriptParams();
+			lvParams.add(OknoAbsencjiParams.ABSENCJA_DTO, mOkno.getAbsencjeZTabeli());
+			new OknoAbsencji(lvParams);
 		}
 	}
 

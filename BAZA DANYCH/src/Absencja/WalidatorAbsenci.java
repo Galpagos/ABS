@@ -179,10 +179,14 @@ public class WalidatorAbsenci {
 	}
 
 	private int wyznaczLimitChorobowy(int pmIdPracownika, int pmRok) {
-		Calendar lvCalendarz = new GregorianCalendar();
-		lvCalendarz.setTime(mObsPrac.getDataUrodzenia(pmIdPracownika));
-		if (pmRok - lvCalendarz.get(Calendar.YEAR) <= 50)
-			return 33;
+
+		Date lvDataUr = mObsPrac.getDataUrodzenia(pmIdPracownika);
+		if (lvDataUr != null) {
+			Calendar lvCalendarz = new GregorianCalendar();
+			lvCalendarz.setTime(lvDataUr);
+			if (pmRok - lvCalendarz.get(Calendar.YEAR) <= 50)
+				return 33;
+		}
 		return 14;
 	}
 

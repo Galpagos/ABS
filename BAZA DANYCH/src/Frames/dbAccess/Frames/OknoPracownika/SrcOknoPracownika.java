@@ -191,4 +191,9 @@ public class SrcOknoPracownika extends AbstractOkno {
 	protected void onOpen() {
 
 	}
+
+	@Override
+	protected void readParams() {
+
+	}
 }

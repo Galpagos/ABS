@@ -29,19 +29,14 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					OknoGlowne mFrame = new OknoGlowne();
-					mFrame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				new OknoGlowne().setVisible(true);
 			}
 		});
 	}
 
-	public OknoGlowne() throws SQLException {
+	public OknoGlowne() {
 		super();
-		addWindowListener(new Przekoder());
+		// addWindowListener(new Przekoder());
 		ustawTabele(tbPracownicy);
 		btnPokazPracownika.addActionListener(lvE -> mObsluga.pokazPracownika());
 		btnDodajPracownika.addActionListener(lvE -> mObsluga.dodajPracownika());

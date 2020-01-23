@@ -38,11 +38,11 @@ public class SprawozdanieMiesieczneCellRender extends JLabel implements TableCel
 		}
 
 		if (pmValue != null) {
-			if (pmValue.toString() != "") {
+			if (!"".equals(pmValue.toString())) {
 				Color newColor;
-				if (pmValue.toString() == "Sobota" || pmValue.toString() == "Niedziela") {
+				if ("Sobota".equals(pmValue.toString()) || "Niedziela".equals(pmValue.toString())) {
 					newColor = new Color(255, 255, 0);
-					if (pmValue.toString() == "Sobota") {
+					if ("Sobota".equals(pmValue.toString())) {
 						mOpis = "Sb";
 						setToolTipText("Sobota");
 					} else {
@@ -69,7 +69,7 @@ public class SprawozdanieMiesieczneCellRender extends JLabel implements TableCel
 			setForeground(Color.white);
 
 		}
-		if (pmValue != null && mOpis == "")
+		if (pmValue != null && "".equals(mOpis))
 			mOpis = pmValue.toString();
 		setText(mOpis);
 

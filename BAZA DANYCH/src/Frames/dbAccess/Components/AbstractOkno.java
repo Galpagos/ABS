@@ -9,12 +9,17 @@ public abstract class AbstractOkno extends JDialog {
 
 	public AbstractOkno(ScriptParams pmParams) {
 		mParams = pmParams;
+		setModalityType(ModalityType.APPLICATION_MODAL);
+
+		readParams();
 		budujOkno();
 		przypiszMetody();
 		odswiezKontrolki();
 		onOpen();
 		setVisible(true);
 	}
+
+	protected abstract void readParams();
 
 	protected abstract void onOpen();
 

@@ -14,7 +14,9 @@ import org.joda.time.LocalDate;
 
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
-import Frames.dbAccess.Frames.Absencja.SrcOknoAbsencji;
+import Frames.dbAccess.Components.ScriptParams;
+import Frames.dbAccess.Frames.Absencja.OknoAbsencji;
+import Frames.dbAccess.Frames.Absencja.OknoAbsencjiParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
 public class ObslugaAbsencji {
@@ -94,8 +96,11 @@ public class ObslugaAbsencji {
 	}
 
 	public void modyfikujAbsencje(AbsencjaDTO pmAbs) {
-		if (pmAbs != null)
-			new SrcOknoAbsencji(pmAbs);
+		if (pmAbs != null) {
+			ScriptParams lvParams = new ScriptParams();
+			lvParams.add(OknoAbsencjiParams.ABSENCJA_DTO, pmAbs);
+			new OknoAbsencji(lvParams);
+		}
 	}
 
 	public void dodajAbsencje(AbsencjaDTO pmAbs) {

@@ -22,7 +22,7 @@ public class Przekod {
 		if (db.getTable("AD_SYS_INFO") == null) {
 			Table newTable;
 			try {
-				db.setColumnOrder(db.DEFAULT_COLUMN_ORDER);
+				db.setColumnOrder(Database.DEFAULT_COLUMN_ORDER);
 				newTable = new TableBuilder("AD_SYS_INFO").addColumn(new ColumnBuilder("NAZWA", DataType.TEXT))
 						.addColumn(new ColumnBuilder("WARTOSC").setSQLType(Types.VARCHAR)).toTable(db);
 				newTable.addRow("Wersja", "1.00");

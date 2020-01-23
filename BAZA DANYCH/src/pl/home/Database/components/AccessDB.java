@@ -22,20 +22,19 @@ public class AccessDB {
 		{
 			lvStatement.execute(pmZapytanie);
 			ResultSet rs = lvStatement.getResultSet();
+			if (rs != null) {
+				ResultSetMetaData metaData = rs.getMetaData();
+				int columnCount = metaData.getColumnCount();
+				while (rs.next()) {
+					Map<String, Object> lvMapa = new HashMap<>();
+					for (int column = 1; column <= columnCount; column++) {
+						lvMapa.put(metaData.getColumnName(column), rs.getObject(column));
 
-			ResultSetMetaData metaData = rs.getMetaData();
-			int columnCount = metaData.getColumnCount();
-			while (rs.next()) {
-				Map<String, Object> lvMapa = new HashMap<>();
-				for (int column = 1; column <= columnCount; column++) {
-					lvMapa.put(metaData.getColumnName(column), rs.getObject(column));
-
+					}
+					lvWynik.add(new LRecord(lvMapa));
 				}
-				lvWynik.add(new LRecord(lvMapa));
-			}
-			if (rs != null)
 				rs.close();
-
+			}
 		} catch (Exception lvLvE) {
 			lvLvE.printStackTrace();
 		}

@@ -1,7 +1,6 @@
 package Frames.dbAccess.Frames.OknoGlowne;
 
 import java.awt.Dimension;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,7 +33,7 @@ public class SrcOknoGlowne extends JFrame {
 	JButton btnSprawozdanie;
 	JButton btnZwolnij;
 
-	public SrcOknoGlowne() throws SQLException {
+	public SrcOknoGlowne() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 825, 560);
 		mContentPane = new JPanel();
@@ -94,7 +93,7 @@ public class SrcOknoGlowne extends JFrame {
 		btnSprawozdanie.setBounds(282, 151, 140, 25);
 		mButtonPanel.add(btnSprawozdanie);
 
-		btnZwolnij = new JButton("ZwolnijPracownika");
+		btnZwolnij = new JButton("Zwolnij Pracownika");
 		btnZwolnij.setBounds(46, 198, 191, 39);
 		mButtonPanel.add(btnZwolnij);
 

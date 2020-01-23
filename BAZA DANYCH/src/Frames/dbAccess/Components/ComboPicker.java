@@ -26,7 +26,7 @@ public class ComboPicker {
 		mObsluga = pmObsluga;
 	}
 
-	private JComboBox cbGrupy;
+	private JComboBox<Object> cbGrupy;
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnNowy;
 	private JDialog d;
@@ -48,11 +48,11 @@ public class ComboPicker {
 		btnNowy = pmBtnNowy;
 	}
 
-	public JComboBox getCbGrupy() {
+	public JComboBox<Object> getCbGrupy() {
 		return cbGrupy;
 	}
 
-	public void setCbGrupy(JComboBox pmCbGrupy) {
+	public void setCbGrupy(JComboBox<Object> pmCbGrupy) {
 		cbGrupy = pmCbGrupy;
 	}
 
@@ -66,7 +66,7 @@ public class ComboPicker {
 		d.getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			cbGrupy = new JComboBox();
+			cbGrupy = new JComboBox<Object>();
 			cbGrupy.setBounds(40, 92, 196, 30);
 			contentPanel.add(cbGrupy);
 		}
