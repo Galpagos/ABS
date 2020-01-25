@@ -7,7 +7,9 @@ import java.util.List;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
+import Frames.dbAccess.Components.ScriptParams;
 import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikow;
+import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikowParams;
 import Frames.dbAccess.Components.PobieranieModulow.PobieranieModulow;
 import Wydruki.ListaObecnosci.OknoListaObecnosci;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
@@ -45,8 +47,9 @@ public class ObslugaOknaSprawozdan {
 		} else {
 			mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());
 		}
-
-		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow("Wybierz pracowników").WybierzPracownikow());
+		ScriptParams lvParams = new ScriptParams();
+		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
 		mDane.setOkresSprawozdawczy(SLMiesiace.Rok.getOkres(mRok));
 	}
 
@@ -55,7 +58,9 @@ public class ObslugaOknaSprawozdan {
 		if (lvData == null)
 			return false;
 		mDane.setOkresSprawozdawczy(SLMiesiace.values()[lvData.getMonthValue() - 1].getOkres(lvData.getYear()));
-		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow("Wybierz pracowników").WybierzPracownikow());
+		ScriptParams lvParams = new ScriptParams();
+		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
 		if (mDane.getListaPracownikow().size() == 0)
 			return false;
 		mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());

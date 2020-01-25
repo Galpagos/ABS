@@ -9,11 +9,11 @@ import Pracownik.ObslugaPracownka;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public class ObslugaPrzygotowaniaListyPracownikow {
-	OknoPrzygotowaniaListyPracownikow mOkno;
+	SrcOknoPrzygotowaniaListyPracownikow mOkno;
 	RepositoryPrzygotowaniaListyPracownikow mRepo;
 	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 
-	public ObslugaPrzygotowaniaListyPracownikow(OknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
+	public ObslugaPrzygotowaniaListyPracownikow(SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
 		mOkno = pmOknoPrzygotowaniaListyPracownikow;
 		mRepo = new RepositoryPrzygotowaniaListyPracownikow();
 	}

@@ -20,7 +20,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 
 import Frames.dbAccess.Components.DatePicker;
+import Frames.dbAccess.Components.ScriptParams;
 import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikow;
+import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikowParams;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci {
@@ -132,7 +134,10 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		getContentPane().add(btnEdytujLewaKolumna);
 		btnEdytujLewaKolumna.addActionListener(e -> {
 			setAlwaysOnTop(false);
-			mListaLewa = new OknoPrzygotowaniaListyPracownikow("Wybierz pracowników", mListaLewa).getListaPrawa();
+			ScriptParams lvParams = new ScriptParams();
+			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.LISTA_PRACOWNIKOW, mListaLewa);
+			mListaLewa = new OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa();
 			odswiezKontrolki();
 		});
 
@@ -141,7 +146,10 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		getContentPane().add(btnEdytujPrawaKolumna);
 		btnEdytujPrawaKolumna.addActionListener(e -> {
 			setAlwaysOnTop(false);
-			mListaPrawa = new OknoPrzygotowaniaListyPracownikow("Wybierz pracowników", mListaPrawa).getListaPrawa();
+			ScriptParams lvParams = new ScriptParams();
+			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.LISTA_PRACOWNIKOW, mListaPrawa);
+			mListaPrawa = new OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa();
 			odswiezKontrolki();
 		});
 

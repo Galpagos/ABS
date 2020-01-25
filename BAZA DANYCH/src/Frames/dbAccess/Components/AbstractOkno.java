@@ -10,6 +10,7 @@ public abstract class AbstractOkno extends JDialog {
 	public AbstractOkno(ScriptParams pmParams) {
 		mParams = pmParams;
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		readParams();
 		budujOkno();
