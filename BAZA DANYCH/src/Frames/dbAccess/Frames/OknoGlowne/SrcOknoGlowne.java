@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 @SuppressWarnings("serial")
-public class SrcOknoGlowne extends JFrame {
+public abstract class SrcOknoGlowne extends JFrame {
 
 	JTable tbPracownicy;
 	JButton btnDodajPracownika;

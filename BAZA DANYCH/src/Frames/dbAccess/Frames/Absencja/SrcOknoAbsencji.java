@@ -16,7 +16,7 @@ import Frames.dbAccess.Components.DatePicker;
 import Frames.dbAccess.Components.ScriptParams;
 
 @SuppressWarnings("serial")
-public class SrcOknoAbsencji extends AbstractOkno {
+public abstract class SrcOknoAbsencji extends AbstractOkno {
 	private JLabel lblAbsencjaPracownika;
 	private JPanel contentPane;
 	protected JFormattedTextField mDataOd;
@@ -115,19 +115,13 @@ public class SrcOknoAbsencji extends AbstractOkno {
 
 	@Override
 	protected void readParams() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void onOpen() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void odswiezKontrolki() {
-		// TODO Auto-generated method stub
-
 	}
 }

@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import Enums.Komunikat;
 import Frames.dbAccess.Components.DatePicker;
+import Frames.dbAccess.Components.ScriptParams;
 import Frames.dbAccess.Frames.OknoSprawozdan.OknoSprawozdan;
 import Parsery.ParseryDB;
 import Pracownik.ObslugaPracownka;
@@ -105,7 +106,7 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void sprawozdanie() {
-		new OknoSprawozdan();
+		new OknoSprawozdan(new ScriptParams());
 	}
 
 	public void zwolnijPracownika() {

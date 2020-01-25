@@ -37,56 +37,48 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 
 	@Override
 	protected void ustawTabele() {
-		super.ustawTabele();
 		ustawTabele(tbAbsencje, mPracownik);
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void przypiszGrupe() {
-		super.przypiszGrupe();
 		mObsluga.przypiszGrupe();
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void usunAbsencje() {
-		super.usunAbsencje();
 		mObsluga.UsunAbsencje();
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void modyfikujAbsencje() {
-		super.modyfikujAbsencje();
 		mObsluga.ModyfikujAbsencje();
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void ustawUrlopNalezny() {
-		super.ustawUrlopNalezny();
 		mObsluga.ustawUrlopNalezny();
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void dodajAbsencje() {
-		super.dodajAbsencje();
 		mObsluga.DodajAbsencje();
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void usunGrupe() {
-		super.usunGrupe();
 		mObsluga.usunGrupe();
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void ustawDateUrodzenia() {
-		super.ustawDateUrodzenia();
 		mObsluga.ustawDateUrodzenia();
 		odswiezKontrolki();
 	}

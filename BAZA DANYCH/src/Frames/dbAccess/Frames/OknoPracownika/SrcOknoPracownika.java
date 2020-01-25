@@ -16,7 +16,7 @@ import Frames.dbAccess.Components.AbstractOkno;
 import Frames.dbAccess.Components.ScriptParams;
 
 @SuppressWarnings("serial")
-public class SrcOknoPracownika extends AbstractOkno {
+public abstract class SrcOknoPracownika extends AbstractOkno {
 
 	public SrcOknoPracownika(ScriptParams pmParams) {
 		super(pmParams);
@@ -155,37 +155,21 @@ public class SrcOknoPracownika extends AbstractOkno {
 		spnRok.addChangeListener(lvE -> ustawTabele());
 	}
 
-	protected void ustawTabele() {
+	protected abstract void ustawTabele();
 
-	}
+	protected abstract void przypiszGrupe();
 
-	protected void przypiszGrupe() {
+	protected abstract void usunAbsencje();
 
-	}
+	protected abstract void modyfikujAbsencje();
 
-	protected void usunAbsencje() {
+	protected abstract void ustawUrlopNalezny();
 
-	}
+	protected abstract void ustawDateUrodzenia();
 
-	protected void modyfikujAbsencje() {
+	protected abstract void usunGrupe();
 
-	}
-
-	protected void ustawUrlopNalezny() {
-
-	}
-
-	protected void ustawDateUrodzenia() {
-
-	}
-
-	protected void usunGrupe() {
-
-	}
-
-	protected void dodajAbsencje() {
-
-	}
+	protected abstract void dodajAbsencje();
 
 	@Override
 	protected void onOpen() {
