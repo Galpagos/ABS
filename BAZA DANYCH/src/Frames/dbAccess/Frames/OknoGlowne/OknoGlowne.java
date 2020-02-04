@@ -15,10 +15,12 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import Frames.dbAccess.Components.JTableModelFromLRecords;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccess.ZestawienieBean;
 import dbAccess.dbAccess;
 import dbAccess.dbAccess.MyTableModel;
+import pl.home.Database.components.AccessDB;
 
 public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
@@ -28,6 +30,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new OknoGlowne().setVisible(true);
 			}
@@ -36,7 +39,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	public OknoGlowne() {
 		super();
-		// addWindowListener(new Przekoder());
+		addWindowListener(new Przekoder());
 		ustawTabele(tbPracownicy);
 		btnPokazPracownika.addActionListener(lvE -> mObsluga.pokazPracownika());
 		btnDodajPracownika.addActionListener(lvE -> mObsluga.dodajPracownika());
@@ -70,7 +73,8 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		};
 	}
 
-	private JTable ustawTabele(JTable pmTabela) {
+	@SuppressWarnings("unused")
+	private JTable ustawTabele2(JTable pmTabela) {
 		try {
 			String lvZapytanie = //
 					"Select " + ZestawienieBean.getKolumnaID() + "," + ZestawienieBean.getKolumnaNazwaPracownika()//
@@ -101,6 +105,38 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return pmTabela;
+	}
+
+	private JTable ustawTabele(JTable pmTabela) {
+
+		String lvZapytanie = //
+				"Select " + ZestawienieBean.getKolumnaID() + "," + ZestawienieBean.getKolumnaNazwaPracownika()//
+						+ " from " + ZestawienieBean.getNazwaTabeli()//
+						+ " where " + ZestawienieBean.getKolumnaNazwaPracownika() + " like \"%"
+						+ mFiltrPracownika.getText() + "%\"" + //
+						" AND Data_Zwolnienia is null";
+		JTableModelFromLRecords lvDTM = new JTableModelFromLRecords(AccessDB.executeQuery(lvZapytanie));
+		pmTabela.setModel(lvDTM);
+		lvDTM.fireTableDataChanged();
+		TableColumnModel lvTcm = pmTabela.getColumnModel();
+		lvTcm.removeColumn(lvTcm.getColumn(0));
+//			for (int lvKolumna = pmTabela.getColumnCount() - 1; lvKolumna >= 0; lvKolumna--) {
+//
+//				if (pmTabela.getColumnName(lvKolumna).contains("ID")) {
+//					TableColumn k = lvTcm.getColumn(lvKolumna);
+//					lvTcm.removeColumn(k);
+//				}
+//			}
+
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(pmTabela.getModel());
+		pmTabela.setRowSorter(sorter);
+
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
+		pmTabela.repaint();
+
 		return pmTabela;
 	}
 

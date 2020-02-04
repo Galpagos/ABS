@@ -63,36 +63,44 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 		executeUpdate(zapytanie);
 	}
 
+	@Override
 	public Object[][] getAbsencjePracownika(int pmId) {
 		return getRecordSets(
-				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,Rodzaj_absencji from Absencje where id_pracownika="
+				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ,EKWIWALENT from Absencje where id_pracownika="
 						+ pmId);
 	}
 
+	@Override
 	public Object[][] getAbsencjePoId(int pmId) {
 		return getRecordSets(
-				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,Rodzaj_absencji from Absencje where id_tabeli="
+				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ,EKWIWALENT from Absencje where id_tabeli="
 						+ pmId);
 	}
 
+	@Override
 	public int ileDniWolnych(Date pmDataOd, Date pmDataDo) {
 		return GetCount("DniWolne"//
 				+ " where DATA BEtween " + ParseryDB.DateParserToSQL_SELECT(pmDataOd) + " and "
 				+ ParseryDB.DateParserToSQL_SELECT(pmDataDo));
 	}
 
+	@Override
 	public void dodajAbsencje(AbsencjaDTO pmAbs) {
-		executeUpdate("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , Rodzaj_absencji ) "//
-				+ " VALUES (" + pmAbs.getId() + " , " + pmAbs.getIdPracownika() + " ,"
+		executeUpdate("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , RODZAJ,EKWIWALENT ) "//
+				+ " VALUES (" + pmAbs.getId() + " , " //
+				+ pmAbs.getIdPracownika() + " ,"
 				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getStart().toDate()) + " , "
-				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getEnd().toDate()) + " ,\""
-				+ pmAbs.getRodzaj().toString() + "\")");
+				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getEnd().toDate()) + " ," //
+				+ "'" + pmAbs.getRodzaj().getKod() + "'," //
+				+ "'" + pmAbs.getProcent().getKodString() + "'" + ")");
 	}
 
+	@Override
 	public void usunAbsencje(int pmID) {
 		executeUpdate("Delete * from Absencje where Id_tabeli=" + pmID);
 	}
 
+	@Override
 	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja) {
 		return GetCount("Absencje where id_tabeli != " + pmAbsencja.getId() + " and id_pracownika="
 				+ pmAbsencja.getIdPracownika() + " and Od_kiedy <= "

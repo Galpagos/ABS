@@ -12,6 +12,8 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import Enums.SLRodzajeAbsencji;
+
 public class dbAccess {
 	public static String mSciezkaDoBazy = "jdbc:ucanaccess://BAZA.accdb";
 
@@ -111,9 +113,12 @@ public class dbAccess {
 			Vector<String> columnNames = new Vector<String>();
 			int columnCount = metaData.getColumnCount();
 			ArrayList<Integer> lvListaKolumn = new ArrayList<Integer>();
+			int lvRodzaj = -1;
 			for (int column = 1; column <= columnCount; column++) {
 				// if (!metaData.getColumnName(column).contains("ID"))
 				// {
+				if ("RODZAJ".equals(metaData.getColumnName(column)))
+					lvRodzaj = column;
 				columnNames.add(metaData.getColumnName(column).replace('_', ' '));
 				lvListaKolumn.add(column);
 				// }
@@ -125,7 +130,11 @@ public class dbAccess {
 				Vector<Object> vector = new Vector<Object>();
 
 				for (int columnIndex : lvListaKolumn) {
-					vector.add(rs.getObject(columnIndex));
+					if (columnIndex == lvRodzaj
+							&& SLRodzajeAbsencji.getByKod((String) rs.getObject(columnIndex)) != null)
+						vector.add(SLRodzajeAbsencji.getByKod((String) rs.getObject(columnIndex)).getNazwa());
+					else
+						vector.add(rs.getObject(columnIndex));
 				}
 				data.add(vector);
 			}
@@ -150,22 +159,27 @@ public class dbAccess {
 		private String[] columnNames;
 		private Object[][] data;
 
+		@Override
 		public int getColumnCount() {
 			return columnNames.length;
 		}
 
+		@Override
 		public int getRowCount() {
 			return data.length;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
 
+		@Override
 		public Object getValueAt(int row, int col) {
 			return data[row][col];
 		}
 
+		@Override
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public Class getColumnClass(int c) {
 			for (int row = 0; row < getRowCount(); row++) {
@@ -179,10 +193,12 @@ public class dbAccess {
 			return Object.class;
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
 
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			data[row][col] = value;
 			fireTableCellUpdated(row, col);

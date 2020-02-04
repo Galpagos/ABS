@@ -1,5 +1,6 @@
 package Wydruki.PrzygotowanieDanych;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.joda.time.Interval;
@@ -31,7 +32,17 @@ public class DaneDoSprawozdaniaMiesiecznego {
 		mOkresSprawozdawczy = pmOkresSprawozdawczy;
 	}
 
+	public LocalDate getData() {
+		return mData;
+	}
+
+	public DaneDoSprawozdaniaMiesiecznego setData(LocalDate pmData) {
+		mData = pmData;
+		return this;
+	}
+
 	private List<PracownikDTO> mListaPracownikow;
 	private List<SLRodzajeAbsencji> mListaAbsencji;
 	private Interval mOkresSprawozdawczy;
+	private LocalDate mData;
 }

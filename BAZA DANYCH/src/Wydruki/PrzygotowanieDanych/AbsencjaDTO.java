@@ -4,12 +4,14 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 import Enums.SLRodzajeAbsencji;
+import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 public class AbsencjaDTO {
 	private Interval mOkres;
 	private SLRodzajeAbsencji mRodzaj;
 	private int mId;
 	private int mIdPracownika;
+	private SLEkwiwalentZaUrlop mProcent;
 
 	public Interval getOkres() {
 		return mOkres;
@@ -62,6 +64,7 @@ public class AbsencjaDTO {
 
 	private String mNazwaPracownika;
 
+	@Override
 	public String toString() {
 		return mRodzaj.toString();
 	}
@@ -69,5 +72,17 @@ public class AbsencjaDTO {
 	public static AbsencjaDTO builder() {
 
 		return new AbsencjaDTO();
+	}
+
+	public SLEkwiwalentZaUrlop getProcent() {
+		if (mProcent != null)
+			return mProcent;
+		return mRodzaj.DEFAULT_PROCENT();
+
+	}
+
+	public AbsencjaDTO setProcent(SLEkwiwalentZaUrlop pmProcent) {
+		mProcent = pmProcent;
+		return this;
 	}
 }

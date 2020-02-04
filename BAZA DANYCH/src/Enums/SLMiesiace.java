@@ -3,44 +3,44 @@ package Enums;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
-public enum SLMiesiace
-{
-	Styczeñ(1), //
-	Luty(2), //
-	Marzec(3), //
-	Kwiecieñ(4), //
-	Maj(5), //
-	Czerwiec(6), //
-	Lipiec(7), //
-	Sierpieñ(8), //
-	Wrzesieñ(9), //
-	PaŸdziernik(10), //
-	Listopad(11), //
-	Grudzieñ(12), //
-	Rok(0);
+public enum SLMiesiace {
+	N01_STYCZEN(1, "Styczeñ"), //
+	NO2_LUTY(2, "Luty"), //
+	NO3_MARZEC(3, "Marzec"), //
+	NO4_KWIECIEN(4, "Kwiecieñ"), //
+	NO5_MAJ(5, "Maj"), //
+	NO6_CZERWIEN(6, "Czewiec"), //
+	NO7_LIPIEC(7, "Lipiec"), //
+	NO8_SIERPIEN(8, "Sierpieñ"), //
+	NO9_WRZESIEN(9, "Wrzesieñ"), //
+	N10_PAZDZIERNIK(10, "PaŸdziernik"), //
+	N11_LISTOPAD(11, "Listopad"), //
+	N12_GRUDZIEN(12, "Grudzieñ"), //
+	N00_ROK(0, "Rok");
 
 	private int mMiesiacInt;
+	private String mNazwa;
 
-	SLMiesiace(int k)
-	{
-		this.mMiesiacInt = k;
+	SLMiesiace(int pmKod, String pmNazwa) {
+		mMiesiacInt = pmKod;
+		mNazwa = pmNazwa;
 	}
 
-	public int getMiesiacInt()
-	{
+	public int getMiesiacInt() {
 		return mMiesiacInt;
 	}
 
-	public Interval getOkres(int pmRok)
-	{
-		if (getMiesiacInt() > 0)
-		{
+	public String getNazwa() {
+		return mNazwa;
+	}
+
+	public Interval getOkres(int pmRok) {
+		if (getMiesiacInt() > 0) {
 			DateTime lvStart = new DateTime().withYear(pmRok).withMonthOfYear(getMiesiacInt()).withDayOfMonth(1)
 					.withTimeAtStartOfDay();
 			DateTime lvEnd = lvStart.plusMonths(1).plusHours(10).minusDays(1);
 			return new Interval(lvStart, lvEnd);
-		} else
-		{
+		} else {
 			DateTime lvStart = new DateTime().withYear(pmRok).withMonthOfYear(1).withDayOfMonth(1)
 					.withTimeAtStartOfDay();
 			DateTime lvEnd = lvStart.plusMonths(12).plusHours(10).minusDays(1);
@@ -48,10 +48,8 @@ public enum SLMiesiace
 		}
 	}
 
-	public static SLMiesiace getByValue(int i)
-	{
-		for (SLMiesiace e : SLMiesiace.values())
-		{
+	public static SLMiesiace getByValue(int i) {
+		for (SLMiesiace e : SLMiesiace.values()) {
 			if (i == e.getMiesiacInt())
 				return e;
 		}

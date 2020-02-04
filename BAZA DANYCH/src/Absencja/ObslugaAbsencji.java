@@ -18,6 +18,7 @@ import Frames.dbAccess.Components.ScriptParams;
 import Frames.dbAccess.Frames.Absencja.OknoAbsencji;
 import Frames.dbAccess.Frames.Absencja.OknoAbsencjiParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 public class ObslugaAbsencji {
 	AbsencjaRepositor mRepo = new AbsencjaRepository();
@@ -29,8 +30,10 @@ public class ObslugaAbsencji {
 			AbsencjaDTO lvAbs = AbsencjaDTO.builder()//
 					.setId((int) lvDane[i][0])//
 					.setIdPracownika((int) lvDane[i][1])//
-					.setRodzaj(SLRodzajeAbsencji.AbsencjaPoNazwie((String) lvDane[i][4]))//
+					.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[i][4]))//
+					.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[i][5] == null ? null : lvDane[i][5].toString()))
 					.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane[i][2], lvDane[i][3]));
+
 			lvLista.add(lvAbs);
 		}
 		return lvLista;
@@ -43,7 +46,8 @@ public class ObslugaAbsencji {
 		return AbsencjaDTO.builder()//
 				.setId((int) lvDane[0][0])//
 				.setIdPracownika((int) lvDane[0][1])//
-				.setRodzaj(SLRodzajeAbsencji.AbsencjaPoNazwie((String) lvDane[0][4]))//
+				.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[0][4]))//
+				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[0][5].toString()))
 				.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane[0][2], lvDane[0][3]));
 	}
 
@@ -155,7 +159,7 @@ public class ObslugaAbsencji {
 				.sorted(Comparator.comparing(AbsencjaDTO::getStart)).collect(Collectors.toList());
 
 		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(
-				lvAbs2.getOkres().overlap(SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))));
+				lvAbs2.getOkres().overlap(SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))));
 
 		lvLista.stream().forEach(lvAbs -> {
 			licznik = licznik - ileDniKalendarzowych(lvAbs);

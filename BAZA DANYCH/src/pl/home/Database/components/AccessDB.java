@@ -5,15 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 
 import Enums.TabeleDB;
 
 public class AccessDB {
 	public static final String PATH_DATABASE = "jdbc:ucanaccess://BAZA.accdb";
 
-	protected static LRecordSet executeQuery(String pmZapytanie) {
+	public static LRecordSet executeQuery(String pmZapytanie) {
 		LRecordSet lvWynik = new LRecordSet();
 		try (//
 				Connection lvCon = init(); //
@@ -26,12 +24,12 @@ public class AccessDB {
 				ResultSetMetaData metaData = rs.getMetaData();
 				int columnCount = metaData.getColumnCount();
 				while (rs.next()) {
-					Map<String, Object> lvMapa = new HashMap<>();
+					LRecord lvMapa = new LRecord();
 					for (int column = 1; column <= columnCount; column++) {
 						lvMapa.put(metaData.getColumnName(column), rs.getObject(column));
 
 					}
-					lvWynik.add(new LRecord(lvMapa));
+					lvWynik.add(lvMapa);
 				}
 				rs.close();
 			}

@@ -12,6 +12,7 @@ import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotow
 import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikowParams;
 import Frames.dbAccess.Components.PobieranieModulow.PobieranieModulow;
 import Wydruki.ListaObecnosci.OknoListaObecnosci;
+import Wydruki.ListaPlac.ListaPlacWydruk;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.SprawozdanieMiesieczne.SprawozdanieMiesieczne;
 import Wydruki.SprawozdanieRoczne.SprawozdanieRoczne;
@@ -50,7 +51,7 @@ public class ObslugaOknaSprawozdan {
 		ScriptParams lvParams = new ScriptParams();
 		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
-		mDane.setOkresSprawozdawczy(SLMiesiace.Rok.getOkres(mRok));
+		mDane.setOkresSprawozdawczy(SLMiesiace.N00_ROK.getOkres(mRok));
 	}
 
 	private boolean przygotujDaneMiesieczne() {
@@ -80,5 +81,25 @@ public class ObslugaOknaSprawozdan {
 		String[] lvArg = new String[0];
 		OknoListaObecnosci.main(lvArg);
 
+	}
+
+	public void generujListePlac() {
+
+		if (przygotujDaneDoListyPlac())
+			new ListaPlacWydruk(mDane);
+
+	}
+
+	private boolean przygotujDaneDoListyPlac() {
+		LocalDate lvData = new DatePicker().setPickedLocalDate();
+		if (lvData == null)
+			return false;
+		mDane.setData(lvData);
+		ScriptParams lvParams = new ScriptParams();
+		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
+		if (mDane.getListaPracownikow().size() == 0)
+			return false;
+		return true;
 	}
 }

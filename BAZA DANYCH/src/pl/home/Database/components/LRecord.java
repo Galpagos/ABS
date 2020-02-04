@@ -2,36 +2,42 @@ package pl.home.Database.components;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
-public class LRecord {
-	private Map<String, Object> mMap;
+public class LRecord extends HashMap<String, Object> {
 
-	public LRecord(Map<String, Object> pmMap) {
-		setMap(pmMap);
+	private static final long serialVersionUID = 1L;
+	private Map<Integer, String> mIndeksy;
+
+	public LRecord() {
+		mIndeksy = new HashMap<Integer, String>();
 	}
 
-	public Map<String, Object> getMap() {
-		return mMap;
-	}
-
-	public void setMap(Map<String, Object> pmMap) {
-		mMap = pmMap;
+	@Override
+	public Object put(String pmString, Object pmObject) {
+		super.put(pmString, pmObject);
+		mIndeksy.put(mIndeksy.size() + 1, pmString);
+		return pmObject;
 	}
 
 	public Integer getAsInteger(String pmNazwa) {
-		return mMap != null ? Integer.parseInt(mMap.get(pmNazwa).toString()) : 0;
+		return Integer.parseInt(get(pmNazwa).toString());
 	}
 
 	public String getAsString(String pmNazwa) {
-		return mMap.get(pmNazwa).toString();
+		return get(pmNazwa).toString();
 	}
 
 	public Date getAsDate(String pmNazwa) {
-		return (Date) mMap.get(pmNazwa);
+		return (Date) get(pmNazwa);
 	}
 
 	public Timestamp getAsTimestamp(String pmNazwa) {
-		return (Timestamp) mMap.get(pmNazwa);
+		return (Timestamp) get(pmNazwa);
+	}
+
+	public Object getValue(int pmIndex) {
+		return get(mIndeksy.get(pmIndex));
 	}
 }

@@ -3,6 +3,8 @@ package pl.home.Database.components;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import Frames.dbAccess.Components.SilentException;
+
 public class LRecordSet extends ArrayList<LRecord> {
 
 	int mIndex = 0;
@@ -18,5 +20,17 @@ public class LRecordSet extends ArrayList<LRecord> {
 
 	public Timestamp getAsTimestamp(String pmNazwa) {
 		return this.get(0).getAsTimestamp(pmNazwa);
+	}
+
+	public LRecord getRecord() {
+		if (size() > mIndex)
+			return get(mIndex);
+		return null;
+	}
+
+	public void setIndex(int pmIndex) throws SilentException {
+		if (size() < mIndex)
+			throw new SilentException("Indeks poza Tabela");
+		mIndex = pmIndex;
 	}
 }

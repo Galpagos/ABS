@@ -43,7 +43,7 @@ public class SprawozdaniaRepository {
 		lvWarunek.append(" IN ( 'TEST");
 		for (SLRodzajeAbsencji lvRodzaj : pmLista) {
 			lvWarunek.append("','");
-			lvWarunek.append(lvRodzaj);
+			lvWarunek.append(lvRodzaj.getKod());
 		}
 		lvWarunek.append("')");
 		return lvWarunek.toString();

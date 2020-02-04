@@ -10,7 +10,7 @@ public class AbsencjaBean {
 	public final static String kolumnaIdPracownika = "ID_pracownika";
 	public final static String kolumnaOdKiedy = "Od_kiedy";
 	public final static String kolumnaDoKiedy = "Do_kiedy";
-	public final static String kolumnaRodzajAbsencji = "Rodzaj_absencji";
+	public final static String kolumnaRodzajAbsencji = "RODZAJ";
 	private int mId;
 	private int mIdPracownika;
 	private Date mDataOd;

@@ -20,6 +20,7 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 	private JButton mbtnSprawozdanieMiesiczne;
 	private JButton btnRoczneUrlopy;
 	private JButton btnListaObecnosci;
+	private JButton btnListaPlac;
 	private JButton cancelButton;
 
 	public SrcOknoSprawozdan(ScriptParams pmParams) {
@@ -43,8 +44,11 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 		btnRoczneUrlopy.addActionListener(e -> wywolajSprawozdanieRoczneUrlopy());
 		btnListaObecnosci.addActionListener(e -> wywolajListeObecnosci());
 		cancelButton.addActionListener(e -> dispose());
+		btnListaPlac.addActionListener(e -> wywolajListePlac());
 
 	}
+
+	protected abstract void wywolajListePlac();
 
 	protected abstract void wywolajListeObecnosci();
 
@@ -62,7 +66,7 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 	protected void budujOkno() {
 		contentPanel = new JPanel();
 		setTitle("Wyb\u00F3r sprawozdania");
-		setBounds(100, 100, 285, 387);
+		setBounds(100, 100, 285, 487);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -89,6 +93,11 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 		btnListaObecnosci = new JButton("Lista obecnosci");
 		btnListaObecnosci.setBounds(28, 218, 205, 42);
 		contentPanel.add(btnListaObecnosci);
+
+		btnListaPlac = new JButton("Lista p³ac");
+		btnListaPlac.setBounds(28, 283, 205, 42);
+		contentPanel.add(btnListaPlac);
+
 		JPanel buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 

@@ -66,10 +66,10 @@ public class WalidatorAbsenci {
 
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							pmAbsencja.getRodzaj(), SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							pmAbsencja.getRodzaj(), SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.urlop_w_pracy,
-							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 
 			break;
 		case urlop_w_pracy:
@@ -78,10 +78,10 @@ public class WalidatorAbsenci {
 
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							pmAbsencja.getRodzaj(), SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							pmAbsencja.getRodzaj(), SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.urlop_wypoczynkowy,
-							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 
 			break;
 
@@ -90,46 +90,46 @@ public class WalidatorAbsenci {
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							new Interval(JodaTime.okresOdDo(new GregorianCalendar(2010, 1, 1).getTime(),
-									new GregorianCalendar(2100, 1, 1).getTime())));
+							new Interval(JodaTime.okresOdDo(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
+									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis()))));
 			break;
 		case urlop_rodzicielski:
 			lvLimit = 224;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							new Interval(JodaTime.okresOdDo(new GregorianCalendar(2010, 1, 1).getTime(),
-									new GregorianCalendar(2100, 1, 1).getTime())));
+							new Interval(JodaTime.okresOdDo(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
+									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis()))));
 			break;
 		case urlop_macierzyñski:
 			lvLimit = 140;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							new Interval(JodaTime.okresOdDo(new GregorianCalendar(2010, 1, 1).getTime(),
-									new GregorianCalendar(2100, 1, 1).getTime())));
+							new Interval(JodaTime.okresOdDo(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
+									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis()))));
 			break;
 		case NZ:// ok
 			lvLimit = 4;
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze + mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(
 					pmAbsencja.getIdPracownika(), pmAbsencja.getRodzaj(),
-					SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+					SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 			break;
 		case opieka_na_dziecko:
 			lvLimit = 60;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							pmAbsencja.getRodzaj(), SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							pmAbsencja.getRodzaj(), SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.opieka_na_kogos,
-							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 			break;
 		case opieka_na_kogos:
 			lvLimit = 14;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 			break;
 
 		case ci¹¿a:
@@ -139,12 +139,12 @@ public class WalidatorAbsenci {
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.ci¹¿a,
-							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.szpital,
-							SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							SLRodzajeAbsencji.L_4, SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+							SLRodzajeAbsencji.L_4, SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 			if (lvLimit <= lvWykorzystany_urlop) {
 				JOptionPane.showMessageDialog(null,
 						"Przekroczono limit " + lvLimit + " dni (Wynagrodzenie chorobowe) z dniem: "
@@ -157,7 +157,7 @@ public class WalidatorAbsenci {
 			lvLimit = 10000000;
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze + mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(
 					pmAbsencja.getIdPracownika(), pmAbsencja.getRodzaj(),
-					SLMiesiace.Rok.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+					SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 		}
 		lvWynik = (lvWykorzystany_urlop > lvLimit);
 

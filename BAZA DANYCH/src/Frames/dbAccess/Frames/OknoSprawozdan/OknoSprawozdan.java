@@ -4,6 +4,7 @@ import Frames.dbAccess.Components.ScriptParams;
 
 public class OknoSprawozdan extends SrcOknoSprawozdan {
 
+	private static final long serialVersionUID = 1L;
 	private ObslugaOknaSprawozdan mObsluga;
 
 	public OknoSprawozdan(ScriptParams pmParams) {
@@ -37,6 +38,13 @@ public class OknoSprawozdan extends SrcOknoSprawozdan {
 	@Override
 	protected void wywolajListeObecnosci() {
 		mObsluga.generujListeObecnosci();
+		dispose();
+	}
+
+	@Override
+	protected void wywolajListePlac() {
+
+		mObsluga.generujListePlac();
 		dispose();
 	}
 

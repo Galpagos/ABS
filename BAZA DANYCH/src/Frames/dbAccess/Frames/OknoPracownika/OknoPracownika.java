@@ -103,7 +103,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 
 	private JTable ustawTabele(JTable pmTabela, PracownikDTO pmPracownik) {
 		try {
-			String lvZapytanie = "Select ID_tabeli, Rodzaj_Absencji, Od_Kiedy,Do_kiedy from Absencje where "//
+			String lvZapytanie = "Select ID_tabeli, RODZAJ, Od_Kiedy,Do_kiedy from Absencje where "//
 					+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getId()//
 					+ " AND (Year([" + AbsencjaBean.kolumnaDoKiedy + "]) = " + spnRok.getValue()//
 					+ " OR Year([" + AbsencjaBean.kolumnaOdKiedy + "]) = " + spnRok.getValue() + ")";

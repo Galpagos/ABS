@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -147,7 +148,7 @@ public class DatePicker {
 		for (int x = 6 + dayOfWeek, day = 1; day <= daysInMonth; x++, day++)// 5?
 			// set text
 			button[x].setText("" + day);
-		l.setText(sdf.format(cal.getTime()));
+		l.setText(sdf.format(new Date(cal.getTimeInMillis())));
 		// set title
 		d.setTitle(Miesiace[(36 + month) % 12]);
 	}
@@ -161,7 +162,7 @@ public class DatePicker {
 		java.util.Calendar cal = java.util.Calendar.getInstance();
 		cal.set(year, month, Integer.parseInt(day));
 		try {
-			return new SimpleDateFormat("yyyy-MM-dd").parse(sdf.format(cal.getTime()));
+			return new SimpleDateFormat("yyyy-MM-dd").parse(sdf.format(new Date(cal.getTimeInMillis())));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

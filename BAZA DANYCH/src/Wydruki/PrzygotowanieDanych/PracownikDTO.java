@@ -38,8 +38,9 @@ public class PracownikDTO {
 		return mListaAbsencji;
 	}
 
-	public void setListaAbsencji(List<AbsencjaDTO> pmListaAbsencji) {
+	public PracownikDTO setListaAbsencji(List<AbsencjaDTO> pmListaAbsencji) {
 		mListaAbsencji = pmListaAbsencji;
+		return this;
 	}
 
 	public String toString() {

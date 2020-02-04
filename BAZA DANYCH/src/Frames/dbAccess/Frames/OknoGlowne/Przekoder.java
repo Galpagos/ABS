@@ -2,7 +2,6 @@ package Frames.dbAccess.Frames.OknoGlowne;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
 
 import Wersja.Przekod;
 
@@ -12,7 +11,7 @@ public class Przekoder implements WindowListener {
 	public void windowOpened(WindowEvent e) {
 		try {
 			Przekod.Wykonaj();
-		} catch (IOException lvE) {
+		} catch (Exception lvE) {
 			lvE.printStackTrace();
 		}
 	}

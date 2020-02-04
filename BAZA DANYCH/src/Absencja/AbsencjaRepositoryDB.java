@@ -48,14 +48,13 @@ public class AbsencjaRepositoryDB extends AccessDB implements AbsencjaRepositor 
 
 	public Optional<AbsencjaDTO> pobierzAbsencjePoId(int pmId) {
 		LRecordSet lvDane = executeQuery(
-				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,Rodzaj_absencji from Absencje where id_tabeli="
-						+ pmId);
+				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ from Absencje where id_tabeli=" + pmId);
 		if (lvDane == null || lvDane.isEmpty())
 			return Optional.empty();
 		return Optional.of(AbsencjaDTO.builder()//
 				.setId(lvDane.getAsInteger("Id_tabeli"))//
 				.setIdPracownika(lvDane.getAsInteger("Id_pracownika"))//
-				.setRodzaj(SLRodzajeAbsencji.AbsencjaPoNazwie(lvDane.getAsString("Rodzaj_absencji")))//
+				.setRodzaj(SLRodzajeAbsencji.getByKod(lvDane.getAsString("RODZAJ")))//
 				.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane.getAsTimestamp("Od_kiedy"),
 						lvDane.getAsTimestamp("Do_kiedy"))));
 	}
