@@ -47,7 +47,7 @@ public class ObslugaAbsencji {
 				.setId((int) lvDane[0][0])//
 				.setIdPracownika((int) lvDane[0][1])//
 				.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[0][4]))//
-				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[0][5].toString()))
+				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[0][5] == null ? "0" : lvDane[0][5].toString()))
 				.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane[0][2], lvDane[0][3]));
 	}
 

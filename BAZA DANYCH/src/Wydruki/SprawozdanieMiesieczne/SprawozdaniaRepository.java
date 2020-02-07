@@ -18,6 +18,7 @@ public class SprawozdaniaRepository {
 				.append(AbsencjaBean.kolumnaOdKiedy).append(",")//
 				.append(AbsencjaBean.kolumnaDoKiedy).append(",")//
 				.append(AbsencjaBean.kolumnaRodzajAbsencji) //
+				.append(",EKWIWALENT")//
 				.append(" from ")//
 				.append(AbsencjaBean.NazwaTabeli)//
 				.append(" where ").append(AbsencjaBean.kolumnaIdPracownika).append("=")//

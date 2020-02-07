@@ -16,6 +16,7 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccess.AbsencjaBean;
 import dbAccess.dbAccess;
 import dbAccess.dbAccess.MyTableModel;
+import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPracownika {
 
@@ -103,7 +104,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 
 	private JTable ustawTabele(JTable pmTabela, PracownikDTO pmPracownik) {
 		try {
-			String lvZapytanie = "Select ID_tabeli, RODZAJ, Od_Kiedy,Do_kiedy from Absencje where "//
+			String lvZapytanie = "Select ID_tabeli, RODZAJ, Od_Kiedy,Do_kiedy,EKWIWALENT from Absencje where "//
 					+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getId()//
 					+ " AND (Year([" + AbsencjaBean.kolumnaDoKiedy + "]) = " + spnRok.getValue()//
 					+ " OR Year([" + AbsencjaBean.kolumnaOdKiedy + "]) = " + spnRok.getValue() + ")";
@@ -143,8 +144,14 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji
 				.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
+		lvAbsencja.setProcent(SLEkwiwalentZaUrlop.getByKod(getProcentZTabeli(lvRow)));
 		lvAbsencja.setIdPracownika(mPracownik.getId());
 		return lvAbsencja;
+	}
+
+	private String getProcentZTabeli(int lvRow) {
+		return tbAbsencje.getModel().getValueAt(lvRow, 4) == null ? "0"
+				: tbAbsencje.getModel().getValueAt(lvRow, 4).toString();
 	}
 
 	@Override

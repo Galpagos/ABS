@@ -42,12 +42,13 @@ public class ListaPlac {
 	private MiesiecznaPlacaPracownika wyliczWyplatePracownika(PracownikDTO pmPracownik) {
 
 		MiesiecznaPlacaPracownika lvWyplata = przygotujDaneDoWyliczeniaWyplaty(pmPracownik);
-
+		BigDecimal lvKwotaMiesieczna = pmPracownik.getId() == 43 ? KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.25))
+				: KWOTA_MIESIECZNA;// specjalna obsluga dla pracownika
 		pmPracownik//
 				.getListaAbsencji()//
 				.forEach(lvAbsencja -> wyliczKwoteZAbsencji(lvAbsencja, lvWyplata));
 
-		BigDecimal lvKwotaZaPrace = KWOTA_MIESIECZNA//
+		BigDecimal lvKwotaZaPrace = lvKwotaMiesieczna//
 				.divide(BigDecimal.valueOf(liczbaDniRoboczychWMiesiacu()), 8, RoundingMode.HALF_UP)//
 				.multiply(BigDecimal.valueOf(liczbaDniPrzepracowanych(pmPracownik)));
 
@@ -64,20 +65,26 @@ public class ListaPlac {
 	}
 
 	private void wyliczKwoteChoroby(AbsencjaDTO pmAbsencja, MiesiecznaPlacaPracownika pmWyplata) {
+		BigDecimal lvKwotaZaDzien = pmWyplata.getPracownik().getId() == 43
+				? KWOTA_ZA_DZIEN.multiply(BigDecimal.valueOf(0.25))
+				: KWOTA_ZA_DZIEN; // specjalna obsluga dla pracownika
+
 		pmWyplata.addKwotaChorobowa(//
-				KWOTA_ZA_DZIEN//
+				lvKwotaZaDzien//
 						.multiply(pmAbsencja.getProcent().getProcent()).setScale(2, RoundingMode.HALF_UP)//
 						.multiply(BigDecimal.valueOf(LicznikDaty.liczbaDniWAbsencjach(Arrays.asList(pmAbsencja)))));
 
 	}
 
 	private void wyliczKwoteUrlopy(AbsencjaDTO pmAbsencja, MiesiecznaPlacaPracownika pmWyplata) {
-
+		BigDecimal lvKwotaMiesieczna = pmWyplata.getPracownik().getId() == 43
+				? KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.25)) // specjalna obsluga dla pracownika
+				: KWOTA_MIESIECZNA;
 		pmWyplata.addKwotaZaUrlopy(//
-				KWOTA_MIESIECZNA//
+				lvKwotaMiesieczna//
 						.divide(BigDecimal.valueOf(liczbaDniRoboczychWMiesiacu()), 8, RoundingMode.HALF_UP)//
 						.multiply(pmAbsencja.getProcent().getProcent())//
-						.multiply(BigDecimal.valueOf(LicznikDaty.ileDniRobotnych(pmAbsencja.getOkres()))));
+						.multiply(BigDecimal.valueOf(LicznikDaty.ileDniRobotnych(Arrays.asList(pmAbsencja)))));
 
 	}
 
@@ -94,7 +101,6 @@ public class ListaPlac {
 			SLRodzajeAbsencji.urlop_wypoczynkowy, //
 			SLRodzajeAbsencji.urlop_ojcowski, //
 			SLRodzajeAbsencji.urlop_okolicznoœciowy, //
-			SLRodzajeAbsencji.swiadczenie_rehab, //
 			SLRodzajeAbsencji.opieka2dni, //
 			SLRodzajeAbsencji.urlop_w_pracy);
 
@@ -106,6 +112,7 @@ public class ListaPlac {
 			SLRodzajeAbsencji.ci¹¿a, //
 			SLRodzajeAbsencji.urlop_macierzyñski, //
 			SLRodzajeAbsencji.urlop_rodzicielski, //
+			SLRodzajeAbsencji.swiadczenie_rehab, //
 			SLRodzajeAbsencji.wypadek);
 
 	private Integer liczbaDniPrzepracowanych(PracownikDTO pmPracownik) {

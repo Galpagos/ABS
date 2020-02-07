@@ -32,7 +32,7 @@ public class ListaPlacRepositoryDB extends AccessDB implements ListaPlacReposito
 		if (lvDniWolne != null && !lvDniWolne.isEmpty())
 			lvLista = lvDniWolne//
 					.stream()//
-					.map(lvRecord -> (new LocalDate(new Instant(lvDniWolne.getAsTimestamp("DATA").getTime()))))//
+					.map(lvRecord -> (new LocalDate(new Instant(lvDniWolne.getAsTimestamp("Data").getTime()))))//
 					.collect(Collectors.toList());
 
 		return lvLista;

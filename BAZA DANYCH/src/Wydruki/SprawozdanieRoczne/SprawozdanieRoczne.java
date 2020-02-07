@@ -121,6 +121,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 			lvAbsWMiesiacu = new AbsencjaDTO();
 
 			lvAbsWMiesiacu.setRodzaj(lvAbs.getRodzaj());
+			lvAbsWMiesiacu.setProcent(lvAbs.getProcent());
 			Interval lvNowyOkres = lvAbs.getOkres().overlap(JodaTime.okresMiesiac(pmI, mRok));
 
 			if (lvNowyOkres != null) {

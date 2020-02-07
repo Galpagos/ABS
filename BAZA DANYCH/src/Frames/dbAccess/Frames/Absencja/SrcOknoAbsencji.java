@@ -14,6 +14,7 @@ import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.AbstractOkno;
 import Frames.dbAccess.Components.DatePicker;
 import Frames.dbAccess.Components.ScriptParams;
+import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 @SuppressWarnings("serial")
 public abstract class SrcOknoAbsencji extends AbstractOkno {
@@ -27,6 +28,7 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 	protected JButton btnPickDate1;
 	protected JButton btnPickDate2;
 	protected JComboBox<SLRodzajeAbsencji> cbRodzajAbsencji;
+	protected JComboBox<SLEkwiwalentZaUrlop> cbProcent;
 
 	public SrcOknoAbsencji(ScriptParams pmParams) {
 		super(pmParams);
@@ -58,23 +60,27 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 
 		contentPane = new JPanel();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 400);
 
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		cbRodzajAbsencji = new JComboBox<SLRodzajeAbsencji>(SLRodzajeAbsencji.values());
-		cbRodzajAbsencji.setBounds(169, 115, 214, 25);
+		cbRodzajAbsencji.setBounds(169, 118, 214, 25);
 		contentPane.add(cbRodzajAbsencji);
+
+		cbProcent = new JComboBox<SLEkwiwalentZaUrlop>(SLEkwiwalentZaUrlop.values());
+		cbProcent.setBounds(169, 158, 214, 25);
+		contentPane.add(cbProcent);
 
 		btnWyjcie = new JButton("Wyj\u015Bcie");
 		btnWyjcie.addActionListener(e -> dispose());
-		btnWyjcie.setBounds(323, 187, 97, 25);
+		btnWyjcie.setBounds(323, 237, 97, 25);
 		contentPane.add(btnWyjcie);
 
 		btnZapisz = new JButton("Zapisz");
-		btnZapisz.setBounds(206, 187, 97, 25);
+		btnZapisz.setBounds(206, 237, 97, 25);
 		contentPane.add(btnZapisz);
 
 		lblAbsencjaPracownika = new JLabel("Absencja pracownika ");
@@ -82,16 +88,20 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 		contentPane.add(lblAbsencjaPracownika);
 
 		JLabel lblDataOd = new JLabel("Data od:");
-		lblDataOd.setBounds(23, 38, 56, 16);
+		lblDataOd.setBounds(13, 38, 56, 16);
 		contentPane.add(lblDataOd);
 
 		JLabel lblDataDo = new JLabel("Data do:");
-		lblDataDo.setBounds(23, 78, 56, 16);
+		lblDataDo.setBounds(13, 78, 56, 16);
 		contentPane.add(lblDataDo);
 
 		JLabel lblRodzajAbsencji = new JLabel("Rodzaj Absencji:");
 		lblRodzajAbsencji.setBounds(13, 118, 128, 16);
 		contentPane.add(lblRodzajAbsencji);
+
+		JLabel lblProcent = new JLabel("Ekwiwalent za nieobecnoœæ:");
+		lblProcent.setBounds(13, 158, 128, 16);
+		contentPane.add(lblProcent);
 
 		mDataOd = new JFormattedTextField(new Date());
 		mDataOd.setBounds(169, 38, 116, 22);

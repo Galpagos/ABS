@@ -8,6 +8,7 @@ import Datownik.JodaTime;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ScriptParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 public class OknoAbsencji extends SrcOknoAbsencji {
 
@@ -37,6 +38,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 
 		super.odswiezKontrolki();
 		cbRodzajAbsencji.setSelectedItem(mAbsencja.getRodzaj());
+		cbProcent.setSelectedItem(mAbsencja.getProcent());
 		mDataOd.setValue(mAbsencja.getOkres().getStart().toDate());
 		mDataDo.setValue(mAbsencja.getOkres().getEnd().toDate());
 	}
@@ -54,6 +56,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 				.setIdPracownika(mAbsencja.getIdPracownika());
 		lvNowaAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
 		lvNowaAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
+		lvNowaAbsencja.setProcent((SLEkwiwalentZaUrlop) cbProcent.getSelectedItem());
 
 		if (mWalidator.czyWystepujeAbsencjaWOkresie(lvNowaAbsencja))
 			return;
@@ -66,6 +69,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 			mObslugaAbsencji.dodajAbsencje(lvNowaAbsencja);
 			mAbsencja.setOkres(lvNowaAbsencja.getOkres());
 			mAbsencja.setRodzaj(lvNowaAbsencja.getRodzaj());
+			mAbsencja.setProcent(lvNowaAbsencja.getProcent());
 			dispose();
 		}
 	}

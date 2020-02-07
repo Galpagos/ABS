@@ -30,7 +30,7 @@ public class LicznikDaty {
 		return ileDniRobotnych(lvDataOd, lvDataDo);
 	}
 
-	public static int ileDniRobotnych(Interval pmOkres) {
+	private static int ileDniRobotnychBezDniWolnych(Interval pmOkres) {
 		Date lvDataOd = pmOkres.getStart().toDate();
 		Date lvDataDo = pmOkres.getEnd().toDate();
 		return ileDniRobotnych(lvDataOd, lvDataDo);
@@ -45,7 +45,7 @@ public class LicznikDaty {
 	public static int ileDniRobotnych(List<AbsencjaDTO> pmLista) {
 		return pmLista//
 				.stream()//
-				.mapToInt(lvAbs -> ileDniRobotnych(lvAbs.getOkres()) - ileDniWolnych(lvAbs.getOkres()))//
+				.mapToInt(lvAbs -> ileDniRobotnychBezDniWolnych(lvAbs.getOkres()) - ileDniWolnych(lvAbs.getOkres()))//
 				.sum();
 	}
 
