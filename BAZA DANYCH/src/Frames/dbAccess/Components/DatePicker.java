@@ -17,9 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import Datownik.Data;
 
 public class DatePicker {
 	// define variables
@@ -63,6 +61,7 @@ public class DatePicker {
 			if (x > 6)
 				// add action listener
 				button[x].addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent ae) {
 						day = button[selection].getActionCommand();
 						// call dispose() method
@@ -84,6 +83,7 @@ public class DatePicker {
 		JButton previous = new JButton("<< Cofnij");
 		// add action command
 		previous.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ae) {
 				// decrement month by 1
 				month--;
@@ -98,6 +98,7 @@ public class DatePicker {
 		JButton next = new JButton("Dalej >>");
 		// add action command
 		next.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ae) {
 				// increment month by 1
 				month++;
@@ -178,14 +179,11 @@ public class DatePicker {
 
 	}
 
-	public DateTime setPickedDateTime() {
+	public LocalDate setPickedDateTime() {
 		if (day.equals(""))
 			return null;
 
-		DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-		int miesiac = (120 + (month)) % 12 + 1;
-		DateTime dt = formatter.parseDateTime(year + "-" + miesiac + "-" + Integer.parseInt(day));
-		return dt;
+		return Data.ex(year, month, Integer.parseInt(day));
 
 	}
 }

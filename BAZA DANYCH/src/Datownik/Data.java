@@ -1,9 +1,10 @@
 package Datownik;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import org.joda.time.YearMonth;
 
 public class Data {
 
@@ -12,11 +13,22 @@ public class Data {
 	}
 
 	public static Date utworzDateNaPierwszyDzien(YearMonth pmMiesiac) {
-		return utworzDate(pmMiesiac.getYear(), pmMiesiac.getMonthOfYear(), 1);
+		return DateFromLocalDate(pmMiesiac.atDay(1));
 	}
 
 	public static Date utworzDateNaOstatniDzien(YearMonth pmMiesiac) {
-		return utworzDate(pmMiesiac.getYear(), pmMiesiac.getMonthOfYear(),
-				pmMiesiac.toLocalDate(1).dayOfMonth().getMaximumValue());
+		return DateFromLocalDate(pmMiesiac.atEndOfMonth());
+	}
+
+	public static LocalDate LocalDateFromDate(Date pmData) {
+		return pmData.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static Date DateFromLocalDate(LocalDate pmData) {
+		return Date.from(pmData.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	}
+
+	public static LocalDate ex(int pmRok, int pmMiesiac, int pmDzien) {
+		return LocalDate.of(pmRok, pmMiesiac, pmDzien);
 	}
 }

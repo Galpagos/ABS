@@ -20,6 +20,8 @@ public class JTableModelFromLRecords extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
+		if (mRecords == null)
+			return 0;
 		return mRecords.getRecord().size();
 	}
 

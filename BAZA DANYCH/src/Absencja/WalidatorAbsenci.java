@@ -1,7 +1,8 @@
 package Absencja;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -9,9 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
-import org.joda.time.Interval;
-
-import Datownik.JodaTime;
+import Datownik.Interval;
 import Enums.Komunikat;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
@@ -32,19 +31,14 @@ public class WalidatorAbsenci {
 		return true;
 	}
 
-	public boolean czyPrawidloweDaty(Date pmOd, Date pmDo) {
-		boolean lvWynik = pmDo.before(pmOd);
+	public boolean czyPrawidloweDaty(LocalDate pmOd, LocalDate pmDo) {
+		boolean lvWynik = pmDo.isBefore(pmOd);
 		if (lvWynik) {
 			Komunikat.DataPoPrzedDataPrzed.pokaz();
 			return false;
 		}
 
-		Calendar lvCalOd = new GregorianCalendar();
-		Calendar lvCalDo = new GregorianCalendar();
-		lvCalOd.setTime(pmOd);
-		lvCalDo.setTime(pmDo);
-
-		if (lvCalOd.get(Calendar.YEAR) != lvCalDo.get(Calendar.YEAR)) {
+		if (pmOd.getYear() != pmDo.getYear()) {
 			Komunikat.DatayWtymSamymRoku.pokaz();
 			return false;
 		}
@@ -66,7 +60,8 @@ public class WalidatorAbsenci {
 
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							pmAbsencja.getRodzaj(), SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							pmAbsencja.getRodzaj(),
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.urlop_w_pracy,
 							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
@@ -78,38 +73,39 @@ public class WalidatorAbsenci {
 
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							pmAbsencja.getRodzaj(), SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							pmAbsencja.getRodzaj(),
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.urlop_wypoczynkowy,
 							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 
 			break;
 
-		case urlop_ojcowski:// ok
+		case urlop_ojcowski:
 			lvLimit = 14;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							new Interval(JodaTime.okresOdDo(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
-									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis()))));
+							new Interval(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
+									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis())));
 			break;
 		case urlop_rodzicielski:
 			lvLimit = 224;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							new Interval(JodaTime.okresOdDo(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
-									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis()))));
+							new Interval(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
+									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis())));
 			break;
 		case urlop_macierzyñski:
 			lvLimit = 140;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							pmAbsencja.getRodzaj(),
-							new Interval(JodaTime.okresOdDo(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
-									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis()))));
+							new Interval(new Date(new GregorianCalendar(2010, 1, 1).getTimeInMillis()),
+									new Date(new GregorianCalendar(2100, 1, 1).getTimeInMillis())));
 			break;
-		case NZ:// ok
+		case NZ:
 			lvLimit = 4;
 			lvWykorzystany_urlop = lvWykorzystaneDniRobocze + mObsluga.ileDniRoboczychAbsencjiPracownikaWOkresie(
 					pmAbsencja.getIdPracownika(), pmAbsencja.getRodzaj(),
@@ -119,7 +115,8 @@ public class WalidatorAbsenci {
 			lvLimit = 60;
 			lvWykorzystany_urlop = lvWykorzystaneDniKalendarzowe
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							pmAbsencja.getRodzaj(), SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
+							pmAbsencja.getRodzaj(),
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
 							SLRodzajeAbsencji.opieka_na_kogos,
 							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
@@ -144,7 +141,8 @@ public class WalidatorAbsenci {
 							SLRodzajeAbsencji.szpital,
 							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))
 					+ mObsluga.ileDniKalendarzowychAbsencjiPracownikaWOkresie(pmAbsencja.getIdPracownika(),
-							SLRodzajeAbsencji.L_4, SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
+							SLRodzajeAbsencji.L_4,
+							SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()));
 			if (lvLimit <= lvWykorzystany_urlop) {
 				JOptionPane.showMessageDialog(null,
 						"Przekroczono limit " + lvLimit + " dni (Wynagrodzenie chorobowe) z dniem: "
@@ -195,16 +193,15 @@ public class WalidatorAbsenci {
 		List<AbsencjaDTO> lvLista = mObsluga.pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
 		lvLista.add(pmAbsencja);
 		List<AbsencjaDTO> lvOgraniczona = lvLista.stream()//
-				.filter(lvAbs -> lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4
-						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.szpital
-						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.ci¹¿a)//
-				.sorted(Comparator.comparing(AbsencjaDTO::getStart))//
+				.filter(lvAbs -> Arrays
+						.asList(SLRodzajeAbsencji.L_4, SLRodzajeAbsencji.szpital, SLRodzajeAbsencji.ci¹¿a)
+						.contains(lvAbs.getRodzaj()))//
 				.collect(Collectors.toList());
 
-		lvOgraniczona.stream()
-				.forEach(lvAbs -> lvAbs.setOkres(lvAbs.getOkres()
-						.overlap(JodaTime.okresOdDo(pmAbsencja.getOkres().getStart().minusDays(lvDni).toDate(),
-								pmAbsencja.getOkres().getEnd().plusDays(lvDni).toDate()))));
+		lvOgraniczona.stream().forEach(lvAbs -> lvAbs.setOkres(//
+				lvAbs.getOkres().overlap(new Interval(//
+						pmAbsencja.getOkres().getStart().minusDays(lvDni),
+						pmAbsencja.getOkres().getEnd().plusDays(lvDni))).orElse(null)));
 
 		lvOgraniczona.removeIf(lvAbs -> lvAbs.getOkres() == null);
 		int licznik = 0;
@@ -215,7 +212,7 @@ public class WalidatorAbsenci {
 						"Dla pracownika nale¿y wykonaæ nowe badania lekarskie ze wzglêdu na d³ug¹ niedyspozycyjnoœæ");
 				return true;
 			}
-			if (i > 0 && lvOgraniczona.get(i).getOkres().getStart().minusDays(1).minusHours(10)
+			if (i > 0 && lvOgraniczona.get(i).getOkres().getStart().minusDays(1)
 					.isAfter(lvOgraniczona.get(i - 1).getOkres().getEnd()))
 				licznik = 0;
 		}

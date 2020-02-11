@@ -1,8 +1,9 @@
 package Absencja;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import pl.home.Database.components.AccessDB;
@@ -21,12 +22,6 @@ public class AbsencjaRepositoryDB extends AccessDB implements AbsencjaRepositor 
 	public Object[][] getAbsencjePoId(int pmId) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public int ileDniWolnych(Date pmDate, Date pmDate2) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -58,8 +53,13 @@ public class AbsencjaRepositoryDB extends AccessDB implements AbsencjaRepositor 
 				.setIdPracownika(lvDane.getAsInteger("Id_pracownika"))//
 				.setRodzaj(SLRodzajeAbsencji.getByKod(lvDane.getAsString("RODZAJ")))//
 				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane.getAsString("EKWIWALENT")))//
-				.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane.getAsTimestamp("Od_kiedy"),
-						lvDane.getAsTimestamp("Do_kiedy"))));
+				.setOkres(new Interval(lvDane.getAsTimestamp("Od_kiedy"), lvDane.getAsTimestamp("Do_kiedy"))));
+	}
+
+	@Override
+	public int ileDniWolnych(LocalDate pmLocalDate, LocalDate pmLocalDate2) {
+
+		return 0;
 	}
 
 }

@@ -2,14 +2,13 @@ package pl.home.ListaPlac;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.joda.time.YearMonth;
-
 import Absencja.ObslugaAbsencji;
-import Datownik.JodaTime;
+import Datownik.Interval;
 import Datownik.LicznikDaty;
 import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
@@ -18,10 +17,9 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 public class ListaPlac {
 	YearMonth mRokMiesiac;
 	private ListaPlacRepository mRepo = new ListaPlacRepositoryDB();
-	final BigDecimal KWOTA_MIESIECZNA = new BigDecimal(2600.00).setScale(2);
-	final BigDecimal KWOTA_ZA_DZIEN = KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.8629))
+	private final BigDecimal KWOTA_MIESIECZNA = new BigDecimal(2600.00).setScale(2);
+	private final BigDecimal KWOTA_ZA_DZIEN = KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.8629))
 			.setScale(8, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(30), 8, RoundingMode.HALF_UP);
-	final BigDecimal PROCENT_80 = BigDecimal.valueOf(0.8);
 
 	public ListaPlac(YearMonth pmYearMonth) {
 		mRokMiesiac = pmYearMonth;
@@ -92,8 +90,7 @@ public class ListaPlac {
 		if (pmPracownik.getListaAbsencji() == null)
 			pmPracownik.setListaAbsencji(new ObslugaAbsencji().pobierzAbsencjePracownika(pmPracownik.getId()));
 
-		LicznikDaty.filtrujAbsencjePoOkresie(pmPracownik.getListaAbsencji(),
-				JodaTime.okresMiesiac(mRokMiesiac.getMonthOfYear(), mRokMiesiac.getYear()));
+		LicznikDaty.filtrujAbsencjePoOkresie(pmPracownik.getListaAbsencji(), new Interval(mRokMiesiac));
 		return new MiesiecznaPlacaPracownika().setPracownik(pmPracownik);
 	}
 
@@ -123,8 +120,7 @@ public class ListaPlac {
 
 	private Integer liczbaDniUrlopu(PracownikDTO pmPracownik, List<SLRodzajeAbsencji> pmLista, boolean pmCzyRobocze) {
 
-		LicznikDaty.filtrujAbsencjePoOkresie(pmPracownik.getListaAbsencji(),
-				JodaTime.okresMiesiac(mRokMiesiac.getMonthOfYear(), mRokMiesiac.getYear()));
+		LicznikDaty.filtrujAbsencjePoOkresie(pmPracownik.getListaAbsencji(), new Interval(mRokMiesiac));
 
 		List<AbsencjaDTO> lvListaOdfiltrowana = odfiltrujPoRodzaju(pmPracownik.getListaAbsencji(), pmLista);
 
@@ -143,11 +139,6 @@ public class ListaPlac {
 	}
 
 	Integer liczbaDniRoboczychWMiesiacu() {
-		return Integer.valueOf(LicznikDaty.ileDniRobotnych(mRokMiesiac) - liczbaDniWolnychWMiesiac());
+		return Integer.valueOf(LicznikDaty.ileDniRobotnych(mRokMiesiac));
 	}
-
-	private int liczbaDniWolnychWMiesiac() {
-		return mRepo.getListaDniWolnychWMiesiacu(mRokMiesiac).size();
-	}
-
 }

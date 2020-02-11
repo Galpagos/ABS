@@ -1,10 +1,10 @@
 package Frames.dbAccess.Frames.OknoGlowne;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
-
-import org.joda.time.DateTime;
 
 import Enums.Komunikat;
 import Frames.dbAccess.Components.DatePicker;
@@ -69,16 +69,16 @@ public class ObslugaOknaGlownego {
 
 	public void dodajDzienWolny() {
 		DniWolneBean lvDzienWolny = new DniWolneBean();
-		DateTime lvData = new DatePicker().setPickedDateTime();
+		LocalDate lvData = new DatePicker().setPickedLocalDate();
 		if (lvData == null)
 			return;
 		else {
-			if (lvData.getDayOfWeek() == 6 || lvData.getDayOfWeek() == 7) {
+			if (DayOfWeek.SUNDAY.equals(lvData.getDayOfWeek()) || DayOfWeek.SATURDAY.equals(lvData.getDayOfWeek())) {
 				JOptionPane.showMessageDialog(null, "Nie mo¿na dodaæ dnia wolnego w weekend!", "B³¹d",
 						JOptionPane.WARNING_MESSAGE);
 				return;
 			} else
-				lvDzienWolny.setData(lvData.toDate());
+				lvDzienWolny.setData(lvData);
 		}
 
 		lvDzienWolny.setOpis(JOptionPane.showInputDialog("Podaj powód dnia wolnego: "));
@@ -87,8 +87,7 @@ public class ObslugaOknaGlownego {
 		else
 			mRepo.zapiszNowyDzienWolny(lvDzienWolny);
 
-		JOptionPane.showMessageDialog(null,
-				"Dnia: " + ParseryDB.DateParserToMsg(lvDzienWolny.getData()) + " z powodu " + lvDzienWolny.getOpis(),
+		JOptionPane.showMessageDialog(null, "Dnia: " + lvDzienWolny.getData() + " z powodu " + lvDzienWolny.getOpis(),
 				"Dodano dzieñ wolny", JOptionPane.INFORMATION_MESSAGE);
 
 	}

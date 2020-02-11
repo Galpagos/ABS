@@ -25,7 +25,7 @@ public class LRecordSet extends ArrayList<LRecord> {
 	public LRecord getRecord() {
 		if (size() > mIndex)
 			return get(mIndex);
-		return null;
+		return new LRecord();
 	}
 
 	public void setIndex(int pmIndex) throws SilentException {

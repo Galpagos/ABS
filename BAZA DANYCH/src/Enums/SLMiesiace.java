@@ -1,7 +1,8 @@
 package Enums;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
+import java.time.Year;
+
+import Datownik.Interval;
 
 public enum SLMiesiace {
 	N01_STYCZEN(1, "Styczeñ"), //
@@ -36,16 +37,12 @@ public enum SLMiesiace {
 
 	public Interval getOkres(int pmRok) {
 		if (getMiesiacInt() > 0) {
-			DateTime lvStart = new DateTime().withYear(pmRok).withMonthOfYear(getMiesiacInt()).withDayOfMonth(1)
-					.withTimeAtStartOfDay();
-			DateTime lvEnd = lvStart.plusMonths(1).plusHours(10).minusDays(1);
-			return new Interval(lvStart, lvEnd);
+
+			return new Interval(getMiesiacInt(), pmRok);
 		} else {
-			DateTime lvStart = new DateTime().withYear(pmRok).withMonthOfYear(1).withDayOfMonth(1)
-					.withTimeAtStartOfDay();
-			DateTime lvEnd = lvStart.plusMonths(12).plusHours(10).minusDays(1);
-			return new Interval(lvStart, lvEnd);
+			return new Interval(Year.of(pmRok));
 		}
+
 	}
 
 	public static SLMiesiace getByValue(int i) {

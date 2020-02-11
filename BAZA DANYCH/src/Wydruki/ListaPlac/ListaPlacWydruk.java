@@ -1,10 +1,9 @@
 package Wydruki.ListaPlac;
 
+import java.time.YearMonth;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
-
-import org.joda.time.YearMonth;
 
 import Frames.dbAccess.Components.ResultTableWindow;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
@@ -29,8 +28,7 @@ public class ListaPlacWydruk implements wynikWResultTableWindow {
 	}
 
 	private void utworzWierszeTabeli() {
-		YearMonth lvMiesiac = new YearMonth().withMonthOfYear(mDane.getData().getMonthValue())
-				.withYear(mDane.getData().getYear());
+		YearMonth lvMiesiac = YearMonth.from(mDane.getData());
 
 		ListaPlac lvPlace = new ListaPlac(lvMiesiac);
 

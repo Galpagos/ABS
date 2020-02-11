@@ -3,8 +3,7 @@ package Wydruki.PrzygotowanieDanych;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.joda.time.Interval;
-
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 
 public class DaneDoSprawozdaniaMiesiecznego {

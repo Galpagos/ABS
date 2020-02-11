@@ -2,6 +2,8 @@ package Wydruki.SprawozdanieMiesieczne;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,11 +12,8 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
-
 import Absencja.ObslugaAbsencji;
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ResultTableWindow;
 import Pracownik.ObslugaPracownka;
@@ -59,7 +58,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 		lvPrac.setListaAbsencji(lvObsluga.pobierzAbsencjePracownika(lvPrac.getId()));
 		if (lvPrac.getListaAbsencji() != null) {
 			for (AbsencjaDTO lvAbs : lvPrac.getListaAbsencji()) {
-				Interval lvNowyOkres = lvAbs.getOkres().overlap(mDane.getOkresSprawozdawczy());
+				Interval lvNowyOkres = lvAbs.getOkres().overlap(mDane.getOkresSprawozdawczy()).orElse(null);
 				lvAbs.setOkres(lvNowyOkres);
 			}
 		}
@@ -79,15 +78,15 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	}
 
 	private void utworzListeWeekendow() {
-		int lvDzien = mDane.getOkresSprawozdawczy().getStart().getDayOfWeek();
+		DayOfWeek lvDzien = mDane.getOkresSprawozdawczy().getStart().getDayOfWeek();
 		for (int i = 0; i < mLiczbaDniWMiesiacu; i++) {
-			if ((lvDzien + i) % 7 == 6) {
+			if (DayOfWeek.SATURDAY.equals(lvDzien.plus(i))) {
 				DniWolneDTO lvDzien1 = new DniWolneDTO();
 				lvDzien1.setDzienWMiesiacu(i + 1);
 				lvDzien1.setPowod("Sobota");
 				mListaDniWolnych.add(lvDzien1);
 			}
-			if ((lvDzien + i) % 7 == 0) {
+			if (DayOfWeek.SUNDAY.equals(lvDzien.plus(i))) {
 				DniWolneDTO lvDzien1 = new DniWolneDTO();
 				lvDzien1.setDzienWMiesiacu(i + 1);
 				lvDzien1.setPowod("Niedziela");
@@ -101,14 +100,13 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 		List<Object[]> lvLista = Arrays.asList(mRepo.getDniWolne());
 		List<Interval> lvDniWolne = new ArrayList<Interval>();
 		for (Object[] lvElem : lvLista) {
-			DateTime lvDT = DateTime.parse(Datownik.LicznikDaty.LDTparseFromObject(lvElem[0]).toString());
-			Interval lvInterval = new Interval(lvDT, new Duration(1000));
+			Interval lvInterval = Interval.OkreszBazy(lvElem[0], lvElem[0]);
 			lvDniWolne.add(lvInterval);
 		}
 
 		for (Interval lvOkres : lvDniWolne) {
 
-			Interval lvNowyOkres = lvOkres.overlap(mDane.getOkresSprawozdawczy());
+			Interval lvNowyOkres = lvOkres.overlap(mDane.getOkresSprawozdawczy()).orElse(null);
 			if (lvNowyOkres != null) {
 				DniWolneDTO lvDzienWolny = new DniWolneDTO();
 				lvDzienWolny.setDzienWMiesiacu(lvNowyOkres.getStart().getDayOfMonth());
@@ -137,7 +135,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow()) {
 			if (lvPrac.getListaAbsencji() != null) {
 				for (AbsencjaDTO lvAbs : lvPrac.getListaAbsencji()) {
-					Interval lvNowyOkres = lvAbs.getOkres().overlap(mDane.getOkresSprawozdawczy());
+					Interval lvNowyOkres = lvAbs.getOkres().overlap(mDane.getOkresSprawozdawczy()).orElse(null);
 					lvAbs.setOkres(lvNowyOkres);
 				}
 			}
@@ -156,7 +154,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
 				lvAbs.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDanePracownika[i][4]));
 				;
-				lvAbs.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDanePracownika[i][2], lvDanePracownika[i][3]));
+				lvAbs.setOkres(new Interval((Timestamp) lvDanePracownika[i][2], (Timestamp) lvDanePracownika[i][3]));
 				lvListaAbs.add(lvAbs);
 			}
 			lvPrac.setListaAbsencji(lvListaAbs);
@@ -168,7 +166,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 		mModel.addColumn("Pracownik");
 
 		YearMonth yearMonthObject = YearMonth.of(mDane.getOkresSprawozdawczy().getStart().getYear(),
-				mDane.getOkresSprawozdawczy().getStart().getMonthOfYear());
+				mDane.getOkresSprawozdawczy().getStart().getMonth());
 		mLiczbaDniWMiesiacu = yearMonthObject.lengthOfMonth();
 
 		for (int i = 1; i <= mLiczbaDniWMiesiacu; i++)
@@ -210,8 +208,8 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 				}
 			}
 		});
-		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()
-				+ " do " + mDane.getOkresSprawozdawczy().getEnd().toLocalDate());
+		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do "
+				+ mDane.getOkresSprawozdawczy().getEnd());
 		mOknoWyniku.pokazWynik();
 
 	}

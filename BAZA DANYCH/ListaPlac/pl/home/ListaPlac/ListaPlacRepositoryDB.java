@@ -1,12 +1,10 @@
 package pl.home.ListaPlac;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 
 import Datownik.Data;
 import Parsery.ParseryDB;
@@ -32,7 +30,7 @@ public class ListaPlacRepositoryDB extends AccessDB implements ListaPlacReposito
 		if (lvDniWolne != null && !lvDniWolne.isEmpty())
 			lvLista = lvDniWolne//
 					.stream()//
-					.map(lvRecord -> (new LocalDate(new Instant(lvDniWolne.getAsTimestamp("Data").getTime()))))//
+					.map(lvRecord -> lvDniWolne.getAsTimestamp("Data").toLocalDateTime().toLocalDate())//
 					.collect(Collectors.toList());
 
 		return lvLista;

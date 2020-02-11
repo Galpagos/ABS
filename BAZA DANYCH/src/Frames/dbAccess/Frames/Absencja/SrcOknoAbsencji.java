@@ -1,10 +1,9 @@
 package Frames.dbAccess.Frames.Absencja;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.AbstractOkno;
 import Frames.dbAccess.Components.DatePicker;
+import Frames.dbAccess.Components.MyDataField;
 import Frames.dbAccess.Components.ScriptParams;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
@@ -20,8 +20,8 @@ import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 public abstract class SrcOknoAbsencji extends AbstractOkno {
 	private JLabel lblAbsencjaPracownika;
 	private JPanel contentPane;
-	protected JFormattedTextField mDataOd;
-	protected JFormattedTextField mDataDo;
+	protected MyDataField mDataOd;
+	protected MyDataField mDataDo;
 
 	protected JButton btnWyjcie;
 	protected JButton btnZapisz;
@@ -38,13 +38,13 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 	protected void przypiszMetody() {
 		btnZapisz.addActionListener(e -> zapiszAbsencje());
 		btnPickDate1.addActionListener(lvE -> {
-			Date lvData = new DatePicker().setPickedDate();
+			LocalDate lvData = new DatePicker().setPickedLocalDate();
 			if (lvData != null)
 				mDataOd.setValue(lvData);
 		});
 
 		btnPickDate2.addActionListener(lvE -> {
-			Date lvData = new DatePicker().setPickedDate();
+			LocalDate lvData = new DatePicker().setPickedLocalDate();
 			if (lvData != null)
 				mDataDo.setValue(lvData);
 		});
@@ -103,12 +103,12 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 		lblProcent.setBounds(13, 158, 128, 16);
 		contentPane.add(lblProcent);
 
-		mDataOd = new JFormattedTextField(new Date());
+		mDataOd = new MyDataField();
 		mDataOd.setBounds(169, 38, 116, 22);
 		contentPane.add(mDataOd);
 		mDataOd.setColumns(10);
 
-		mDataDo = new JFormattedTextField(new Date());
+		mDataDo = new MyDataField();
 		mDataDo.setBounds(169, 75, 116, 22);
 		contentPane.add(mDataDo);
 		mDataDo.setColumns(10);

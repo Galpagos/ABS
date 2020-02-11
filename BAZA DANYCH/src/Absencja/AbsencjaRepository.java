@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -78,7 +78,7 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 	}
 
 	@Override
-	public int ileDniWolnych(Date pmDataOd, Date pmDataDo) {
+	public int ileDniWolnych(LocalDate pmDataOd, LocalDate pmDataDo) {
 		return GetCount("DniWolne"//
 				+ " where DATA BEtween " + ParseryDB.DateParserToSQL_SELECT(pmDataOd) + " and "
 				+ ParseryDB.DateParserToSQL_SELECT(pmDataDo));
@@ -88,9 +88,8 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 	public void dodajAbsencje(AbsencjaDTO pmAbs) {
 		executeUpdate("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , RODZAJ,EKWIWALENT ) "//
 				+ " VALUES (" + pmAbs.getId() + " , " //
-				+ pmAbs.getIdPracownika() + " ,"
-				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getStart().toDate()) + " , "
-				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getEnd().toDate()) + " ," //
+				+ pmAbs.getIdPracownika() + " ," + ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getStart()) + " , "
+				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getEnd()) + " ," //
 				+ "'" + pmAbs.getRodzaj().getKod() + "'," //
 				+ "'" + pmAbs.getProcent().getKodString() + "'" + ")");
 	}
@@ -104,7 +103,7 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja) {
 		return GetCount("Absencje where id_tabeli != " + pmAbsencja.getId() + " and id_pracownika="
 				+ pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
-				+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd().toDate()) //
-				+ " and Do_Kiedy>=" + ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getStart().toDate()));
+				+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd()) //
+				+ " and Do_Kiedy>=" + ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getStart()));
 	}
 }

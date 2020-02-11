@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import Datownik.JodaTime;
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ScriptParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
@@ -139,7 +139,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 		lvAbsencja.setId((Integer) tbAbsencje.getModel().getValueAt(lvRow, 0));
 		Date lvOd = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 2);
 		Date lvDo = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3);
-		lvAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
+		lvAbsencja.setOkres(new Interval(lvOd, lvDo));
 		lvAbsencja.setIdPracownika(mPracownik.getId());
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji
 				.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));

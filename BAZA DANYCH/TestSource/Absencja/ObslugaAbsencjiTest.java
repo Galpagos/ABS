@@ -7,13 +7,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import org.joda.time.Interval;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import Datownik.Data;
 import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
@@ -64,8 +64,8 @@ class ObslugaAbsencjiTest {
 		assertEquals(3, lvWynik.getIdPracownika());
 		assertEquals(1, lvWynik.getId());
 		assertEquals(SLRodzajeAbsencji.urlop_w_pracy, lvWynik.getRodzaj());
-		assertEquals(new Date(1559347200000l), lvWynik.getOkres().getStart().toDate());
-		assertEquals(new Date(1559347800000l), lvWynik.getOkres().getEnd().toDate());
+		assertEquals(Data.LocalDateFromDate(new Date(1559347200000l)), lvWynik.getOkres().getStart());
+		assertEquals(Data.LocalDateFromDate(new Date(1559347800000l)), lvWynik.getOkres().getEnd());
 	}
 
 	@Test
@@ -75,47 +75,17 @@ class ObslugaAbsencjiTest {
 		assertEquals(3, a1.getIdPracownika());
 		assertEquals(1, a1.getId());
 		assertEquals(SLRodzajeAbsencji.urlop_w_pracy, a1.getRodzaj());
-		assertEquals(new Date(1559347200000l), a1.getOkres().getStart().toDate());
-		assertEquals(new Date(1559347800000l), a1.getOkres().getEnd().toDate());
+		assertEquals(Data.LocalDateFromDate(new Date(1559347200000l)), a1.getOkres().getStart());
+		assertEquals(Data.LocalDateFromDate(new Date(1559347800000l)), a1.getOkres().getEnd());
 
 		AbsencjaDTO a2 = lvWynik.get(1);
 
 		assertAll(() -> assertEquals(4, a2.getIdPracownika()), //
 				() -> assertEquals(2, a2.getId()), //
 				() -> assertEquals(SLRodzajeAbsencji.urlop_ojcowski, a2.getRodzaj()), //
-				() -> assertEquals(new Date(1559347200000l), a2.getOkres().getStart().toDate()), //
-				() -> assertEquals(new Date(1559347800000l), a2.getOkres().getEnd().toDate()), //
+				() -> assertEquals(Data.LocalDateFromDate(new Date(1559347200000l)), a2.getOkres().getStart()), //
+				() -> assertEquals(Data.LocalDateFromDate(new Date(1559347800000l)), a2.getOkres().getEnd()), //
 				() -> assertEquals(2, mObsluga.pobierzAbsencjePracownika(1).size()));
-	}
-
-	@Test
-	void jedenDzienWolny() {
-		int lvWynik = mObsluga.ileDniRoboczych(new Interval(1559347200000l, 1559347800000l));
-		assertEquals(0, lvWynik);
-	}
-
-	@Test
-	void jedenDzienPracowity() {
-		int lvWynik = mObsluga.ileDniRoboczych(new Interval(1559520000000l, 1559520600000l));
-		assertEquals(1, lvWynik);
-	}
-
-	@Test
-	void szescDniPiecRoboczych() {
-		int lvWynik = mObsluga.ileDniRoboczych(new Interval(1559520000000l, 1559952600000l));
-		assertEquals(5, lvWynik);
-	}
-
-	@Test
-	void roboczeWCzerwcu() {
-		int lvWynik = mObsluga.ileDniRoboczych(new Interval(1559347200000l, 1561853400000l));
-		assertEquals(20, lvWynik);
-	}
-
-	@Test
-	void roboczeWMaju() {
-		int lvWynik = mObsluga.ileDniRoboczych(new Interval(1556668800000l, 1559261400000l));
-		assertEquals(23, lvWynik);
 	}
 
 }

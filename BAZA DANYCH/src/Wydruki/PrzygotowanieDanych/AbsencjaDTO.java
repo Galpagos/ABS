@@ -1,8 +1,8 @@
 package Wydruki.PrzygotowanieDanych;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
+import java.time.LocalDate;
 
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
@@ -17,7 +17,7 @@ public class AbsencjaDTO {
 		return mOkres;
 	}
 
-	public DateTime getStart() {
+	public LocalDate getStart() {
 		return getOkres().getStart();
 	}
 

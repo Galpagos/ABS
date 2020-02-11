@@ -7,7 +7,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 import Absencja.ObslugaAbsencji;
-import Datownik.JodaTime;
+import Datownik.Interval;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ComboPicker;
@@ -39,7 +39,7 @@ public class ObslugaOknaPracownika {
 
 		lvAbsencja.setId(dbAccess.GetNextID(AbsencjaBean.NazwaTabeli));
 		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
-		lvAbsencja.setOkres(JodaTime.okresOdDo(new Date(), new Date()));
+		lvAbsencja.setOkres(new Interval(new Date(), new Date()));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
 
 		mObslugaAbsencji.modyfikujAbsencje(lvAbsencja);

@@ -1,6 +1,6 @@
 package Absencja;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
@@ -10,7 +10,7 @@ public interface AbsencjaRepositor {
 
 	Object[][] getAbsencjePoId(int pmId);
 
-	int ileDniWolnych(Date pmDate, Date pmDate2);
+	int ileDniWolnych(LocalDate pmLocalDate, LocalDate pmLocalDate2);
 
 	void dodajAbsencje(AbsencjaDTO pmAbs);
 

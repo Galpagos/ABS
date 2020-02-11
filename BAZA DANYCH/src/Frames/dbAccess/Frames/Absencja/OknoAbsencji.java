@@ -1,10 +1,11 @@
 package Frames.dbAccess.Frames.Absencja;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import Absencja.ObslugaAbsencji;
 import Absencja.WalidatorAbsenci;
-import Datownik.JodaTime;
+import Datownik.Data;
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ScriptParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
@@ -39,22 +40,22 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 		super.odswiezKontrolki();
 		cbRodzajAbsencji.setSelectedItem(mAbsencja.getRodzaj());
 		cbProcent.setSelectedItem(mAbsencja.getProcent());
-		mDataOd.setValue(mAbsencja.getOkres().getStart().toDate());
-		mDataDo.setValue(mAbsencja.getOkres().getEnd().toDate());
+		mDataOd.setValue(Data.DateFromLocalDate(mAbsencja.getOkres().getStart()));
+		mDataDo.setValue(Data.DateFromLocalDate(mAbsencja.getOkres().getEnd()));
 	}
 
 	@Override
 	protected void zapiszAbsencje() {
 		super.zapiszAbsencje();
 
-		Date lvOd = (Date) mDataOd.getValue();
-		Date lvDo = (Date) mDataDo.getValue();
+		LocalDate lvOd = mDataOd.getDateValue();
+		LocalDate lvDo = mDataDo.getDateValue();
 
 		if (!mWalidator.czyPrawidloweDaty(lvOd, lvDo))
 			return;
 		AbsencjaDTO lvNowaAbsencja = AbsencjaDTO.builder().setId(mAbsencja.getId())
 				.setIdPracownika(mAbsencja.getIdPracownika());
-		lvNowaAbsencja.setOkres(JodaTime.okresOdDo(lvOd, lvDo));
+		lvNowaAbsencja.setOkres(new Interval(lvOd, lvDo));
 		lvNowaAbsencja.setRodzaj((SLRodzajeAbsencji) cbRodzajAbsencji.getSelectedItem());
 		lvNowaAbsencja.setProcent((SLEkwiwalentZaUrlop) cbProcent.getSelectedItem());
 

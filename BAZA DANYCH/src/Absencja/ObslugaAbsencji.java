@@ -1,5 +1,6 @@
 package Absencja;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -8,10 +9,8 @@ import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-
+import Datownik.Interval;
+import Datownik.LicznikDaty;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ScriptParams;
@@ -32,7 +31,7 @@ public class ObslugaAbsencji {
 					.setIdPracownika((int) lvDane[i][1])//
 					.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[i][4]))//
 					.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[i][5] == null ? null : lvDane[i][5].toString()))
-					.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane[i][2], lvDane[i][3]));
+					.setOkres(Interval.OkreszBazy(lvDane[i][2], lvDane[i][3]));
 
 			lvLista.add(lvAbs);
 		}
@@ -48,34 +47,13 @@ public class ObslugaAbsencji {
 				.setIdPracownika((int) lvDane[0][1])//
 				.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[0][4]))//
 				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[0][5] == null ? "0" : lvDane[0][5].toString()))
-				.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDane[0][2], lvDane[0][3]));
-	}
-
-	private int ileDniBezWeekendowOkresie(Interval pmOkres) {
-		DateTime lvStart = pmOkres.getStart();
-		long lvRobocze = 0;
-		lvRobocze = (pmOkres.toDuration().getStandardDays() / 7l) * 5l;
-		long lvPozostale = pmOkres.toDuration().getStandardDays() % 7l;
-		for (int i = 0; i <= lvPozostale; i++) {
-			if (lvStart.getDayOfWeek() != 6 && lvStart.getDayOfWeek() != 7)
-				lvRobocze++;
-			lvStart = lvStart.plusDays(1);
-		}
-		return (int) lvRobocze;
-	}
-
-	private int ileDniWolnychWOkresie(Interval pmOkres) {
-		return mRepo.ileDniWolnych(pmOkres.getStart().toDate(), pmOkres.getEnd().toDate());
-	}
-
-	public int ileDniRoboczych(Interval pmOkres) {
-		return ileDniBezWeekendowOkresie(pmOkres) - ileDniWolnychWOkresie(pmOkres);
+				.setOkres(Interval.OkreszBazy(lvDane[0][2], lvDane[0][3]));
 	}
 
 	public int ileDniRoboczych(AbsencjaDTO pmAbs) {
 		if (pmAbs.getOkres() == null)
 			return 0;
-		return ileDniRoboczych(pmAbs.getOkres());
+		return LicznikDaty.ileDniRoboczych(pmAbs.getOkres());
 	}
 
 	public Map<SLRodzajeAbsencji, Integer> zliczDniRoboczeWAbsencjach(List<AbsencjaDTO> pmLista) {
@@ -90,7 +68,7 @@ public class ObslugaAbsencji {
 				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
 				.collect(Collectors.toList());
 
-		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres)));
+		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres).orElse(null)));
 
 		int lvWynik = 0;
 		Map<SLRodzajeAbsencji, Integer> lvMapa = zliczDniKalendarzoweWAbsencjach(lvLista);
@@ -125,7 +103,7 @@ public class ObslugaAbsencji {
 				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
 				.collect(Collectors.toList());
 
-		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres)));
+		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres).orElse(null)));
 		int lvWynik = 0;
 		Map<SLRodzajeAbsencji, Integer> lvMapa = zliczDniKalendarzoweWAbsencjach(lvLista);
 		if (lvMapa.containsKey(pmRodzaj))
@@ -143,10 +121,10 @@ public class ObslugaAbsencji {
 	public int ileDniKalendarzowych(AbsencjaDTO pmAbsencja) {
 		if (pmAbsencja.getOkres() == null)
 			return 0;
-		return Math.toIntExact(pmAbsencja.getOkres().toDuration().getStandardDays()) + 1;
+		return LicznikDaty.ileDniKalendarzowych(pmAbsencja.getOkres());
 	}
 
-	private DateTime lvDataGraniczna = null;
+	private LocalDate lvDataGraniczna = null;
 	private int licznik = 33;
 
 	public LocalDate dzienKoncaWynagrodzeniaChorobowego(AbsencjaDTO pmAbsencja, int pmLimit) {
@@ -158,8 +136,8 @@ public class ObslugaAbsencji {
 						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4 || lvAbs.getRodzaj() == SLRodzajeAbsencji.ci¹¿a)//
 				.sorted(Comparator.comparing(AbsencjaDTO::getStart)).collect(Collectors.toList());
 
-		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(
-				lvAbs2.getOkres().overlap(SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear()))));
+		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres()
+				.overlap(SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear())).orElse(null)));
 
 		lvLista.stream().forEach(lvAbs -> {
 			licznik = licznik - ileDniKalendarzowych(lvAbs);
@@ -167,6 +145,6 @@ public class ObslugaAbsencji {
 				lvDataGraniczna = lvAbs.getOkres().getEnd().plusDays(licznik);
 
 		});
-		return lvDataGraniczna.toLocalDate();
+		return lvDataGraniczna;
 	}
 }

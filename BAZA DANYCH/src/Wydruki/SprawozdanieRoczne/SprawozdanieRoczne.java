@@ -1,5 +1,8 @@
 package Wydruki.SprawozdanieRoczne;
 
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,12 +11,8 @@ import java.util.stream.Collectors;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-
-import Datownik.JodaTime;
+import Datownik.Interval;
+import Datownik.LicznikDaty;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ResultTableWindow;
@@ -67,8 +66,8 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 		mOknoWyniku.setDane(this);
 		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieRoczneCellRender());
 		mOknoWyniku.getMtable().setDefaultRenderer(PustePole.class, new CellRenderPustePole());
-		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart().toLocalDate()
-				+ " do " + mDane.getOkresSprawozdawczy().getEnd().toLocalDate());
+		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do "
+				+ mDane.getOkresSprawozdawczy().getEnd());
 		mOknoWyniku.pokazWynik();
 	}
 
@@ -122,7 +121,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 
 			lvAbsWMiesiacu.setRodzaj(lvAbs.getRodzaj());
 			lvAbsWMiesiacu.setProcent(lvAbs.getProcent());
-			Interval lvNowyOkres = lvAbs.getOkres().overlap(JodaTime.okresMiesiac(pmI, mRok));
+			Interval lvNowyOkres = lvAbs.getOkres().overlap(new Interval(pmI, mRok)).orElse(null);
 
 			if (lvNowyOkres != null) {
 				lvAbsWMiesiacu.setOkres(lvNowyOkres);
@@ -139,10 +138,15 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 	}
 
 	private void policzDniRobocze(AbsencjaDTO pmAbsWMiesiacu) {
-		LocalDate date = pmAbsWMiesiacu.getOkres().getStart().toLocalDate();
-		LocalDate stop = pmAbsWMiesiacu.getOkres().getEnd().toLocalDate();
+		LocalDate date = pmAbsWMiesiacu.getOkres().getStart();
+		LocalDate stop = pmAbsWMiesiacu.getOkres().getEnd();
 		while (date.isBefore(stop) || date.isEqual(stop)) {
-			if (date.getDayOfWeek() != 6 && date.getDayOfWeek() != 7) { // If not weekend, collect this LocalDate.
+			if (!DayOfWeek.SUNDAY.equals(date.getDayOfWeek()) && !DayOfWeek.SATURDAY.equals(date.getDayOfWeek())) { // If
+																													// not
+																													// weekend,
+																													// collect
+																													// this
+																													// LocalDate.
 				if (!dzienWolny(date, pmAbsWMiesiacu.getOkres())) {
 					mListaAbsWMiesiacu.add(pmAbsWMiesiacu.getRodzaj());
 				}
@@ -154,11 +158,10 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 
 	private boolean dzienWolny(LocalDate pmDate, Interval pmNowyOkres) {
 		for (Interval lvDzien : mDniWolneWRoku) {
-			Interval lvSprawdz = lvDzien.overlap(pmNowyOkres);
+			Interval lvSprawdz = lvDzien.overlap(pmNowyOkres).orElse(null);
 			if (lvSprawdz != null) {
-				for (LocalDate lvDay = lvSprawdz.getStart().toLocalDate(); lvDay
-						.isBefore(lvSprawdz.getEnd().toLocalDate())
-						|| lvDay.isEqual(lvSprawdz.getEnd().toLocalDate()); lvDay = lvDay.plusDays(1)) {
+				for (LocalDate lvDay = lvSprawdz.getStart(); lvDay.isBefore(lvSprawdz.getEnd())
+						|| lvDay.isEqual(lvSprawdz.getEnd()); lvDay = lvDay.plusDays(1)) {
 					if (lvDay.equals(pmDate))
 						return true;
 				}
@@ -177,7 +180,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 				lvAbs.setIdPracownika((int) lvDanePracownika[i][1]);
 				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
 				lvAbs.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDanePracownika[i][4]));
-				lvAbs.setOkres(Datownik.LicznikDaty.OkreszBazy(lvDanePracownika[i][2], lvDanePracownika[i][3]));
+				lvAbs.setOkres(new Interval((Timestamp) lvDanePracownika[i][2], (Timestamp) lvDanePracownika[i][3]));
 				lvListaAbs.add(lvAbs);
 			}
 			lvPrac.setListaAbsencji(lvListaAbs);
@@ -208,8 +211,8 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 		List<Object[]> lvLista = Arrays.asList(mRepo.getDniWolne());
 		List<Interval> lvDniWolne = new ArrayList<Interval>();
 		for (Object[] lvElem : lvLista) {
-			DateTime lvDT = DateTime.parse(Datownik.LicznikDaty.LDTparseFromObject(lvElem[0]).toString());
-			Interval lvInterval = new Interval(lvDT, new Duration(1000));
+			LocalDate lvDT = LicznikDaty.LDTparseFromObject(lvElem[0]);
+			Interval lvInterval = new Interval(lvDT, lvDT);
 			lvDniWolne.add(lvInterval);
 		}
 		return lvDniWolne;

@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import Datownik.Data;
-import Datownik.JodaTime;
+import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -33,7 +33,7 @@ public class ListaPlacTest {
 
 	@BeforeEach
 	public void setUp() {
-		mPlace = new ListaPlac(new YearMonth().withYear(2019).withMonthOfYear(1));
+		mPlace = new ListaPlac(YearMonth.of(2019, 1));
 		MockitoAnnotations.initMocks(this);
 		mPlace.setListaPlacRepository(mRepo);
 		mListaPracownikow = new ArrayList<PracownikDTO>();
@@ -61,14 +61,14 @@ public class ListaPlacTest {
 	@Test
 	public void jedenPracownikUrlopWypoczynkowy() {
 
-		mListaDniWolnych.add(new LocalDate());
-		mListaDniWolnych.add(new LocalDate());
+		mListaDniWolnych.add(LocalDate.now());
+		mListaDniWolnych.add(LocalDate.now());
 		Mockito.doReturn(mListaDniWolnych).when(mRepo).getListaDniWolnychWMiesiacu(Mockito.any(YearMonth.class));
 
 		mListaAbsencji.add(//
 				new AbsencjaDTO()//
 						.setRodzaj(SLRodzajeAbsencji.urlop_wypoczynkowy)//
-						.setOkres(JodaTime.okresOdDo(Data.utworzDate(2018, 12, 21), Data.utworzDate(2019, 1, 1))));
+						.setOkres(new Interval(Data.utworzDate(2018, 12, 21), Data.utworzDate(2019, 1, 1))));
 
 		PracownikDTO lvPracownik = new PracownikDTO()//
 				.setId(10)//
@@ -88,23 +88,23 @@ public class ListaPlacTest {
 
 	@Test
 	public void liczbaDniRoboczychWMiesiacuStyczen2020() {
-		mPlace.mRokMiesiac = new YearMonth().withYear(2020).withMonthOfYear(1);
+		mPlace.mRokMiesiac = YearMonth.of(2020, 1);
 		Mockito.doReturn(mListaDniWolnych).when(mRepo).getListaDniWolnychWMiesiacu(Mockito.any(YearMonth.class));
 		assertEquals(23, mPlace.liczbaDniRoboczychWMiesiacu());
 	}
 
 	@Test
 	public void liczbaDniRoboczychWMiesiacuLuty2020() {
-		mPlace.mRokMiesiac = new YearMonth().withYear(2020).withMonthOfYear(2);
+		mPlace.mRokMiesiac = YearMonth.of(2020, 2);
 		Mockito.doReturn(mListaDniWolnych).when(mRepo).getListaDniWolnychWMiesiacu(Mockito.any(YearMonth.class));
 		assertEquals(20, mPlace.liczbaDniRoboczychWMiesiacu());
 	}
 
 	@Test
 	public void liczbaDniRoboczychWMiesiacuLuty2020ZDniamiWolnymi() {
-		mPlace.mRokMiesiac = new YearMonth().withYear(2020).withMonthOfYear(2);
-		mListaDniWolnych.add(new LocalDate());
-		mListaDniWolnych.add(new LocalDate());
+		mPlace.mRokMiesiac = YearMonth.of(2020, 2);
+		mListaDniWolnych.add(LocalDate.now());
+		mListaDniWolnych.add(LocalDate.now());
 		Mockito.doReturn(mListaDniWolnych).when(mRepo).getListaDniWolnychWMiesiacu(Mockito.any(YearMonth.class));
 
 		assertEquals(18, mPlace.liczbaDniRoboczychWMiesiacu());
@@ -113,14 +113,14 @@ public class ListaPlacTest {
 	@Test
 	public void jedenPracownikChorobaL4() {
 
-		mListaDniWolnych.add(new LocalDate());
-		mListaDniWolnych.add(new LocalDate());
+		mListaDniWolnych.add(LocalDate.now());
+		mListaDniWolnych.add(LocalDate.now());
 		Mockito.doReturn(mListaDniWolnych).when(mRepo).getListaDniWolnychWMiesiacu(Mockito.any(YearMonth.class));
 
 		mListaAbsencji.add(//
 				new AbsencjaDTO()//
 						.setRodzaj(SLRodzajeAbsencji.L_4)//
-						.setOkres(JodaTime.okresOdDo(Data.utworzDate(2019, 1, 1), Data.utworzDate(2019, 1, 24))));
+						.setOkres(new Interval(Data.utworzDate(2019, 1, 1), Data.utworzDate(2019, 1, 24))));
 
 		PracownikDTO lvPracownik = new PracownikDTO()//
 				.setId(10)//
@@ -149,7 +149,7 @@ public class ListaPlacTest {
 		mListaAbsencji.add(//
 				new AbsencjaDTO()//
 						.setRodzaj(SLRodzajeAbsencji.ci¹¿a)//
-						.setOkres(JodaTime.okresOdDo(Data.utworzDate(2018, 12, 21), Data.utworzDate(2019, 2, 24))));
+						.setOkres(new Interval(Data.utworzDate(2018, 12, 21), Data.utworzDate(2019, 2, 24))));
 
 		PracownikDTO lvPracownik = new PracownikDTO()//
 				.setId(10)//
