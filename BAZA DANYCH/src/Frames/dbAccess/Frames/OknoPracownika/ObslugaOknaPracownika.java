@@ -17,6 +17,7 @@ import Frames.dbAccess.Frames.Absencja.OknoAbsencjiParams;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
+import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccess.AbsencjaBean;
@@ -24,13 +25,13 @@ import dbAccess.dbAccess;
 
 public class ObslugaOknaPracownika {
 	InterfejsOknaPracownika mOkno;
-	OknoPracownikaRepository mRepo;
+
+	PracownikRepository mRepoPracownika = new PracownikRepository();
 	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 	ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
 
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika) {
 		mOkno = pmOknoPracownika;
-		mRepo = new OknoPracownikaRepository();
 	}
 
 	public void DodajAbsencje() {
@@ -64,7 +65,7 @@ public class ObslugaOknaPracownika {
 			return;
 
 		int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();
-		mRepo.usunAbsencje(lvIdAbsencji);
+		mObslugaAbsencji.usunAbsencje(lvIdAbsencji, true);
 
 	}
 
@@ -110,17 +111,12 @@ public class ObslugaOknaPracownika {
 	}
 
 	public String getDataUrodzenia(PracownikDTO pmPracownik) {
-		Object[][] lvDane = mRepo.getDataUrodzenia(pmPracownik.getId());
-		if (lvDane[0][0] == null)
-			return "";
-		return lvDane[0][0].toString().split(" ")[0];
+		return mObslugaPracownika.getDataUrodzeniaTxt(pmPracownik);
+
 	}
 
 	public String getUrlop(PracownikDTO pmPracownik) {
-		Object[][] lvDane = mRepo.getUrlopNalezny(pmPracownik.getId());
-		if (lvDane[0][0] == null)
-			return "";
-		return lvDane[0][0].toString();
+		return mObslugaPracownika.getUrlopTxt(pmPracownik);
 	}
 
 	public void ustawUrlopNalezny() {
@@ -129,7 +125,7 @@ public class ObslugaOknaPracownika {
 		int lvWartosc;
 		try {
 			lvWartosc = Integer.parseInt(lvUrlop);
-			mRepo.ustawUrlopNalezny(mOkno.getPracownika().getId(), lvWartosc);
+			mObslugaPracownika.ustawUrlopNalezny(mOkno.getPracownika().getId(), lvWartosc);
 
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Podaj Wartosc Liczbow¹!");

@@ -35,7 +35,6 @@ public class ListaPlacTest {
 	public void setUp() {
 		mPlace = new ListaPlac(YearMonth.of(2019, 1));
 		MockitoAnnotations.initMocks(this);
-		mPlace.setListaPlacRepository(mRepo);
 		mListaPracownikow = new ArrayList<PracownikDTO>();
 		mListaAbsencji = new ArrayList<AbsencjaDTO>();
 		mListaDniWolnych = new ArrayList<LocalDate>();

@@ -15,12 +15,14 @@ import Enums.Komunikat;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Pracownik.ObslugaPracownka;
+import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
 public class WalidatorAbsenci {
 	private AbsencjaRepositor mRepo = new AbsencjaRepository();
 	private ObslugaAbsencji mObsluga = new ObslugaAbsencji();
 	private ObslugaPracownka mObsPrac = new ObslugaPracownka();
+	private PracownikRepository mRepoPracownika = new PracownikRepository();
 
 	public boolean czyWystepujeAbsencjaWOkresie(AbsencjaDTO pmAbsencja) {
 		boolean lvWynik = !(mRepo.zliczAbsencjePracownikaWOkresie(pmAbsencja) == 0);
@@ -178,7 +180,7 @@ public class WalidatorAbsenci {
 
 	private int wyznaczLimitChorobowy(int pmIdPracownika, int pmRok) {
 
-		Date lvDataUr = mObsPrac.getDataUrodzenia(pmIdPracownika);
+		Date lvDataUr = mRepoPracownika.getDataUrodzenia(pmIdPracownika);
 		if (lvDataUr != null) {
 			Calendar lvCalendarz = new GregorianCalendar();
 			lvCalendarz.setTime(lvDataUr);

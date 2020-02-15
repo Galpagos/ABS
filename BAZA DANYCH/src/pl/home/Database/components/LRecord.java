@@ -1,9 +1,13 @@
 package pl.home.Database.components;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import Datownik.Data;
+import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 
 public class LRecord extends HashMap<String, Object> {
 
@@ -22,7 +26,8 @@ public class LRecord extends HashMap<String, Object> {
 	}
 
 	public Integer getAsInteger(String pmNazwa) {
-		return Integer.parseInt(get(pmNazwa).toString());
+
+		return get(pmNazwa) == null ? null : Integer.parseInt(get(pmNazwa).toString());
 	}
 
 	public String getAsString(String pmNazwa) {
@@ -37,7 +42,32 @@ public class LRecord extends HashMap<String, Object> {
 		return (Timestamp) get(pmNazwa);
 	}
 
+	public Integer getAsInteger(SystemTables pmNazwa) {
+		return getAsInteger(pmNazwa.toString());
+	}
+
+	public String getAsString(SystemTables pmNazwa) {
+		return getAsString(pmNazwa.toString());
+	}
+
+	public Date getAsDate(SystemTables pmNazwa) {
+		return getAsDate(pmNazwa.toString());
+	}
+
+	public Timestamp getAsTimestamp(SystemTables pmNazwa) {
+		return getAsTimestamp(pmNazwa.toString());
+	}
+
 	public Object getValue(int pmIndex) {
 		return get(mIndeksy.get(pmIndex));
+	}
+
+	public LocalDate getAsLocalDate(String pmDataUrodzenia) {
+
+		return Data.LocalDateFromDate(getAsDate(pmDataUrodzenia));
+	}
+
+	public LocalDate getAsLocalDate(SystemTables pmNazwa) {
+		return getAsLocalDate(pmNazwa.toString());
 	}
 }

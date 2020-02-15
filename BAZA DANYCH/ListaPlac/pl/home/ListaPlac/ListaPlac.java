@@ -16,17 +16,12 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public class ListaPlac {
 	YearMonth mRokMiesiac;
-	private ListaPlacRepository mRepo = new ListaPlacRepositoryDB();
 	private final BigDecimal KWOTA_MIESIECZNA = new BigDecimal(2600.00).setScale(2);
 	private final BigDecimal KWOTA_ZA_DZIEN = KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.8629))
 			.setScale(8, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(30), 8, RoundingMode.HALF_UP);
 
 	public ListaPlac(YearMonth pmYearMonth) {
 		mRokMiesiac = pmYearMonth;
-	}
-
-	void setListaPlacRepository(ListaPlacRepository pmRepo) {
-		mRepo = pmRepo;
 	}
 
 	public List<MiesiecznaPlacaPracownika> wyliczWyplate(List<PracownikDTO> pmLista) {

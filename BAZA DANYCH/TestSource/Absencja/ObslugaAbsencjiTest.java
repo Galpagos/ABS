@@ -87,5 +87,4 @@ class ObslugaAbsencjiTest {
 				() -> assertEquals(Data.LocalDateFromDate(new Date(1559347800000l)), a2.getOkres().getEnd()), //
 				() -> assertEquals(2, mObsluga.pobierzAbsencjePracownika(1).size()));
 	}
-
 }

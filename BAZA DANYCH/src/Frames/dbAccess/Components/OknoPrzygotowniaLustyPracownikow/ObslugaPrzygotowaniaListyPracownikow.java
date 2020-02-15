@@ -6,14 +6,17 @@ import java.util.List;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
+import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public class ObslugaPrzygotowaniaListyPracownikow {
 	SrcOknoPrzygotowaniaListyPracownikow mOkno;
 	RepositoryPrzygotowaniaListyPracownikow mRepo;
+	PracownikRepository mRepoPracownik = new PracownikRepository();
 	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 
-	public ObslugaPrzygotowaniaListyPracownikow(SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
+	public ObslugaPrzygotowaniaListyPracownikow(
+			SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
 		mOkno = pmOknoPrzygotowaniaListyPracownikow;
 		mRepo = new RepositoryPrzygotowaniaListyPracownikow();
 	}
@@ -40,9 +43,9 @@ public class ObslugaPrzygotowaniaListyPracownikow {
 	public void zasilTabele(GrupaDTO pmObject) {
 		List<PracownikDTO> lvDane = new ArrayList<>();
 		if (pmObject.getNazwa().equals("Wszyscy")) {
-			lvDane = mObslugaPracownika.getListaWszystkichPracownikow();
+			lvDane = mRepoPracownik.getListaWszystkichPracownikow();
 		} else {
-			lvDane = mObslugaPracownika.getListaPracownikowWGrupie(pmObject.getID());
+			lvDane = mRepoPracownik.getListaPracownikowWGrupie(pmObject.getID());
 		}
 
 		mOkno.setListaLewa(lvDane);

@@ -1,5 +1,7 @@
 package Absencja;
 
+import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.ID_tabeli;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -11,6 +13,7 @@ import java.util.Vector;
 
 import Parsery.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
 import pl.home.Database.components.AccessDB;
 
 public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
@@ -58,11 +61,6 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 		return lvData;
 	}
 
-	public static void DeleteRow(String tabela, int id) {
-		String zapytanie = "Delete from " + tabela + " where ID_tabeli=" + id;
-		executeUpdate(zapytanie);
-	}
-
 	@Override
 	public Object[][] getAbsencjePracownika(int pmId) {
 		return getRecordSets(
@@ -96,7 +94,9 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 
 	@Override
 	public void usunAbsencje(int pmID) {
-		executeUpdate("Delete * from Absencje where Id_tabeli=" + pmID);
+		QueryBuilder.DELETE()//
+				.andWarunek(ID_tabeli, pmID)//
+				.execute();
 	}
 
 	@Override

@@ -1,9 +1,12 @@
 package pl.home.Database.components;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Frames.dbAccess.Components.SilentException;
+import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
 
 public class LRecordSet extends ArrayList<LRecord> {
 
@@ -19,7 +22,7 @@ public class LRecordSet extends ArrayList<LRecord> {
 	}
 
 	public Timestamp getAsTimestamp(String pmNazwa) {
-		return this.get(0).getAsTimestamp(pmNazwa);
+		return this.get(mIndex).getAsTimestamp(pmNazwa);
 	}
 
 	public LRecord getRecord() {
@@ -32,5 +35,20 @@ public class LRecordSet extends ArrayList<LRecord> {
 		if (size() < mIndex)
 			throw new SilentException("Indeks poza Tabela");
 		mIndex = pmIndex;
+	}
+
+	public LocalDate getAsLocalDate(String pmDataUrodzenia) {
+
+		return this.get(mIndex).getAsLocalDate(pmDataUrodzenia);
+	}
+
+	public Date getAsDate(ZestawienieColumns pmDataUrodzenia) {
+
+		return this.get(mIndex).getAsDate(pmDataUrodzenia);
+	}
+
+	public Integer getAsInteger(ZestawienieColumns pmUrlopNalezny) {
+
+		return get(mIndex).getAsInteger(pmUrlopNalezny);
 	}
 }

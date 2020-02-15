@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 import Enums.Komunikat;
+import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
 import Frames.dbAccess.Components.ScriptParams;
 import Frames.dbAccess.Frames.OknoSprawozdan.OknoSprawozdan;
@@ -59,7 +60,7 @@ public class ObslugaOknaGlownego {
 		else {
 			for (int i = 0; i < lvDane.length; i++)
 				lvNieobecni = lvNieobecni + lvDane[i][0].toString() + " od " + lvDane[i][1] + " do " + lvDane[i][2]
-						+ " z powodu " + lvDane[i][3] + "\n";
+						+ " z powodu " + SLRodzajeAbsencji.getByKod(lvDane[i][3].toString()).getNazwa() + "\n";
 			lvNieobecni = lvNieobecni.replaceAll("00:00:00.0", "");
 
 			JOptionPane.showMessageDialog(null, lvNieobecni, "Nieobecni dnia:" + ParseryDB.DateParserToMsg(lvNaKiedy),

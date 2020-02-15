@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
-import Enums.TabeleDB;
+import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 
 public class AccessDB {
 	public static final String PATH_DATABASE = "jdbc:ucanaccess://BAZA.accdb";
@@ -39,18 +39,18 @@ public class AccessDB {
 		return lvWynik;
 	}
 
-	protected static int getNextID(TabeleDB pmTable) {
+	protected static int getNextID(SystemTables pmPole) {
 
 		try (//
 				Connection lvCon = init(); //
 				Statement lvStatement = lvCon.createStatement();) {
 			lvStatement.execute(""//
 					+ " SELECT"//
-					+ "   TOP 1 " + pmTable.getIdPole()//
+					+ "   TOP 1 " + pmPole.toString()//
 					+ " FROM " //
-					+ pmTable.getKod() //
+					+ pmPole.getTableName()//
 					+ " ORDER BY" //
-					+ "   " + pmTable.getIdPole() + " DESC");
+					+ "   " + pmPole.toString() + " DESC");
 
 			ResultSet rs = lvStatement.getResultSet();
 			if (!rs.next())

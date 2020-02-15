@@ -1,102 +1,142 @@
 package Pracownik;
 
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Urlop_Nalezny;
+
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.swing.JOptionPane;
+import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.GrupyPowiazaniaColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
+import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
+import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
+import pl.home.Database.components.AccessDB;
+import pl.home.Database.components.LRecord;
+import pl.home.Database.components.LRecordSet;
 
-import Parsery.ParseryDB;
-import dbAccess.AbsencjaBean;
-import dbAccess.ZestawienieBean;
-import dbAccess.dbAccess;
-
-public class PracownikRepository
-{
-	public void dodajPracownika(String pmNazwa)
-	{
-		int lvID = dbAccess.GetNextID("Zestawienie");
-		dbAccess.Zapisz("INSERT INTO Zestawienie (ID_tabeli, Pracownik, Urlop_Nalezny) VALUES ( " + lvID + " ,\""
-				+ pmNazwa + "\", 26)");
+public class PracownikRepository extends AccessDB {
+	public void dodajPracownika(String pmNazwa) {
+		QueryBuilder.INSERT()//
+				.setFromGenerator(ID_tabeli)//
+				.set(Pracownik, pmNazwa)//
+				.set(Urlop_Nalezny, 26)//
+				.execute();
 	}
 
-	public void usunPracownika(int pmId)
-	{
-		String lvNazwa = getPracownikNazwa(pmId);
-		JOptionPane.showMessageDialog(null, "Usunieto pracownika " + lvNazwa, "Usuwanie Pracownika",
-				JOptionPane.INFORMATION_MESSAGE);
-		dbAccess.Zapisz("Delete * from " + AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika
-				+ " = " + pmId);
-		dbAccess.Zapisz("Delete * from " + ZestawienieBean.getNazwaTabeli() + " where " + ZestawienieBean.getKolumnaID()
-				+ " = " + pmId);
+	public void usunPracownika(int pmId) {
+
+		QueryBuilder.DELETE()//
+				.delete(SystemTablesNames.ABSENCJE)//
+				.andWarunek(AbsencjeColumns.ID_pracownika, pmId)//
+				.execute();
+
+		QueryBuilder.DELETE()//
+				.delete(SystemTablesNames.ZESTAWIENIE)//
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId)//
+				.execute();
 	}
 
-	public void zwolnijPracownika(int pmId, Date pmData)
-	{
-		String lvZapytanie = //
-				"UPDATE ZESTAWIENIE SET Data_Zwolnienia = " + ParseryDB.DateParserToSQL_INSERT(pmData)
-						+ " where ID_tabeli = " + pmId;
-		dbAccess.Zapisz(lvZapytanie);
+	public void zwolnijPracownika(int pmId, LocalDate pmData) {
 
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.Data_Zwolnienia, pmData)//
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId)//
+				.execute();
 	}
 
-	public String getPracownikNazwa(int pmId)
-	{
-		return dbAccess.getRecordSets("Select Pracownik from Zestawienie where id_tabeli=" + pmId)[0][0].toString();
-
+	public String getPracownikNazwa(int pmId) {
+		return QueryBuilder.SELECT()//
+				.select(Pracownik)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute().getAsString(Pracownik.toString());
 	}
 
-	public Object[][] getListaWszystkichPracownikow()
-	{
-		// TODO Auto-generated method stub
-		return dbAccess.getRecordSets(
-				"Select " + ZestawienieBean.getKolumnaID() + "," + ZestawienieBean.getKolumnaNazwaPracownika() + //
-						" from " + ZestawienieBean.getNazwaTabeli()
-						+ " where Data_Zwolnienia is null order by pracownik asc");
-	}
+	public List<PracownikDTO> getListaWszystkichPracownikow() {
 
-	public Object[][] getListaPracownikowWGrupie(int pmGrupaId)
-	{
-		return dbAccess.getRecordSets("Select ID_Tabeli, Pracownik "//
-				+ "from Zestawienie  zz right join AD_GRUPY_POWIAZANIA ad on zz.id_Tabeli=ad.ID_PRacownika"//
-				+ " where zz.Data_Zwolnienia is null and ad.ID_grupy=" + pmGrupaId + " order by pracownik asc");
-	}
+		LRecordSet lvWynik = QueryBuilder.SELECT()//
+				.select(ID_tabeli, Pracownik)//
+				.andWarunek(ZestawienieColumns.Data_Zwolnienia, null)//
+				.orderBy(Pracownik, true)//
+				.execute();
 
-	public void ustawDateUrodzenia(int pmId, Date pmDataUrodzenia)
-	{
-		dbAccess.Zapisz("Update Zestawienie set Data_Urodzenia=" + ParseryDB.DateParserToSQL_INSERT(pmDataUrodzenia)
-				+ " where id_tabeli =" + pmId);
-
-	}
-
-	public Object[][] getDataUrodzenia(int pmId)
-	{
-		return dbAccess.getRecordSets("Select Data_Urodzenia from Zestawienie where ID_tabeli=" + pmId);
-	}
-
-	public Object[][] getUrlopNalezny(int pmId)
-	{
-		return dbAccess.getRecordSets("Select Urlop_Nalezny from Zestawienie where ID_tabeli=" + pmId);
-	}
-
-	public void ustawUrlopNalezny(int pmId, int pmUrlop)
-	{
-		dbAccess.Zapisz("Update Zestawienie set Urlop_Nalezny=" + pmUrlop + " where id_tabeli =" + pmId);
+		return lvWynik//
+				.stream()//
+				.map(lvRecord -> parsujPracownika(lvRecord))//
+				.collect(Collectors.toList());
 
 	}
 
-	public Object[][] pobierzNieobecnych(LocalDate pmDataObecnosci)
-	{
-		String lvZapytanie = //
-				"SELECT zz.id_tabeli, zz." + ZestawienieBean.getKolumnaNazwaPracownika() + ", ab."
-						+ AbsencjaBean.kolumnaOdKiedy + ", ab." + AbsencjaBean.kolumnaDoKiedy + ",ab."
-						+ AbsencjaBean.kolumnaRodzajAbsencji + //
-						" from " + AbsencjaBean.NazwaTabeli + " ab  "//
-						+ "INNER JOIN " + ZestawienieBean.getNazwaTabeli() + " zz on ab."
-						+ AbsencjaBean.GetKolumnIdPracownika() + "=zz." + ZestawienieBean.getKolumnaID() + //
-						" WHERE ab." + AbsencjaBean.kolumnaOdKiedy + " <="
-						+ ParseryDB.DateParserToSQL_SELECT(pmDataObecnosci)//
-						+ " and ab." + AbsencjaBean.kolumnaDoKiedy + ">="
-						+ ParseryDB.DateParserToSQL_SELECT(pmDataObecnosci);
-		return dbAccess.getRecordSets(lvZapytanie);
+	private PracownikDTO parsujPracownika(LRecord pmRecord) {
+		PracownikDTO lvPracownik = new PracownikDTO();
+		lvPracownik.setId(pmRecord.getAsInteger(ID_tabeli));
+		lvPracownik.setNazwa(pmRecord.getAsString(Pracownik));
+		return lvPracownik;
+	}
+
+	public List<PracownikDTO> getListaPracownikowWGrupie(int pmGrupaId) {
+
+		LRecordSet lvWynik = //
+				QueryBuilder.SELECT()//
+						.select(ID_tabeli, Pracownik)//
+						.joinOn(GrupyPowiazaniaColumns.ID_PRACOWNIKA, ID_tabeli)//
+						.andWarunek(ZestawienieColumns.Data_Zwolnienia, null)//
+						.andWarunek(GrupyPowiazaniaColumns.ID_GRUPY, pmGrupaId)//
+						.orderBy(Pracownik, true)//
+						.execute();
+
+		return lvWynik//
+				.stream()//
+				.map(lvRecord -> parsujPracownika(lvRecord))//
+				.collect(Collectors.toList());
+	}
+
+	public void ustawDateUrodzenia(int pmId, Date pmDataUrodzenia) {
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.Data_Urodzenia, pmDataUrodzenia)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+	}
+
+	public Date getDataUrodzenia(int pmId) {
+		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
+				.select(ZestawienieColumns.Data_Urodzenia)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+
+		return lvRecordSet.getAsDate(ZestawienieColumns.Data_Urodzenia);
+	}
+
+	public void ustawUrlopNalezny(int pmId, int pmUrlop) {
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.Urlop_Nalezny, pmUrlop)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+	}
+
+	public Integer getUrlopNalezny(int pmId) {
+		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
+				.select(ZestawienieColumns.Urlop_Nalezny)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+
+		return lvRecordSet.getAsInteger(ZestawienieColumns.Urlop_Nalezny);
+	}
+
+	public List<PracownikDTO> pobierzNieobecnych(LocalDate pmDataObecnosci) {
+
+		LRecordSet lvWynik = QueryBuilder.SELECT()//
+				.select(ID_tabeli, Pracownik, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy,
+						AbsencjeColumns.RODZAJ)//
+				.joinOn(AbsencjeColumns.ID_pracownika, ID_tabeli)
+				.andBeforeOrEqual(AbsencjeColumns.Od_kiedy, pmDataObecnosci)//
+				.andAfterOrEqual(AbsencjeColumns.Do_kiedy, pmDataObecnosci)//
+				.execute();
+
+		return lvWynik.stream().map(lvRecord -> parsujPracownika(lvRecord)).collect(Collectors.toList());
 	}
 }
