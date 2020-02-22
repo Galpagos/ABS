@@ -7,15 +7,14 @@ import java.util.List;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
-import Frames.dbAccess.Components.ScriptParams;
-import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikow;
-import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikowParams;
-import Frames.dbAccess.Components.PobieranieModulow.PobieranieModulow;
 import Wydruki.ListaObecnosci.OknoListaObecnosci;
 import Wydruki.ListaPlac.ListaPlacWydruk;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.SprawozdanieMiesieczne.SprawozdanieMiesieczne;
 import Wydruki.SprawozdanieRoczne.SprawozdanieRoczne;
+import pl.home.components.frames.mainframes.OknoPrzygotowaniaListyPracownikow;
+import pl.home.components.frames.mainframes.PobieranieModulow;
+import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
 
 public class ObslugaOknaSprawozdan {
 	DaneDoSprawozdaniaMiesiecznego mDane;
@@ -46,10 +45,9 @@ public class ObslugaOknaSprawozdan {
 			lvLista.add(SLRodzajeAbsencji.urlop_wypoczynkowy);
 			mDane.setListaAbsencji(lvLista);
 		} else {
-			mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());
+			mDane.setListaAbsencji(new PobieranieModulow().get().getListaAbsencji());
 		}
-		ScriptParams lvParams = new ScriptParams();
-		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+		OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().build();
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
 		mDane.setOkresSprawozdawczy(SLMiesiace.N00_ROK.getOkres(mRok));
 	}
@@ -59,12 +57,11 @@ public class ObslugaOknaSprawozdan {
 		if (lvData == null)
 			return false;
 		mDane.setOkresSprawozdawczy(SLMiesiace.values()[lvData.getMonthValue() - 1].getOkres(lvData.getYear()));
-		ScriptParams lvParams = new ScriptParams();
-		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+		OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().build();
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
 		if (mDane.getListaPracownikow().size() == 0)
 			return false;
-		mDane.setListaAbsencji(new PobieranieModulow().ZwrocModuly());
+		mDane.setListaAbsencji(new PobieranieModulow().get().getListaAbsencji());
 		if (mDane.getListaAbsencji().size() == 0)
 			return false;
 		return true;
@@ -95,8 +92,7 @@ public class ObslugaOknaSprawozdan {
 		if (lvData == null)
 			return false;
 		mDane.setData(lvData);
-		ScriptParams lvParams = new ScriptParams();
-		lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
+		OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().build();
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
 		if (mDane.getListaPracownikow().size() == 0)
 			return false;

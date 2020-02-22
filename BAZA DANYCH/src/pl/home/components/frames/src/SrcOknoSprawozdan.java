@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.OknoSprawozdan;
+package pl.home.components.frames.src;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -9,9 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Frames.dbAccess.Components.AbstractOkno;
-import Frames.dbAccess.Components.ScriptParams;
+import pl.home.components.frames.parameters.OSprawozdanWejscie;
+import pl.home.components.frames.parameters.OSprawozdanWyjscie;
 
-public abstract class SrcOknoSprawozdan extends AbstractOkno {
+public abstract class SrcOknoSprawozdan extends AbstractOkno<OSprawozdanWejscie, OSprawozdanWyjscie> {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	private JButton mbtnSprawozdanieRoczne;
@@ -21,9 +22,8 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 	private JButton btnRoczneUrlopy;
 	private JButton btnListaObecnosci;
 	private JButton btnListaPlac;
-	private JButton cancelButton;
 
-	public SrcOknoSprawozdan(ScriptParams pmParams) {
+	public SrcOknoSprawozdan(OSprawozdanWejscie pmParams) {
 		super(pmParams);
 	}
 
@@ -43,7 +43,6 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 		mbtnSprawozdanieMiesiczne.addActionListener(e -> wywolajSprawozdanieMiesieczne());
 		btnRoczneUrlopy.addActionListener(e -> wywolajSprawozdanieRoczneUrlopy());
 		btnListaObecnosci.addActionListener(e -> wywolajListeObecnosci());
-		cancelButton.addActionListener(e -> dispose());
 		btnListaPlac.addActionListener(e -> wywolajListePlac());
 
 	}
@@ -54,9 +53,9 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 
 	protected abstract void wywolajSprawozdanieRoczneUrlopy();
 
-	abstract void wywolajSprawozdanieMiesieczne();
+	protected abstract void wywolajSprawozdanieMiesieczne();
 
-	abstract void wywolajSprawozdanieRoczne();
+	protected abstract void wywolajSprawozdanieRoczne();
 
 	@Override
 	protected void odswiezKontrolki() {
@@ -102,8 +101,17 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno {
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
-		cancelButton = new JButton("Cancel");
-		cancelButton.setActionCommand("Cancel");
-		buttonPane.add(cancelButton);
+		buttonPane.add(mcancelButton);
 	}
+
+	@Override
+	protected void beforeClose() {
+	}
+
+	@Override
+	protected OSprawozdanWyjscie budujWyjscie() {
+
+		return null;
+	}
+
 }

@@ -46,7 +46,7 @@ public class Interval {
 
 	public Optional<Interval> overlap(Interval pmOkres) {
 
-		if (mDataOd.isAfter(pmOkres.getEnd()) || pmOkres.getStart().isAfter(mDataDo))
+		if (pmOkres == null || mDataOd.isAfter(pmOkres.getEnd()) || pmOkres.getStart().isAfter(mDataDo))
 			return Optional.empty();
 		LocalDate lvDataOd = mDataOd.isAfter(pmOkres.getStart()) ? mDataOd : pmOkres.getStart();
 		LocalDate lvDataDo = mDataDo.isBefore(pmOkres.getEnd()) ? mDataDo : pmOkres.getEnd();

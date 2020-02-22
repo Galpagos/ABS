@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.OknoGlowne;
+package pl.home.components.frames.src;
 
 import java.awt.Dimension;
 
@@ -17,21 +17,21 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 @SuppressWarnings("serial")
 public abstract class SrcOknoGlowne extends JFrame {
 
-	JTable tbPracownicy;
-	JButton btnDodajPracownika;
-	JButton btnPokazPracownika;
-	JButton btnUsunPracownika;
+	protected JTable tbPracownicy;
+	protected JButton btnDodajPracownika;
+	protected JButton btnPokazPracownika;
+	protected JButton btnUsunPracownika;
 	JScrollPane mScrollPane;
 	PracownikDTO mPracownik = null;
-	JTextField mFiltrPracownika;
+	protected JTextField mFiltrPracownika;
 	JPanel mContentPane;
 	JPanel mButtonPanel;
-	JButton btnWyjcie;
-	JButton btnPokazNieobecnych;
-	JButton btnDodajDzienWolny;
-	JButton btnPokazDniWolne;
-	JButton btnSprawozdanie;
-	JButton btnZwolnij;
+	protected JButton btnWyjcie;
+	protected JButton btnPokazNieobecnych;
+	protected JButton btnDodajDzienWolny;
+	protected JButton btnPokazDniWolne;
+	protected JButton btnSprawozdanie;
+	protected JButton btnZwolnij;
 
 	public SrcOknoGlowne() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

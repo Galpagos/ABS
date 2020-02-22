@@ -1,12 +1,13 @@
-package Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow;
-
-import java.util.ArrayList;
+package pl.home.components.frames.mainframes;
 
 import javax.swing.DefaultComboBoxModel;
 
-import Frames.dbAccess.Components.ScriptParams;
+import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.InterfejsPrzygotowaniaListyPracownikow;
+import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.ObslugaPrzygotowaniaListyPracownikow;
 import Grupy.GrupaDTO;
-import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
+import pl.home.components.frames.parameters.OPrzygListyPracWyjscie;
+import pl.home.components.frames.src.SrcOknoPrzygotowaniaListyPracownikow;
 
 public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListyPracownikow
 		implements InterfejsPrzygotowaniaListyPracownikow {
@@ -14,12 +15,12 @@ public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListy
 	private static final long serialVersionUID = -5117051096105142242L;
 	ObslugaPrzygotowaniaListyPracownikow mObsluga;
 
-	public OknoPrzygotowaniaListyPracownikow(ScriptParams pmParams) {
+	public OknoPrzygotowaniaListyPracownikow(OPrzygListyPracWejscie pmParams) {
 		super(pmParams);
 	}
 
 	@Override
-	void wszyscyWPrawo() {
+	protected void wszyscyWPrawo() {
 		mObsluga.wszyscyWPrawo();
 	}
 
@@ -50,13 +51,6 @@ public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListy
 	}
 
 	@Override
-	protected void cancel() {
-		mListaPrawa = new ArrayList<PracownikDTO>();
-		dispose();
-
-	}
-
-	@Override
 	protected void budujOkno() {
 		super.budujOkno();
 		mObsluga = new ObslugaPrzygotowaniaListyPracownikow(this);
@@ -74,6 +68,12 @@ public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListy
 	protected void odswiezKontrolki() {
 		super.odswiezKontrolki();
 		cbWyborGrupy.setModel(new DefaultComboBoxModel<GrupaDTO>(mObsluga.pobierzGrupy()));
+	}
+
+	@Override
+	protected OPrzygListyPracWyjscie budujWyjscie() {
+
+		return OPrzygListyPracWyjscie.builder().withLista(mListaPrawa).withAccepted(mAccepted).build();
 	}
 
 }

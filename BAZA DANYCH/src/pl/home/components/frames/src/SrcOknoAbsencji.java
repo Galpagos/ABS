@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.Absencja;
+package pl.home.components.frames.src;
 
 import java.time.LocalDate;
 
@@ -13,30 +13,28 @@ import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.AbstractOkno;
 import Frames.dbAccess.Components.DatePicker;
 import Frames.dbAccess.Components.MyDataField;
-import Frames.dbAccess.Components.ScriptParams;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
+import pl.home.components.frames.parameters.OAbsencjiWejscie;
+import pl.home.components.frames.parameters.OAbsencjiWyjscie;
 
 @SuppressWarnings("serial")
-public abstract class SrcOknoAbsencji extends AbstractOkno {
+public abstract class SrcOknoAbsencji extends AbstractOkno<OAbsencjiWejscie, OAbsencjiWyjscie> {
 	private JLabel lblAbsencjaPracownika;
 	private JPanel contentPane;
 	protected MyDataField mDataOd;
 	protected MyDataField mDataDo;
 
-	protected JButton btnWyjcie;
-	protected JButton btnZapisz;
 	protected JButton btnPickDate1;
 	protected JButton btnPickDate2;
 	protected JComboBox<SLRodzajeAbsencji> cbRodzajAbsencji;
 	protected JComboBox<SLEkwiwalentZaUrlop> cbProcent;
 
-	public SrcOknoAbsencji(ScriptParams pmParams) {
+	public SrcOknoAbsencji(OAbsencjiWejscie pmParams) {
 		super(pmParams);
 	}
 
 	@Override
 	protected void przypiszMetody() {
-		btnZapisz.addActionListener(e -> zapiszAbsencje());
 		btnPickDate1.addActionListener(lvE -> {
 			LocalDate lvData = new DatePicker().setPickedLocalDate();
 			if (lvData != null)
@@ -48,12 +46,15 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 			if (lvData != null)
 				mDataDo.setValue(lvData);
 		});
-
 	}
 
-	protected void zapiszAbsencje() {
-
+	@Override
+	protected void beforeClose() {
+		if (mAccepted)
+			zapiszAbsencje();
 	}
+
+	public abstract void zapiszAbsencje();
 
 	@Override
 	protected void budujOkno() {
@@ -74,14 +75,12 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 		cbProcent.setBounds(169, 158, 214, 25);
 		contentPane.add(cbProcent);
 
-		btnWyjcie = new JButton("Wyj\u015Bcie");
-		btnWyjcie.addActionListener(e -> dispose());
-		btnWyjcie.setBounds(323, 237, 97, 25);
-		contentPane.add(btnWyjcie);
+		mcancelButton.setBounds(323, 237, 97, 25);
+		contentPane.add(mcancelButton);
 
-		btnZapisz = new JButton("Zapisz");
-		btnZapisz.setBounds(206, 237, 97, 25);
-		contentPane.add(btnZapisz);
+		mokButton.setText("Zapisz");
+		mokButton.setBounds(206, 237, 97, 25);
+		contentPane.add(mokButton);
 
 		lblAbsencjaPracownika = new JLabel("Absencja pracownika ");
 		lblAbsencjaPracownika.setBounds(13, 0, 298, 25);
@@ -133,5 +132,11 @@ public abstract class SrcOknoAbsencji extends AbstractOkno {
 
 	@Override
 	protected void odswiezKontrolki() {
+	}
+
+	@Override
+	protected OAbsencjiWyjscie budujWyjscie() {
+
+		return OAbsencjiWyjscie.builder().build();
 	}
 }

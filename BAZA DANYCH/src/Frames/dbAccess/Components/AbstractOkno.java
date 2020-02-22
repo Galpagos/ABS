@@ -1,16 +1,28 @@
 package Frames.dbAccess.Components;
 
-import javax.swing.JDialog;
+import java.awt.Component;
 
-public abstract class AbstractOkno extends JDialog {
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.SwingConstants;
+
+public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends ParametryWyjscia> extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	protected ScriptParams mParams;
+	protected T1 mParams;
+	protected boolean mAccepted;
 
-	public AbstractOkno(ScriptParams pmParams) {
+	protected JButton mokButton;
+	protected JButton mcancelButton;
+
+	public AbstractOkno(T1 pmParams) {
 		mParams = pmParams;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+		createOkButton();
+
+		createCancelButton();
 
 		readParams();
 		budujOkno();
@@ -20,7 +32,30 @@ public abstract class AbstractOkno extends JDialog {
 		setVisible(true);
 	}
 
-	protected abstract void readParams();
+	private void createCancelButton() {
+		mcancelButton = new JButton("Wyjœcie");
+		mcancelButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		mcancelButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		mcancelButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		mcancelButton.setActionCommand("Cancel");
+		mcancelButton.addActionListener(e -> {
+			mAccepted = false;
+			beforeClose();
+			dispose();
+		});
+	}
+
+	private void createOkButton() {
+		mokButton = new JButton("OK");
+		mokButton.setActionCommand("OK");
+		mokButton.addActionListener(e -> {
+			mAccepted = true;
+			beforeClose();
+			dispose();
+		});
+	}
+
+	protected abstract void beforeClose();
 
 	protected abstract void onOpen();
 
@@ -29,4 +64,16 @@ public abstract class AbstractOkno extends JDialog {
 	protected abstract void odswiezKontrolki();
 
 	protected abstract void budujOkno();
+
+	protected abstract T2 budujWyjscie();
+
+	public T2 get() {
+		T2 lvWyjscie = budujWyjscie();
+		lvWyjscie.setAccepted(mAccepted);
+		return lvWyjscie;
+	}
+
+	protected void readParams() {
+	}
+
 }

@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.OknoPracownika;
+package pl.home.components.frames.src;
 
 import java.awt.Font;
 
@@ -13,12 +13,13 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import Frames.dbAccess.Components.AbstractOkno;
-import Frames.dbAccess.Components.ScriptParams;
+import pl.home.components.frames.parameters.OPracWejscie;
+import pl.home.components.frames.parameters.OPracWyjscie;
 
 @SuppressWarnings("serial")
-public abstract class SrcOknoPracownika extends AbstractOkno {
+public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPracWyjscie> {
 
-	public SrcOknoPracownika(ScriptParams pmParams) {
+	public SrcOknoPracownika(OPracWejscie pmParams) {
 		super(pmParams);
 	}
 
@@ -180,4 +181,15 @@ public abstract class SrcOknoPracownika extends AbstractOkno {
 	protected void readParams() {
 
 	}
+
+	@Override
+	protected void beforeClose() {
+	}
+
+	@Override
+	protected OPracWyjscie budujWyjscie() {
+
+		return OPracWyjscie.builder().build();
+	}
+
 }

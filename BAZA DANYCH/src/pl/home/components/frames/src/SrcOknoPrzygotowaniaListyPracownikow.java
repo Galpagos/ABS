@@ -1,6 +1,5 @@
-package Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow;
+package pl.home.components.frames.src;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,26 +10,26 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import Frames.dbAccess.Components.AbstractOkno;
-import Frames.dbAccess.Components.ScriptParams;
+import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.InterfejsPrzygotowaniaListyPracownikow;
 import Grupy.GrupaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
+import pl.home.components.frames.parameters.OPrzygListyPracWyjscie;
 
-public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
-		implements InterfejsPrzygotowaniaListyPracownikow {
+public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
+		AbstractOkno<OPrzygListyPracWejscie, OPrzygListyPracWyjscie> implements InterfejsPrzygotowaniaListyPracownikow {
 
 	private static final long serialVersionUID = 4904737240355272360L;
 	JList<PracownikDTO> mTabLewa;
 	JList<PracownikDTO> mTabPrawa;
 	List<PracownikDTO> mListaLewa;
-	List<PracownikDTO> mListaPrawa;
+	protected List<PracownikDTO> mListaPrawa;
 	protected JComboBox<GrupaDTO> cbWyborGrupy;
 	private JPanel contentPanel;
-	private JButton mokButton;
-	private JButton mcancelButton;
+
 	private JButton btnWszyscyWybrani;
 	private JButton btnJedenWybrany;
 	private JButton btnJedenOdrzucony;
@@ -39,15 +38,20 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 	private JLabel lblAbyZaznaczyKilka;
 	private JScrollPane mScrollPane1;
 
-	public SrcOknoPrzygotowaniaListyPracownikow(ScriptParams pmParams) {
+	public SrcOknoPrzygotowaniaListyPracownikow(OPrzygListyPracWejscie pmParams) {
 		super(pmParams);
 
+	}
+
+	@Override
+	protected void beforeClose() {
 	}
 
 	public void dSrcOknoPrzygotowaniaListyPracownikow() {
 
 	}
 
+	@Override
 	public List<PracownikDTO> getListaLewa() {
 		return mListaLewa;
 	}
@@ -56,25 +60,30 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 		return mListaPrawa;
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public void odswiezTabLewa() {
 		mTabLewa.setModel(new javax.swing.AbstractListModel() {
 			PracownikDTO[] strings = mListaLewa.toArray(new PracownikDTO[mListaLewa.size()]);
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public Object getElementAt(int i) {
 				return strings[i];
 			}
 		});
 	}
 
+	@Override
 	public List<PracownikDTO> getListaPrawa() {
 		return mListaPrawa;
 	}
 
+	@Override
 	public void setListaPrawa(List<PracownikDTO> pmListaPrawa) {
 		mListaPrawa = pmListaPrawa;
 
@@ -90,20 +99,24 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 		mTabPrawa.setModel(new javax.swing.AbstractListModel() {
 			PracownikDTO[] strings = mListaPrawa.toArray(new PracownikDTO[mListaPrawa.size()]);
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public Object getElementAt(int i) {
 				return strings[i];
 			}
 		});
 	}
 
+	@Override
 	public List<PracownikDTO> getSelectionLewa() {
 		return mTabLewa.getSelectedValuesList();
 	}
 
+	@Override
 	public int[] getSelectionLewaInt() {
 		return mTabLewa.getSelectedIndices();
 	}
@@ -112,19 +125,10 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 		return mTabPrawa.getSelectedIndices();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void readParams() {
-		if (mParams.containsKey(OknoPrzygotowaniaListyPracownikowParams.LISTA_PRACOWNIKOW))
-			mListaPrawa = (List<PracownikDTO>) mParams.get(OknoPrzygotowaniaListyPracownikowParams.LISTA_PRACOWNIKOW);
-		else
-			mListaPrawa = new ArrayList<PracownikDTO>();
-	}
-
-	@Override
-	protected void onOpen() {
-		// TODO Auto-generated method stub
-
+		mListaPrawa = new ArrayList<PracownikDTO>();
+		mListaPrawa.addAll(mParams.getLista());
 	}
 
 	@Override
@@ -134,12 +138,10 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 		btnJedenOdrzucony.addActionListener(e -> usunZPrawo());
 		btnWszyscyOdrzuceni.addActionListener(e -> wyczyscLewa());
 		btnPuste.addActionListener(e -> dodajPrzerwe());
-		mokButton.addActionListener(e -> dispose());
-		cbWyborGrupy.addActionListener(e -> wyborGRupy());
-		mcancelButton.addActionListener(e -> cancel());
-	}
 
-	protected abstract void cancel();
+		cbWyborGrupy.addActionListener(e -> wyborGRupy());
+
+	}
 
 	protected abstract void wyborGRupy();
 
@@ -151,7 +153,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 
 	protected abstract void jedenwPrawo();
 
-	abstract void wszyscyWPrawo();
+	protected abstract void wszyscyWPrawo();
 
 	@Override
 	protected void odswiezKontrolki() {
@@ -164,7 +166,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 
 		mListaLewa = new ArrayList<PracownikDTO>();
 
-		setTitle((String) mParams.get(OknoPrzygotowaniaListyPracownikowParams.NAZWA));
+		setTitle(mParams.getNazwa());
 		contentPanel = new JPanel();
 		setBounds(100, 100, 681, 525);
 		getContentPane().setLayout(null);
@@ -227,17 +229,12 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 		cbWyborGrupy = new JComboBox<GrupaDTO>();
 		cbWyborGrupy.setBounds(12, 13, 154, 25);
 		cbWyborGrupy.setSelectedItem(" ");
-		mokButton = new JButton("OK");
+
 		mokButton.setBounds(487, 13, 77, 25);
-		mokButton.setActionCommand("OK");
+
 		getRootPane().setDefaultButton(mokButton);
 
-		mcancelButton = new JButton("Cancel");
 		mcancelButton.setBounds(576, 12, 77, 25);
-		mcancelButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-		mcancelButton.setVerticalAlignment(SwingConstants.BOTTOM);
-		mcancelButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		mcancelButton.setActionCommand("Cancel");
 
 		buttonPane.setLayout(null);
 		buttonPane.add(cbWyborGrupy);
@@ -245,4 +242,9 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno
 		buttonPane.add(mcancelButton);
 
 	}
+
+	@Override
+	protected void onOpen() {
+	}
+
 }

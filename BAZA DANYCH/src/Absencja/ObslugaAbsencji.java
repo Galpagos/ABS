@@ -13,11 +13,10 @@ import Datownik.Interval;
 import Datownik.LicznikDaty;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
-import Frames.dbAccess.Components.ScriptParams;
-import Frames.dbAccess.Frames.Absencja.OknoAbsencji;
-import Frames.dbAccess.Frames.Absencja.OknoAbsencjiParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
+import pl.home.components.frames.mainframes.OknoAbsencji;
+import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
 public class ObslugaAbsencji {
 	AbsencjaRepositor mRepo = new AbsencjaRepository();
@@ -79,8 +78,7 @@ public class ObslugaAbsencji {
 
 	public void modyfikujAbsencje(AbsencjaDTO pmAbs) {
 		if (pmAbs != null) {
-			ScriptParams lvParams = new ScriptParams();
-			lvParams.add(OknoAbsencjiParams.ABSENCJA_DTO, pmAbs);
+			OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(pmAbs).build();
 			new OknoAbsencji(lvParams);
 		}
 	}

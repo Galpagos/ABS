@@ -1,6 +1,6 @@
 package Projekt_Glowny;
 
-import Frames.dbAccess.Frames.OknoGlowne.OknoGlowne;
+import pl.home.components.frames.mainframes.OknoGlowne;
 
 public class testframe {
 

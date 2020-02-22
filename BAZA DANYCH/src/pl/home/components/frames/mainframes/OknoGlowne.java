@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.OknoGlowne;
+package pl.home.components.frames.mainframes;
 
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data_Zwolnienia;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
@@ -18,9 +18,13 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import Frames.dbAccess.Components.JTableModelFromLRecords;
+import Frames.dbAccess.Frames.OknoGlowne.InterfejsOknaGlownego;
+import Frames.dbAccess.Frames.OknoGlowne.ObslugaOknaGlownego;
+import Frames.dbAccess.Frames.OknoGlowne.Przekoder;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.DbSelect;
 import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
+import pl.home.components.frames.src.SrcOknoGlowne;
 
 public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 

@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.OknoPracownika;
+package pl.home.components.frames.mainframes;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -10,13 +10,16 @@ import javax.swing.table.TableColumnModel;
 
 import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
-import Frames.dbAccess.Components.ScriptParams;
+import Frames.dbAccess.Frames.OknoPracownika.InterfejsOknaPracownika;
+import Frames.dbAccess.Frames.OknoPracownika.ObslugaOknaPracownika;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccess.AbsencjaBean;
 import dbAccess.dbAccess;
 import dbAccess.dbAccess.MyTableModel;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
+import pl.home.components.frames.parameters.OPracWejscie;
+import pl.home.components.frames.src.SrcOknoPracownika;
 
 public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPracownika {
 
@@ -24,7 +27,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	private PracownikDTO mPracownik;
 	private ObslugaOknaPracownika mObsluga;
 
-	public OknoPracownika(ScriptParams pmParams) {
+	public OknoPracownika(OPracWejscie pmParams) {
 		super(pmParams);
 
 	}
@@ -32,7 +35,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	@Override
 	protected void readParams() {
 		super.readParams();
-		setPracownik(mParams);
+		mPracownik = mParams.getPracownik();
 		mObsluga = new ObslugaOknaPracownika(this);
 	}
 
@@ -92,10 +95,6 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 		lblUrlopNalezny.setText(mObsluga.getUrlop(mPracownik));
 		lblGrupy.setText(mObsluga.grupyPracownika());
 		ustawTabele(tbAbsencje, mPracownik);
-	}
-
-	private void setPracownik(ScriptParams pmParams) {
-		mPracownik = (PracownikDTO) pmParams.get(OknoPracownikaParams.PRACOWNIK_DTO);
 	}
 
 	private void odswiezLblDataUrodzenia() {
@@ -158,4 +157,5 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	public PracownikDTO getPracownika() {
 		return mPracownik;
 	}
+
 }

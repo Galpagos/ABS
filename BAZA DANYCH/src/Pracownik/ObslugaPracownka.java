@@ -8,10 +8,9 @@ import javax.swing.JOptionPane;
 
 import Enums.Komunikat;
 import Frames.dbAccess.Components.DatePicker;
-import Frames.dbAccess.Components.ScriptParams;
-import Frames.dbAccess.Frames.OknoPracownika.OknoPracownika;
-import Frames.dbAccess.Frames.OknoPracownika.OknoPracownikaParams;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import pl.home.components.frames.mainframes.OknoPracownika;
+import pl.home.components.frames.parameters.OPracWejscie;
 
 public class ObslugaPracownka {
 	PracownikRepository mRepo = new PracownikRepository();
@@ -68,8 +67,7 @@ public class ObslugaPracownka {
 	}
 
 	public void pokazPracownika(PracownikDTO pmPracownik) {
-		ScriptParams lvParams = new ScriptParams();
-		lvParams.add(OknoPracownikaParams.PRACOWNIK_DTO, pmPracownik);
+		OPracWejscie lvParams = OPracWejscie.builder().pracownik(pmPracownik).build();
 		new OknoPracownika(lvParams);
 	}
 

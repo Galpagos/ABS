@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="C:/Users/Bogdan/Desktop/Programowanie/EXTERNAL JARS/mockito-all-1.10.19.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Bogdan/Desktop/Programowanie/EXTERNAL JARS/junit-jupiter-engine-5.5.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Bogdan/Desktop/Programowanie/EXTERNAL JARS/junit-platform-engine-1.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Bogdan/Desktop/Programowanie/EXTERNAL JARS/lombok.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

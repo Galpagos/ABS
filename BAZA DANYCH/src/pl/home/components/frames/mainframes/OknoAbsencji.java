@@ -1,4 +1,4 @@
-package Frames.dbAccess.Frames.Absencja;
+package pl.home.components.frames.mainframes;
 
 import java.time.LocalDate;
 
@@ -7,9 +7,10 @@ import Absencja.WalidatorAbsenci;
 import Datownik.Data;
 import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
-import Frames.dbAccess.Components.ScriptParams;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
+import pl.home.components.frames.parameters.OAbsencjiWejscie;
+import pl.home.components.frames.src.SrcOknoAbsencji;
 
 public class OknoAbsencji extends SrcOknoAbsencji {
 
@@ -18,13 +19,13 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	private ObslugaAbsencji mObslugaAbsencji;
 	private WalidatorAbsenci mWalidator;
 
-	public OknoAbsencji(ScriptParams pmParams) {
+	public OknoAbsencji(OAbsencjiWejscie pmParams) {
 		super(pmParams);
 	}
 
 	@Override
 	protected void readParams() {
-		mAbsencja = (AbsencjaDTO) mParams.get(OknoAbsencjiParams.ABSENCJA_DTO);
+		mAbsencja = mParams.getAbsencja();
 	}
 
 	@Override
@@ -45,8 +46,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	}
 
 	@Override
-	protected void zapiszAbsencje() {
-		super.zapiszAbsencje();
+	public void zapiszAbsencje() {
 
 		LocalDate lvOd = mDataOd.getDateValue();
 		LocalDate lvDo = mDataDo.getDateValue();
@@ -74,4 +74,5 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 			dispose();
 		}
 	}
+
 }

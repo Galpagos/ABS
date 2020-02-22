@@ -9,11 +9,11 @@ import javax.swing.JOptionPane;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
-import Frames.dbAccess.Components.ScriptParams;
-import Frames.dbAccess.Frames.OknoSprawozdan.OknoSprawozdan;
 import Parsery.ParseryDB;
 import Pracownik.ObslugaPracownka;
 import dbAccess.DniWolneBean;
+import pl.home.components.frames.mainframes.OknoSprawozdan;
+import pl.home.components.frames.parameters.OSprawozdanWejscie;
 
 public class ObslugaOknaGlownego {
 	InterfejsOknaGlownego mOkno;
@@ -106,7 +106,7 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void sprawozdanie() {
-		new OknoSprawozdan(new ScriptParams());
+		new OknoSprawozdan(OSprawozdanWejscie.builder().build());
 	}
 
 	public void zwolnijPracownika() {

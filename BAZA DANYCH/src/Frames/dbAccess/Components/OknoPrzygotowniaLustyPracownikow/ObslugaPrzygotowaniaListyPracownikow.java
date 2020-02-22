@@ -8,6 +8,7 @@ import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import pl.home.components.frames.src.SrcOknoPrzygotowaniaListyPracownikow;
 
 public class ObslugaPrzygotowaniaListyPracownikow {
 	SrcOknoPrzygotowaniaListyPracownikow mOkno;

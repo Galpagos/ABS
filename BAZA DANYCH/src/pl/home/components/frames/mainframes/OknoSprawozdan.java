@@ -1,13 +1,15 @@
-package Frames.dbAccess.Frames.OknoSprawozdan;
+package pl.home.components.frames.mainframes;
 
-import Frames.dbAccess.Components.ScriptParams;
+import Frames.dbAccess.Frames.OknoSprawozdan.ObslugaOknaSprawozdan;
+import pl.home.components.frames.parameters.OSprawozdanWejscie;
+import pl.home.components.frames.src.SrcOknoSprawozdan;
 
 public class OknoSprawozdan extends SrcOknoSprawozdan {
 
 	private static final long serialVersionUID = 1L;
 	private ObslugaOknaSprawozdan mObsluga;
 
-	public OknoSprawozdan(ScriptParams pmParams) {
+	public OknoSprawozdan(OSprawozdanWejscie pmParams) {
 		super(pmParams);
 	}
 

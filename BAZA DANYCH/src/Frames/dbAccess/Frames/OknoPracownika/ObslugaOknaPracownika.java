@@ -11,9 +11,6 @@ import Datownik.Interval;
 import Enums.Komunikat;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ComboPicker;
-import Frames.dbAccess.Components.ScriptParams;
-import Frames.dbAccess.Frames.Absencja.OknoAbsencji;
-import Frames.dbAccess.Frames.Absencja.OknoAbsencjiParams;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
@@ -22,6 +19,8 @@ import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccess.AbsencjaBean;
 import dbAccess.dbAccess;
+import pl.home.components.frames.mainframes.OknoAbsencji;
+import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
 public class ObslugaOknaPracownika {
 	InterfejsOknaPracownika mOkno;
@@ -50,8 +49,8 @@ public class ObslugaOknaPracownika {
 		if (mOkno.getZaznaczenieTabeli() < 0) {
 			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
 		} else {
-			ScriptParams lvParams = new ScriptParams();
-			lvParams.add(OknoAbsencjiParams.ABSENCJA_DTO, mOkno.getAbsencjeZTabeli());
+
+			OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mOkno.getAbsencjeZTabeli()).build();
 			new OknoAbsencji(lvParams);
 		}
 	}

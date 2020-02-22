@@ -20,10 +20,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 
 import Frames.dbAccess.Components.DatePicker;
-import Frames.dbAccess.Components.ScriptParams;
-import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikow;
-import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.OknoPrzygotowaniaListyPracownikowParams;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import pl.home.components.frames.mainframes.OknoPrzygotowaniaListyPracownikow;
+import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
 
 public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci {
 	/**
@@ -134,9 +133,8 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		getContentPane().add(btnEdytujLewaKolumna);
 		btnEdytujLewaKolumna.addActionListener(e -> {
 			setAlwaysOnTop(false);
-			ScriptParams lvParams = new ScriptParams();
-			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
-			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.LISTA_PRACOWNIKOW, mListaLewa);
+
+			OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().withLista(mListaLewa).build();
 			mListaLewa = new OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa();
 			odswiezKontrolki();
 		});
@@ -146,9 +144,7 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		getContentPane().add(btnEdytujPrawaKolumna);
 		btnEdytujPrawaKolumna.addActionListener(e -> {
 			setAlwaysOnTop(false);
-			ScriptParams lvParams = new ScriptParams();
-			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.NAZWA, "Wybierz pracowników");
-			lvParams.add(OknoPrzygotowaniaListyPracownikowParams.LISTA_PRACOWNIKOW, mListaPrawa);
+			OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().withLista(mListaPrawa).build();
 			mListaPrawa = new OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa();
 			odswiezKontrolki();
 		});
@@ -294,6 +290,7 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		return mWysokoscWiersza;
 	}
 
+	@Override
 	@SuppressWarnings({ "serial" })
 	public void odswiezKontrolki() {
 		txtNaglowek.setText(mNaglowek);
@@ -302,10 +299,12 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		tblLewa.setModel(new javax.swing.AbstractListModel<PracownikDTO>() {
 			PracownikDTO[] strings = mListaLewa.toArray(new PracownikDTO[mListaLewa.size()]);
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public PracownikDTO getElementAt(int i) {
 				return strings[i];
 			}
@@ -313,10 +312,12 @@ public class OknoListaObecnosci extends JDialog implements iDaneDoListyObecnosci
 		tblPrawa.setModel(new javax.swing.AbstractListModel<PracownikDTO>() {
 			PracownikDTO[] strings = mListaPrawa.toArray(new PracownikDTO[mListaPrawa.size()]);
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public PracownikDTO getElementAt(int i) {
 				return strings[i];
 			}
