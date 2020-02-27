@@ -21,6 +21,8 @@ public class Data {
 	}
 
 	public static LocalDate LocalDateFromDate(Date pmData) {
+		if (pmData == null)
+			return null;
 		return pmData.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 

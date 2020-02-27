@@ -12,14 +12,13 @@ import pl.home.components.frames.src.SrcOknoPrzygotowaniaListyPracownikow;
 
 public class ObslugaPrzygotowaniaListyPracownikow {
 	SrcOknoPrzygotowaniaListyPracownikow mOkno;
-	RepositoryPrzygotowaniaListyPracownikow mRepo;
 	PracownikRepository mRepoPracownik = new PracownikRepository();
 	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
+	ObslugaGrup mObslugaGrup = new ObslugaGrup();
 
 	public ObslugaPrzygotowaniaListyPracownikow(
 			SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
 		mOkno = pmOknoPrzygotowaniaListyPracownikow;
-		mRepo = new RepositoryPrzygotowaniaListyPracownikow();
 	}
 
 	public void wszyscyWPrawo() {
@@ -75,7 +74,7 @@ public class ObslugaPrzygotowaniaListyPracownikow {
 	}
 
 	public GrupaDTO[] pobierzGrupy() {
-		List<GrupaDTO> lvListaCB = ObslugaGrup.getListaGrup();
+		List<GrupaDTO> lvListaCB = mObslugaGrup.getListaGrup();
 
 		GrupaDTO lvWszyscy = new GrupaDTO();
 		lvWszyscy.setNazwa("Wszyscy");

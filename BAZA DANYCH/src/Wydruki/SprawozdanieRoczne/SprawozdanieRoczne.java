@@ -1,10 +1,8 @@
 package Wydruki.SprawozdanieRoczne;
 
-import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -12,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.swing.table.DefaultTableModel;
 
 import Datownik.Interval;
-import Datownik.LicznikDaty;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ResultTableWindow;
@@ -172,20 +169,8 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 
 	private void uzupelnijAbsencje() {
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow()) {
-			List<AbsencjaDTO> lvListaAbs = new ArrayList<>();
-			Object[][] lvDanePracownika = mRepo.getAbsencjeDlaPracownika(lvPrac.getId(), mDane.getListaAbsencji());
-			for (int i = 0; i < lvDanePracownika.length; i++) {
-				AbsencjaDTO lvAbs = new AbsencjaDTO();
-				lvAbs.setId((int) lvDanePracownika[i][0]);
-				lvAbs.setIdPracownika((int) lvDanePracownika[i][1]);
-				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
-				lvAbs.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDanePracownika[i][4]));
-				lvAbs.setOkres(new Interval((Timestamp) lvDanePracownika[i][2], (Timestamp) lvDanePracownika[i][3]));
-				lvListaAbs.add(lvAbs);
-			}
-			lvPrac.setListaAbsencji(lvListaAbs);
+			lvPrac.setListaAbsencji(mRepo.getAbsencjeDlaPracownika(lvPrac.getId(), mDane.getListaAbsencji()));
 		}
-
 	}
 
 	private void uzupelnijUrlopNalezny() {
@@ -208,15 +193,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 	}
 
 	private List<Interval> utworzListeDniWolnych() {
-		List<Object[]> lvLista = Arrays.asList(mRepo.getDniWolne());
-		List<Interval> lvDniWolne = new ArrayList<Interval>();
-		for (Object[] lvElem : lvLista) {
-			LocalDate lvDT = LicznikDaty.LDTparseFromObject(lvElem[0]);
-			Interval lvInterval = new Interval(lvDT, lvDT);
-			lvDniWolne.add(lvInterval);
-		}
-		return lvDniWolne;
-
+		return mRepo.getDniWolne();
 	}
 
 	@Override

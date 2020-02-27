@@ -4,62 +4,47 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-import Parsery.ParseryDB;
-import Wydruki.PrzygotowanieDanych.PracownikDTO;
-import dbAccess.AbsencjaBean;
 import dbAccess.DniWolneBean;
-import dbAccess.ZestawienieBean;
-import dbAccess.dbAccess;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.DniWolneColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
+import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
 
 public class RepositoryOknaGlownego {
 	public void dodajPracownikaDB(String pmNazwa) {
-		PracownikDTO lvPracownik = new PracownikDTO();
-		lvPracownik.setId(dbAccess.GetNextID("Zestawienie"));
-		lvPracownik.setNazwa(pmNazwa);
-		dbAccess.Zapisz(lvPracownik.ZapisDataSetu());
+		QueryBuilder.INSERT()//
+				.set(ZestawienieColumns.Urlop_Nalezny, 26)//
+				.set(ZestawienieColumns.ID_tabeli, QueryBuilder.getNextId(ZestawienieColumns.ID_tabeli))//
+				.set(ZestawienieColumns.Pracownik, pmNazwa)//
+				.execute();
 	}
 
 	public void usunPracownikaDB(int pmId) {
-		int liczbaAbsencji = dbAccess
-				.GetCount(AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika + " = " + pmId);
-		JOptionPane.showMessageDialog(null,
-				"Usunieto pracownika o ID " + pmId + "\n oraz " + liczbaAbsencji + " jego absencji!",
-				"Usuwanie Pracownika", JOptionPane.INFORMATION_MESSAGE);
-		dbAccess.Zapisz("Delete * from " + AbsencjaBean.NazwaTabeli + " where " + AbsencjaBean.kolumnaIdPracownika
-				+ " = " + pmId);
-		dbAccess.Zapisz("Delete * from " + ZestawienieBean.getNazwaTabeli() + " where " + ZestawienieBean.getKolumnaID()
-				+ " = " + pmId);
-	}
 
-	public Object[][] pobierzNieobecnych(Date pmNaKiedy) {
-		String lvZapytanie = //
-				"SELECT zz." + ZestawienieBean.getKolumnaNazwaPracownika() + ", ab." + AbsencjaBean.kolumnaOdKiedy
-						+ ", ab." + AbsencjaBean.kolumnaDoKiedy + ",ab." + AbsencjaBean.kolumnaRodzajAbsencji + //
-						" from " + AbsencjaBean.NazwaTabeli + " ab  "//
-						+ "INNER JOIN " + ZestawienieBean.getNazwaTabeli() + " zz on ab."
-						+ AbsencjaBean.GetKolumnIdPracownika() + "=zz." + ZestawienieBean.getKolumnaID() + //
-						" WHERE ab." + AbsencjaBean.kolumnaOdKiedy + " <=" + ParseryDB.DateParserToSQL_SELECT(pmNaKiedy)//
-						+ " and ab." + AbsencjaBean.kolumnaDoKiedy + ">=" + ParseryDB.DateParserToSQL_SELECT(pmNaKiedy);
-		return dbAccess.getRecordSets(lvZapytanie);
+		JOptionPane.showMessageDialog(null, "Usunieto pracownika oraz jego absencje!", "Usuwanie Pracownika",
+				JOptionPane.INFORMATION_MESSAGE);
+		QueryBuilder.DELETE()//
+				.andWarunek(AbsencjeColumns.ID_pracownika, pmId)//
+				.execute();
+
+		QueryBuilder.DELETE()//
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId)//
+				.execute();
 	}
 
 	public void zapiszNowyDzienWolny(DniWolneBean pmDzien) {
-		pmDzien.setId(dbAccess.GetNextID(DniWolneBean.NazwaTabeli));
-		dbAccess.Zapisz(pmDzien.ZapiszDataSet());
-	}
+		QueryBuilder.INSERT()//
+				.set(DniWolneColumns.ID_tabeli, QueryBuilder.getNextId(DniWolneColumns.ID_tabeli))//
+				.set(DniWolneColumns.Data, pmDzien.getData())//
+				.execute();
 
-	public Object[][] pobierzDniWolne() {
-		String lvZapytanie = //
-				"SELECT top 20 TB.Data, TB.Opis from " + DniWolneBean.NazwaTabeli + " TB order by "
-						+ DniWolneBean.kolumnaData + " DESC";
-		return dbAccess.getRecordSets(lvZapytanie);
 	}
 
 	public void zwolnijPracownika(int pmId, Date pmData) {
-		String lvZapytanie = //
-				"UPDATE ZESTAWIENIE SET Data_Zwolnienia = " + ParseryDB.DateParserToSQL_INSERT(pmData)
-						+ " where ID_tabeli = " + pmId;
-		dbAccess.Zapisz(lvZapytanie);
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.Data_Zwolnienia, pmData)//
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId)//
+				.execute();
 
 	}
 }

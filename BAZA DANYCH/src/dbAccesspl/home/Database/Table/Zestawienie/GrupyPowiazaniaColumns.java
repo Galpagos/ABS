@@ -19,6 +19,6 @@ public enum GrupyPowiazaniaColumns implements SystemTables {
 	@Override
 	public String getTableName() {
 
-		return " AD_GRUPY_POWIAZANIA ";
+		return " AD_GRUPY_POWIAZANIA";
 	}
 }

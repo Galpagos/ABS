@@ -1,32 +1,29 @@
 package Grupy;
 
-public class GrupaDTO
-{
+public class GrupaDTO {
 	int mID;
 	String mNazwa;
 
-	public int getID()
-	{
+	public int getID() {
 		return mID;
 	}
 
-	public void setID(int pmID)
-	{
+	public GrupaDTO setID(int pmID) {
 		mID = pmID;
+		return this;
 	}
 
-	public String getNazwa()
-	{
+	public String getNazwa() {
 		return mNazwa;
 	}
 
-	public void setNazwa(String pmNazwa)
-	{
+	public GrupaDTO setNazwa(String pmNazwa) {
 		mNazwa = pmNazwa;
+		return this;
 	}
 
-	public String toString()
-	{
+	@Override
+	public String toString() {
 		return mNazwa;
 	}
 }

@@ -9,10 +9,12 @@ import java.sql.Statement;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 
 public class AccessDB {
-	public static final String PATH_DATABASE = "jdbc:ucanaccess://BAZA.accdb";
+	private static final String PATH_DATABASE = "jdbc:ucanaccess://BAZA.accdb";
 
 	public static LRecordSet executeQuery(String pmZapytanie) {
 		LRecordSet lvWynik = new LRecordSet();
+		System.out.println(pmZapytanie);
+		System.out.println("");
 		try (//
 				Connection lvCon = init(); //
 				Statement lvStatement = lvCon.createStatement();)//
@@ -26,6 +28,8 @@ public class AccessDB {
 				while (rs.next()) {
 					LRecord lvMapa = new LRecord();
 					for (int column = 1; column <= columnCount; column++) {
+						// SystemTablesNames.getByName(metaData.getTableName(column));
+
 						lvMapa.put(metaData.getColumnName(column), rs.getObject(column));
 
 					}
@@ -39,7 +43,7 @@ public class AccessDB {
 		return lvWynik;
 	}
 
-	protected static int getNextID(SystemTables pmPole) {
+	public static int getNextID(SystemTables pmPole) {
 
 		try (//
 				Connection lvCon = init(); //
@@ -65,6 +69,8 @@ public class AccessDB {
 	}
 
 	protected static boolean executeUpdate(String pmZapytanie) {
+		System.out.println(pmZapytanie);
+		System.out.println("");
 		boolean lvWynik = false;
 		try (//
 				Connection lvCon = init(); //
@@ -90,21 +96,4 @@ public class AccessDB {
 		}
 		return lvCon;
 	}
-
-	public static void zamknijPolaczenia(Object... pmArgs) {
-		for (Object lvObiekt : pmArgs) {
-
-			try {
-				if (lvObiekt instanceof ResultSet)
-					((ResultSet) lvObiekt).close();
-				if (lvObiekt instanceof Statement)
-					((Statement) lvObiekt).close();
-				if (lvObiekt instanceof Connection)
-					((Connection) lvObiekt).close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 }

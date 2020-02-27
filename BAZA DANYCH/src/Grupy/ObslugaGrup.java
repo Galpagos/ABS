@@ -1,6 +1,5 @@
 package Grupy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -11,49 +10,41 @@ import Enums.Komunikat;
 import Frames.dbAccess.Components.ObsluzenieComboPicker;
 
 public class ObslugaGrup implements ObsluzenieComboPicker {
-	static RepoGrupy mRepo = new RepoGrupy();
+	private GrupyRepository mRepo = new GrupyRepository();
 
+	@Override
 	public void dodaj() {
 		String lvNazwa = JOptionPane.showInputDialog("Podaj nazwe Grupy");
 		mRepo.dodajGrupe(lvNazwa);
 	}
 
-	public static List<GrupaDTO> getListaGrup() {
-		List<GrupaDTO> lvLista = new ArrayList<>();
+	public List<GrupaDTO> getListaGrup() {
 
-		Object[][] lvDane = mRepo.getGrupy();
-		for (Object[] ob : lvDane) {
-			GrupaDTO lvGrupa = new GrupaDTO();
-			lvGrupa.setID((int) ob[0]);
-			lvGrupa.setNazwa((String) ob[1]);
-			lvLista.add(lvGrupa);
-		}
-		return lvLista;
+		return mRepo.pobierzGrupy();
 	}
 
-	public static String getGrupyPracownikaText(int pmId) {
+	public String getGrupyPracownikaText(int pmId) {
 		StringBuilder lvText = new StringBuilder();
-		Object[][] lvDane = mRepo.pobierzGrupy(pmId);
-		for (Object[] ob : lvDane)
-			for (Object ob2 : ob)
-				if (ob2.getClass().equals(String.class))
-					lvText.append(ob2.toString() + "  ");
+		List<GrupaDTO> lvDane = mRepo.pobierzGrupyPracownika(pmId);
+		for (GrupaDTO lvGRupa : lvDane)
+			lvText.append(lvGRupa.getNazwa() + "  ");
 		return lvText.toString();
 	}
 
+	@Override
 	public void usun(Object pmObject) {
 		if (pmObject != null) {
 			if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
 				return;
-			mRepo.usunGrupe((GrupaDTO) pmObject);
+			mRepo.usunGrupe(((GrupaDTO) pmObject).getID());
 		}
 	}
 
-	public static void ustawGrupePracownikowi(int lvIdPracownika, Object pmGrupa) {
+	public void ustawGrupePracownikowi(int lvIdPracownika, Object pmGrupa) {
 		mRepo.ustawGrupePracownikowi(lvIdPracownika, (GrupaDTO) pmGrupa);
 	}
 
-	public static void usunGrupePracownikowi(int lvIdPracownika, Object pmGrupa) {
+	public void usunGrupePracownikowi(int lvIdPracownika, Object pmGrupa) {
 		mRepo.usunGrupePracownikowi(lvIdPracownika, (GrupaDTO) pmGrupa);
 	}
 

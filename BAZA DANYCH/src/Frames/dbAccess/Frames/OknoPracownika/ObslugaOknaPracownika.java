@@ -17,8 +17,8 @@ import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
-import dbAccess.AbsencjaBean;
-import dbAccess.dbAccess;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
@@ -28,6 +28,7 @@ public class ObslugaOknaPracownika {
 	PracownikRepository mRepoPracownika = new PracownikRepository();
 	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 	ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
+	ObslugaGrup mObslugaGrup = new ObslugaGrup();
 
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika) {
 		mOkno = pmOknoPracownika;
@@ -36,8 +37,7 @@ public class ObslugaOknaPracownika {
 	public void DodajAbsencje() {
 		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.urlop_wypoczynkowy;
-
-		lvAbsencja.setId(dbAccess.GetNextID(AbsencjaBean.NazwaTabeli));
+		lvAbsencja.setId(QueryBuilder.getNextID(AbsencjeColumns.ID_tabeli));
 		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
 		lvAbsencja.setOkres(new Interval(new Date(), new Date()));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
@@ -69,7 +69,7 @@ public class ObslugaOknaPracownika {
 	}
 
 	public String grupyPracownika() {
-		return "Nale\u017Cy do grup: " + ObslugaGrup.getGrupyPracownikaText(mOkno.getPracownika().getId());
+		return "Nale\u017Cy do grup: " + mObslugaGrup.getGrupyPracownikaText(mOkno.getPracownika().getId());
 	}
 
 	public void przypiszGrupe() {
@@ -79,7 +79,7 @@ public class ObslugaOknaPracownika {
 
 		GrupaDTO lvGrupa = (GrupaDTO) lvCB.ustawGrupy();
 		if (lvGrupa != null) {
-			ObslugaGrup.ustawGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
+			mObslugaGrup.ustawGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
 		}
 
 	}
@@ -90,7 +90,7 @@ public class ObslugaOknaPracownika {
 
 		GrupaDTO lvGrupa = (GrupaDTO) lvCB.ustawGrupy();
 		if (lvGrupa != null) {
-			ObslugaGrup.usunGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
+			mObslugaGrup.usunGrupePracownikowi(mOkno.getPracownika().getId(), lvGrupa);
 		}
 	}
 

@@ -10,18 +10,19 @@ import Parsery.ParseryDB;
 import pl.home.Database.components.AccessDB;
 import pl.home.Database.components.LRecordSet;
 
-public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDelete, DbInsert {
+public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDelete, DbInsert, DbCount {
 	private QueryBuilder(TypZapytania pmTyp) {
 		mTyp = pmTyp;
 	}
 
-	StringBuilder mQuery = new StringBuilder();
-	StringBuilder mWarunek = new StringBuilder().append(" WHERE 1=1 ");
-	StringBuilder mOrderBy = new StringBuilder();
+	private StringBuilder mQuery = new StringBuilder();
+	private StringBuilder mWarunek = new StringBuilder().append(" WHERE 1=1 ");
+	private StringBuilder mOrderBy = new StringBuilder();
+	private Integer mTop = null;
 
-	TypZapytania mTyp = null;
-	String mTabela;
-	Map<SystemTables, String> mPola = new LinkedHashMap<>();
+	private TypZapytania mTyp = null;
+	private String mTabela;
+	private Map<SystemTables, String> mPola = new LinkedHashMap<>();
 
 	public static DbSelect SELECT() {
 		return new QueryBuilder(TypZapytania.SELECT);
@@ -37,6 +38,10 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 
 	public static DbInsert INSERT() {
 		return new QueryBuilder(TypZapytania.INSERT);
+	}
+
+	public static DbCount COUNT() {
+		return new QueryBuilder(TypZapytania.COUNT);
 	}
 
 	@Override
@@ -55,7 +60,6 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	@Override
 	public QueryBuilder select(SystemTables pmTable, SystemTables... pmArgs) {
 		mTabela = pmTable.getTableName();
-		mQuery.append("SELECT ");
 		mQuery.append(mTabela + "." + pmTable);
 
 		if (pmArgs != null && pmArgs.length > 0)
@@ -92,7 +96,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	}
 
 	@Override
-	public QueryBuilder andBeforeOrEqual(SystemTables pmPole, Object pmWartosc) {
+	public QueryBuilder andBeforeOrEqual(SystemTables pmPole, LocalDate pmWartosc) {
 
 		String lvWartosc = valueToString(pmPole, pmWartosc);
 
@@ -101,7 +105,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	}
 
 	@Override
-	public QueryBuilder andAfterOrEqual(SystemTables pmPole, Object pmWartosc) {
+	public QueryBuilder andAfterOrEqual(SystemTables pmPole, LocalDate pmWartosc) {
 
 		String lvWartosc = valueToString(pmPole, pmWartosc);
 
@@ -133,6 +137,11 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	}
 
 	@Override
+	public int count() {
+		return executeQuery("SELECT Count(1) as TOTAL FROM " + mTabela + mWarunek.toString()).getAsInteger("TOTAL");// count(*)
+	}
+
+	@Override
 	public QueryBuilder orWarunek(SystemTables pmPole, Object pmWartosc) {
 		mWarunek.append(" or " + pmPole.getTableName() + "." + pmPole.toString() + "=" + pmWartosc);
 		return this;
@@ -149,7 +158,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	@Override
 	public LRecordSet execute() {
 		if (TypZapytania.SELECT.equals(mTyp))
-			return executeQuery(mQuery.toString() + mWarunek.toString() + mOrderBy.toString());
+			return executeQuery("SELECT " + withTop() + mQuery.toString() + mWarunek.toString() + mOrderBy.toString());
 		if (TypZapytania.UPDATE.equals(mTyp))
 			executeUpdate("UPDATE " + mTabela + " SET " + mQuery.deleteCharAt(mQuery.length() - 1).toString()
 					+ mWarunek.toString());
@@ -158,6 +167,11 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 		if (TypZapytania.INSERT.equals(mTyp))
 			executeUpdate("INSERT INTO " + mTabela + mapToInsert());
 		return new LRecordSet();
+	}
+
+	private String withTop() {
+
+		return mTop != null ? " TOP " + mTop : "";
 	}
 
 	private String mapToInsert() {
@@ -175,7 +189,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	}
 
 	private enum TypZapytania {
-		SELECT, UPDATE, DELETE, INSERT;
+		SELECT, UPDATE, DELETE, INSERT, COUNT;
 	}
 
 	@Override
@@ -188,6 +202,20 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	public QueryBuilder joinOn(SystemTables pmWith, SystemTables pmOn) {
 		mQuery.append(" INNER JOIN " + pmWith.getTableName() + " ON " + pmWith.getTableName() + "." + pmWith + "="
 				+ pmOn.getTableName() + "." + pmOn);
+		return this;
+	}
+
+	public static int getNextId(SystemTables pmPole) {
+		Integer lvActalId = executeQuery(
+				"SELECT TOP 1 " + pmPole + " FROM " + pmPole.getTableName() + " ORDER BY ID_tabeli DESC")
+						.getAsInteger(pmPole.toString());
+		return (lvActalId == null ? 0 : lvActalId.intValue()) + 1;
+	}
+
+	@Override
+	public QueryBuilder top(int pmTop) {
+
+		mTop = new Integer(pmTop);
 		return this;
 	}
 

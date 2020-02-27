@@ -8,10 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import Absencja.AbsencjaRepository;
-import Parsery.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
-import dbAccess.DniWolneBean;
-import dbAccess.dbAccess;
 
 public class LicznikDaty {
 
@@ -48,12 +45,6 @@ public class LicznikDaty {
 				.stream()//
 				.mapToInt(lvAbs -> ileDniRoboczych(lvAbs.getOkres()))//
 				.sum();
-	}
-
-	static int ileDniWolnych(LocalDate pmDataOd, LocalDate pmDataDo) {
-		return dbAccess.GetCount(DniWolneBean.NazwaTabeli //
-				+ " where " + DniWolneBean.kolumnaData + " BEtween " + ParseryDB.DateParserToSQL_SELECT(pmDataOd)
-				+ " and " + ParseryDB.DateParserToSQL_SELECT(pmDataDo));
 	}
 
 	public static void filtrujAbsencjePoOkresie(List<AbsencjaDTO> pmAbsencja, Interval pmOkres) {

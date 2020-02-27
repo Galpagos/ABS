@@ -1,5 +1,6 @@
 package Wydruki.PrzygotowanieDanych;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PracownikDTO {
@@ -7,6 +8,7 @@ public class PracownikDTO {
 	private String mNazwa;
 	private List<AbsencjaDTO> mListaAbsencji;
 	private String mUrlopNalezny;
+	private LocalDate mDataZwolnienia;
 
 	public String getUrlopNalezny() {
 		return mUrlopNalezny;
@@ -43,12 +45,17 @@ public class PracownikDTO {
 		return this;
 	}
 
+	@Override
 	public String toString() {
 		return this.mNazwa;
 	}
 
-	public String ZapisDataSetu() {
-		return "INSERT INTO Zestawienie (ID_tabeli, Pracownik, Urlop_Nalezny) VALUES (" + getId() + ",\"" + getNazwa()
-				+ "\", 26)";
+	public LocalDate getDataZwolnienia() {
+		return mDataZwolnienia;
+	}
+
+	public PracownikDTO setDataZwolnienia(LocalDate pmDataZwolnienia) {
+		mDataZwolnienia = pmDataZwolnienia;
+		return this;
 	}
 }

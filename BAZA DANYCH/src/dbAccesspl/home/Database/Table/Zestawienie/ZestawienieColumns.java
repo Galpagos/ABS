@@ -22,7 +22,7 @@ public enum ZestawienieColumns implements SystemTables {
 	@Override
 	public String getTableName() {
 
-		return " Zestawienie ";
+		return " Zestawienie";
 	}
 
 }

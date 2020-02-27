@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import Parsery.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
 import pl.home.Database.components.AccessDB;
 
@@ -84,12 +85,15 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 
 	@Override
 	public void dodajAbsencje(AbsencjaDTO pmAbs) {
-		executeUpdate("INSERT INTO Absencje (ID_tabeli , ID_pracownika , Od_kiedy , Do_kiedy , RODZAJ,EKWIWALENT ) "//
-				+ " VALUES (" + pmAbs.getId() + " , " //
-				+ pmAbs.getIdPracownika() + " ," + ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getStart()) + " , "
-				+ ParseryDB.DateParserToSQL_INSERT(pmAbs.getOkres().getEnd()) + " ," //
-				+ "'" + pmAbs.getRodzaj().getKod() + "'," //
-				+ "'" + pmAbs.getProcent().getKodString() + "'" + ")");
+		QueryBuilder.INSERT()//
+				.set(ID_tabeli, pmAbs.getId())// a
+				.set(AbsencjeColumns.ID_pracownika, pmAbs.getIdPracownika())//
+				.set(AbsencjeColumns.Od_kiedy, pmAbs.getOkres().getStart())//
+				.set(AbsencjeColumns.Do_kiedy, pmAbs.getOkres().getEnd())//
+				.set(AbsencjeColumns.EKWIWALENT, pmAbs.getProcent().getKod())//
+				.set(AbsencjeColumns.RODZAJ, pmAbs.getRodzaj().getKod())//
+				.execute();
+
 	}
 
 	@Override

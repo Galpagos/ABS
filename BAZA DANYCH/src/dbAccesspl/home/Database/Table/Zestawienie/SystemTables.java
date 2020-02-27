@@ -4,4 +4,5 @@ public interface SystemTables {
 	public Class<?> getKlasa();
 
 	public abstract String getTableName();
+
 }

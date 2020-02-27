@@ -11,7 +11,5 @@ public interface DbSelect extends DbWhere {
 
 	public QueryBuilder joinOn(SystemTables pmWith, SystemTables pmOn);
 
-	public QueryBuilder andBeforeOrEqual(SystemTables pmIdPole, Object pmWartosc);
-
-	public QueryBuilder andAfterOrEqual(SystemTables pmPole, Object pmWartosc);
+	public QueryBuilder top(int pmTop);
 }

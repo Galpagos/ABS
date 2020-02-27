@@ -6,14 +6,22 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import Absencja.AbsencjaRepository;
+import Datownik.Interval;
 import Enums.Komunikat;
+import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
+import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
+import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.mainframes.OknoPracownika;
 import pl.home.components.frames.parameters.OPracWejscie;
 
 public class ObslugaPracownka {
 	PracownikRepository mRepo = new PracownikRepository();
+	AbsencjaRepository mRepoAbs = new AbsencjaRepository();
 
 	public void dodajNowegoPracownika() {
 		String lvNazwa = JOptionPane.showInputDialog("Podaj nazwê pracownika: ");
@@ -45,7 +53,9 @@ public class ObslugaPracownka {
 	}
 
 	public String getDataUrodzeniaTxt(PracownikDTO pmPracownik) {
-		return mRepo.getDataUrodzenia(pmPracownik.getId()).toString().split(" ")[0];
+		if (mRepo.getDataUrodzenia(pmPracownik.getId()) != null)
+			return mRepo.getDataUrodzenia(pmPracownik.getId()).toString().split(" ")[0];
+		return "";
 	}
 
 	public String getUrlopTxt(PracownikDTO pmPracownik) {
@@ -73,5 +83,19 @@ public class ObslugaPracownka {
 
 	public List<PracownikDTO> getListaNieobecnych(LocalDate pmDataObecnosci) {
 		return mRepo.pobierzNieobecnych(pmDataObecnosci);
+	}
+
+	public void zatrudnijPracownika(int pmId) {
+		LocalDate lvData = new DatePicker().setPickedLocalDate();
+		if (lvData == null)
+			return;
+		AbsencjaDTO lvAbs = new AbsencjaDTO()//
+				.setId(QueryBuilder.getNextId(AbsencjeColumns.ID_tabeli))//
+				.setIdPracownika(pmId)//
+				.setOkres(new Interval(mRepo.getDataZwolnienia(pmId), lvData))//
+				.setProcent(SLEkwiwalentZaUrlop.PROCENT_0)//
+				.setRodzaj(SLRodzajeAbsencji.BRAK_STOSUNKU_PRACY);
+		mRepoAbs.dodajAbsencje(lvAbs);
+		mRepo.zwolnijPracownika(pmId, null);
 	}
 }

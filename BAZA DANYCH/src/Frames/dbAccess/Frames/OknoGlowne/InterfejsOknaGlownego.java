@@ -4,10 +4,12 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public interface InterfejsOknaGlownego {
 
-	void odswiezTabele();
+	void odswiezKontrolki();
 
 	int getZaznaczenieTabeli();
 
 	PracownikDTO getPracownikZTabeli();
+
+	void odswiezTabele();
 
 }

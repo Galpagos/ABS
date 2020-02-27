@@ -2,11 +2,9 @@ package Wydruki.SprawozdanieMiesieczne;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -14,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 
 import Absencja.ObslugaAbsencji;
 import Datownik.Interval;
-import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ResultTableWindow;
 import Pracownik.ObslugaPracownka;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
@@ -97,12 +94,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	}
 
 	private void utworzListeDniWolnych() {
-		List<Object[]> lvLista = Arrays.asList(mRepo.getDniWolne());
-		List<Interval> lvDniWolne = new ArrayList<Interval>();
-		for (Object[] lvElem : lvLista) {
-			Interval lvInterval = Interval.OkreszBazy(lvElem[0], lvElem[0]);
-			lvDniWolne.add(lvInterval);
-		}
+		List<Interval> lvDniWolne = mRepo.getDniWolne();
 
 		for (Interval lvOkres : lvDniWolne) {
 
@@ -145,19 +137,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 
 	private void uzupelnijAbsencje() {
 		for (PracownikDTO lvPrac : mDane.getListaPracownikow()) {
-			List<AbsencjaDTO> lvListaAbs = new ArrayList<>();
-			Object[][] lvDanePracownika = mRepo.getAbsencjeDlaPracownika(lvPrac.getId(), mDane.getListaAbsencji());
-			for (int i = 0; i < lvDanePracownika.length; i++) {
-				AbsencjaDTO lvAbs = new AbsencjaDTO();
-				lvAbs.setId((int) lvDanePracownika[i][0]);
-				lvAbs.setIdPracownika((int) lvDanePracownika[i][1]);
-				lvAbs.setNazwaPracownika(lvPrac.getNazwa());
-				lvAbs.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDanePracownika[i][4]));
-				;
-				lvAbs.setOkres(new Interval((Timestamp) lvDanePracownika[i][2], (Timestamp) lvDanePracownika[i][3]));
-				lvListaAbs.add(lvAbs);
-			}
-			lvPrac.setListaAbsencji(lvListaAbs);
+			lvPrac.setListaAbsencji(mRepo.getAbsencjeDlaPracownika(lvPrac.getId(), mDane.getListaAbsencji()));
 		}
 
 	}

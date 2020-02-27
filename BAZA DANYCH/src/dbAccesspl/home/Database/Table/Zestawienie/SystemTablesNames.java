@@ -26,4 +26,13 @@ public enum SystemTablesNames {
 
 	EnumSet<? extends SystemTables> mTabela;
 	String mNazwa;
+
+	public static SystemTablesNames getByName(String pmName) {
+		for (SystemTablesNames e : SystemTablesNames.values()) {
+			if (e.getNazwa().equalsIgnoreCase(pmName)) {
+				return e;
+			}
+		}
+		return null;
+	}
 }

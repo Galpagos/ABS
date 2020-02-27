@@ -5,10 +5,14 @@ import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Prac
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Urlop_Nalezny;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Datownik.Interval;
+import Enums.SLRodzajeAbsencji;
+import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.GrupyPowiazaniaColumns;
@@ -75,6 +79,14 @@ public class PracownikRepository extends AccessDB {
 		PracownikDTO lvPracownik = new PracownikDTO();
 		lvPracownik.setId(pmRecord.getAsInteger(ID_tabeli));
 		lvPracownik.setNazwa(pmRecord.getAsString(Pracownik));
+		lvPracownik.setDataZwolnienia(pmRecord.getAsLocalDate(ZestawienieColumns.Data_Zwolnienia));
+		if (pmRecord.containsKey(AbsencjeColumns.RODZAJ.toString())) {
+			AbsencjaDTO lvAbsencja = new AbsencjaDTO();
+			lvAbsencja.setRodzaj(SLRodzajeAbsencji.getByKod(pmRecord.getAsString(AbsencjeColumns.RODZAJ)));
+			lvAbsencja.setOkres(new Interval(pmRecord.getAsLocalDate(AbsencjeColumns.Od_kiedy),
+					pmRecord.getAsLocalDate(AbsencjeColumns.Do_kiedy)));
+			lvPracownik.setListaAbsencji(Arrays.asList(lvAbsencja));
+		}
 		return lvPracownik;
 	}
 
@@ -138,5 +150,26 @@ public class PracownikRepository extends AccessDB {
 				.execute();
 
 		return lvWynik.stream().map(lvRecord -> parsujPracownika(lvRecord)).collect(Collectors.toList());
+	}
+
+	public PracownikDTO getPracownik(Integer pmIdPracownika) {
+
+		LRecordSet lvWynik = QueryBuilder.SELECT()//
+				.select(ID_tabeli, ZestawienieColumns.Pracownik, ZestawienieColumns.Urlop_Nalezny,
+						ZestawienieColumns.Data_Urodzenia, ZestawienieColumns.Data_Zatrudnienia,
+						ZestawienieColumns.Data_Zwolnienia)//
+				.andWarunek(ID_tabeli, pmIdPracownika)//
+				.execute();
+
+		return parsujPracownika(lvWynik.get(0));
+	}
+
+	public LocalDate getDataZwolnienia(int pmId) {
+
+		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
+				.select(ZestawienieColumns.Data_Zwolnienia)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+		return lvRecordSet.getAsLocalDate(ZestawienieColumns.Data_Zwolnienia);
 	}
 }

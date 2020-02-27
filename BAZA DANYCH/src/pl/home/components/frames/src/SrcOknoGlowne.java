@@ -3,6 +3,7 @@ package pl.home.components.frames.src;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +22,8 @@ public abstract class SrcOknoGlowne extends JFrame {
 	protected JButton btnDodajPracownika;
 	protected JButton btnPokazPracownika;
 	protected JButton btnUsunPracownika;
+	protected JButton btnZatrudnij;
+	protected JCheckBox cbCzyUsunieci;
 	JScrollPane mScrollPane;
 	PracownikDTO mPracownik = null;
 	protected JTextField mFiltrPracownika;
@@ -97,10 +100,18 @@ public abstract class SrcOknoGlowne extends JFrame {
 		btnZwolnij.setBounds(46, 198, 191, 39);
 		mButtonPanel.add(btnZwolnij);
 
+		btnZatrudnij = new JButton("Zatrudnij Pracownika");
+		btnZatrudnij.setBounds(46, 198, 191, 39);
+		mButtonPanel.add(btnZatrudnij);
+
 		mFiltrPracownika = new JTextField("");
-		mFiltrPracownika.setBounds(91, 468, 105, 27);
+		mFiltrPracownika.setBounds(71, 468, 105, 27);
 		mContentPane.add(mFiltrPracownika);
 		mFiltrPracownika.setColumns(10);
+
+		cbCzyUsunieci = new JCheckBox("<HTML>Poka¿ </b>zwolnionych</HTML>");
+		cbCzyUsunieci.setBounds(180, 468, 105, 27);
+		mContentPane.add(cbCzyUsunieci);
 
 		JLabel lblFiltr = new JLabel("Filtr:");
 		lblFiltr.setBounds(30, 458, 115, 46);

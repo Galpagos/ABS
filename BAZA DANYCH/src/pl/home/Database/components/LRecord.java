@@ -31,10 +31,15 @@ public class LRecord extends HashMap<String, Object> {
 	}
 
 	public String getAsString(String pmNazwa) {
+		if (get(pmNazwa) == null)
+			return "";
+
 		return get(pmNazwa).toString();
 	}
 
 	public Date getAsDate(String pmNazwa) {
+		if (get(pmNazwa) == null)
+			return null;
 		return (Date) get(pmNazwa);
 	}
 
@@ -69,5 +74,10 @@ public class LRecord extends HashMap<String, Object> {
 
 	public LocalDate getAsLocalDate(SystemTables pmNazwa) {
 		return getAsLocalDate(pmNazwa.toString());
+	}
+
+	public String getColumnName(Object pmCol) {
+
+		return (String) this.get(pmCol);
 	}
 }

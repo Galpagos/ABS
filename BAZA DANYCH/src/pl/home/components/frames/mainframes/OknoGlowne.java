@@ -55,6 +55,12 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		btnSprawozdanie.addActionListener(lvE -> mObsluga.sprawozdanie());
 		btnZwolnij.addActionListener(lvE -> mObsluga.zwolnijPracownika());
 		mFiltrPracownika.getDocument().addDocumentListener(ustawListenerFiltruPracownika());
+		cbCzyUsunieci.addActionListener(lvE -> {
+			odswiezTabele();
+			odswiezKontrolki();
+		});
+		btnZatrudnij.addActionListener(lvE -> mObsluga.zatrudnijPracownika());
+		tbPracownicy.getSelectionModel().addListSelectionListener(e -> odswiezKontrolki());
 		repaint();
 	}
 
@@ -82,8 +88,10 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		DbSelect lvZapytanieLS = QueryBuilder//
 				.SELECT()//
 				.select(ID_tabeli, Pracownik)//
-				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"")//
-				.andWarunek(Data_Zwolnienia, null);
+				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"");
+
+		if (!cbCzyUsunieci.isSelected())
+			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
 
 		JTableModelFromLRecords lvDTM = new JTableModelFromLRecords(lvZapytanieLS.execute());
 		pmTabela.setModel(lvDTM);
@@ -99,6 +107,8 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 			sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 			sorter.setSortKeys(sortKeys);
 		}
+		if (lvDTM.getRowCount() > 0)
+			pmTabela.setRowSelectionInterval(0, 0);
 		pmTabela.repaint();
 
 		return pmTabela;
@@ -111,12 +121,26 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	@Override
 	public PracownikDTO getPracownikZTabeli() {
-		PracownikDTO lvPracownik = new PracownikDTO();
 		int lvRow = tbPracownicy.convertRowIndexToModel(getZaznaczenieTabeli());
-		lvPracownik.setId((Integer) tbPracownicy.getModel().getValueAt(lvRow, 0));
-		lvPracownik.setNazwa((String) tbPracownicy.getModel().getValueAt(lvRow, 1));
+		Integer lvIdPracownika = (Integer) tbPracownicy.getModel().getValueAt(lvRow, 0);
 
-		return lvPracownik;
+		return mObsluga.getPracownik(lvIdPracownika);
+	}
+
+	@Override
+	public void odswiezKontrolki() {
+		btnZwolnij.setVisible(getZaznaczenieTabeli() >= 0 && !czyZwolniony(getPracownikZTabeli()));
+		btnZatrudnij.setVisible(!btnZwolnij.isVisible());
+		btnPokazPracownika.setEnabled(getZaznaczenieTabeli() >= 0);
+		btnUsunPracownika.setEnabled(getZaznaczenieTabeli() >= 0);
+		btnZwolnij.setEnabled(getZaznaczenieTabeli() >= 0);
+		btnZatrudnij.setEnabled(getZaznaczenieTabeli() >= 0);
+		repaint();
+	}
+
+	private boolean czyZwolniony(PracownikDTO pmPracownik) {
+
+		return pmPracownik.getDataZwolnienia() != null;
 	}
 
 	@Override

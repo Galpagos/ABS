@@ -51,4 +51,14 @@ public class LRecordSet extends ArrayList<LRecord> {
 
 		return get(mIndex).getAsInteger(pmUrlopNalezny);
 	}
+
+	public String getAsString(ZestawienieColumns pmPole) {
+
+		return getAsString(pmPole.toString());
+	}
+
+	public LocalDate getAsLocalDate(ZestawienieColumns pmDataZwolnienia) {
+
+		return getAsLocalDate(pmDataZwolnienia.toString());
+	}
 }

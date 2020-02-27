@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
-public enum SLRodzajeAbsencji {
+public enum SLRodzajeAbsencji implements InterfejsSlownika {
 	urlop_wypoczynkowy("uW", "Urlop wypoczynkowy", new Color(255, 165, 0), "1", SLEkwiwalentZaUrlop.PROCENT_100), //
 	urlop_w_pracy("uPR", "Urlop w pracy", new Color(254, 127, 156), "2", SLEkwiwalentZaUrlop.PROCENT_100), //
 	L_4("L4", "L-4", new Color(9, 200, 18), "3", SLEkwiwalentZaUrlop.PROCENT_80), //
@@ -25,7 +25,8 @@ public enum SLRodzajeAbsencji {
 	NB("NB", "NB", new Color(128, 0, 128), "17", SLEkwiwalentZaUrlop.PROCENT_0), //
 	swiadczenie_rehab("SwR", "Œwiadczenie rehab.", new Color(155, 155, 15), "18", SLEkwiwalentZaUrlop.PROCENT_90), //
 	opieka2dni("188", "Opieka 2 dni na dziecko art.188", new Color(0, 155, 155), "19", SLEkwiwalentZaUrlop.PROCENT_100), //
-	UB("UB", "UB", new Color(255, 38, 38), "20", SLEkwiwalentZaUrlop.PROCENT_0); //
+	UB("UB", "UB", new Color(255, 38, 38), "20", SLEkwiwalentZaUrlop.PROCENT_0), //
+	BRAK_STOSUNKU_PRACY("BSP", "Brak stosunku pracy", Color.BLACK, "21", SLEkwiwalentZaUrlop.PROCENT_0);
 
 	private final String nazwa;
 	private final Color mColor;
@@ -77,6 +78,7 @@ public enum SLRodzajeAbsencji {
 		return mSkrot;
 	}
 
+	@Override
 	public String getKod() {
 		return mKod;
 	}

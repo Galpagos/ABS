@@ -19,6 +19,6 @@ public enum GrupyColumns implements SystemTables {
 	@Override
 	public String getTableName() {
 
-		return " AD_GRUPY ";
+		return " AD_GRUPY";
 	}
 }

@@ -2,16 +2,18 @@ package Frames.dbAccess.Frames.OknoGlowne;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import Enums.Komunikat;
-import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
-import Parsery.ParseryDB;
 import Pracownik.ObslugaPracownka;
+import Pracownik.PracownikRepository;
+import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccess.DniWolneBean;
+import pl.home.DniWolne.DniWolneRepository;
+import pl.home.DniWolne.DzienWolnyDTO;
 import pl.home.components.frames.mainframes.OknoSprawozdan;
 import pl.home.components.frames.parameters.OSprawozdanWejscie;
 
@@ -19,6 +21,8 @@ public class ObslugaOknaGlownego {
 	InterfejsOknaGlownego mOkno;
 	RepositoryOknaGlownego mRepo;
 	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
+	DniWolneRepository mRepoDniWolne = new DniWolneRepository();
+	PracownikRepository mRepoPracownika = new PracownikRepository();
 
 	public ObslugaOknaGlownego(InterfejsOknaGlownego pmSrcOknoGlowne) {
 		mOkno = pmSrcOknoGlowne;
@@ -36,6 +40,7 @@ public class ObslugaOknaGlownego {
 	public void dodajPracownika() {
 		mObslugaPracownika.dodajNowegoPracownika();
 		mOkno.odswiezTabele();
+		mOkno.odswiezKontrolki();
 	}
 
 	public void usunPracownika() {
@@ -44,26 +49,28 @@ public class ObslugaOknaGlownego {
 		} else {
 			mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
 			mOkno.odswiezTabele();
+			mOkno.odswiezKontrolki();
 		}
 	}
 
 	public void pokazNieobecnych() {
 		String lvNieobecni = "";
-		Date lvNaKiedy = new DatePicker().setPickedDate();
+		LocalDate lvNaKiedy = new DatePicker().setPickedLocalDate();
 		if (lvNaKiedy == null)
 			return;
-		Object[][] lvDane = mRepo.pobierzNieobecnych(lvNaKiedy);
+		List<PracownikDTO> lvDane = mRepoPracownika.pobierzNieobecnych(lvNaKiedy);
 
-		if (lvDane.length == 0)
-			JOptionPane.showMessageDialog(null, "Brak nieobecnoœci na dzieñ: " + ParseryDB.DateParserToMsg(lvNaKiedy), //
-					"Nieobecni dnia :" + ParseryDB.DateParserToMsg(lvNaKiedy), JOptionPane.INFORMATION_MESSAGE);
+		if (lvDane.isEmpty())
+			JOptionPane.showMessageDialog(null, "Brak nieobecnoœci na dzieñ: " + lvNaKiedy, //
+					"Nieobecni dnia :" + lvNaKiedy, JOptionPane.INFORMATION_MESSAGE);
 		else {
-			for (int i = 0; i < lvDane.length; i++)
-				lvNieobecni = lvNieobecni + lvDane[i][0].toString() + " od " + lvDane[i][1] + " do " + lvDane[i][2]
-						+ " z powodu " + SLRodzajeAbsencji.getByKod(lvDane[i][3].toString()).getNazwa() + "\n";
-			lvNieobecni = lvNieobecni.replaceAll("00:00:00.0", "");
+			for (PracownikDTO lvPracownik : lvDane)
+				lvNieobecni = lvNieobecni + lvPracownik.getNazwa() + " od "
+						+ lvPracownik.getListaAbsencji().get(0).getOkres().getStart() + " do "
+						+ lvPracownik.getListaAbsencji().get(0).getOkres().getEnd() + " z powodu "
+						+ lvPracownik.getListaAbsencji().get(0).getRodzaj().getNazwa() + "\n";
 
-			JOptionPane.showMessageDialog(null, lvNieobecni, "Nieobecni dnia:" + ParseryDB.DateParserToMsg(lvNaKiedy),
+			JOptionPane.showMessageDialog(null, lvNieobecni, "Nieobecni dnia:" + lvNaKiedy,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
@@ -94,10 +101,10 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void pokazDniWolne() {
-		Object[][] lvDane = mRepo.pobierzDniWolne();
+		List<DzienWolnyDTO> lvDane = mRepoDniWolne.pobierzOstatnieDniWolne();
 		String lvWynik = "";
-		for (int i = 0; i < lvDane.length; i++)
-			lvWynik = lvWynik + lvDane[i][0].toString() + " z powodu " + lvDane[i][1].toString() + "\n";
+		for (DzienWolnyDTO lvDzien : lvDane)
+			lvWynik = lvWynik + lvDzien.getData() + " z powodu " + lvDzien.getOpis() + "\n";
 		lvWynik = lvWynik.replaceAll("00:00:00.0", "");
 
 		JOptionPane.showMessageDialog(null, "Ostatnio wprowadzone 20 dni: \n" + lvWynik, "Dni Wolne",
@@ -115,6 +122,18 @@ public class ObslugaOknaGlownego {
 		} else {
 			mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
 			mOkno.odswiezTabele();
+			mOkno.odswiezKontrolki();
 		}
+	}
+
+	public void zatrudnijPracownika() {
+		mObslugaPracownika.zatrudnijPracownika(mOkno.getPracownikZTabeli().getId());
+		mOkno.odswiezTabele();
+		mOkno.odswiezKontrolki();
+	}
+
+	public PracownikDTO getPracownik(Integer pmIdPracownika) {
+
+		return mRepoPracownika.getPracownik(pmIdPracownika);
 	}
 }
