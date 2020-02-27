@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import Datownik.Data;
 import Parsery.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.DniWolneColumns;
 import pl.home.Database.components.AccessDB;
 import pl.home.Database.components.LRecordSet;
 
@@ -30,7 +31,7 @@ public class ListaPlacRepositoryDB extends AccessDB implements ListaPlacReposito
 		if (lvDniWolne != null && !lvDniWolne.isEmpty())
 			lvLista = lvDniWolne//
 					.stream()//
-					.map(lvRecord -> lvDniWolne.getAsTimestamp("Data").toLocalDateTime().toLocalDate())//
+					.map(lvRecord -> lvDniWolne.getAsTimestamp(DniWolneColumns.Data).toLocalDateTime().toLocalDate())//
 					.collect(Collectors.toList());
 
 		return lvLista;

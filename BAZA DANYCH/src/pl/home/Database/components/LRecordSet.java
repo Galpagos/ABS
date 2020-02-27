@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import Frames.dbAccess.Components.SilentException;
+import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
 
 public class LRecordSet extends ArrayList<LRecord> {
@@ -13,15 +14,15 @@ public class LRecordSet extends ArrayList<LRecord> {
 	int mIndex = 0;
 	private static final long serialVersionUID = 2479458688075804811L;
 
-	public Integer getAsInteger(String pmNazwa) {
+	public Integer getAsInteger(SystemTables pmNazwa) {
 		return this.get(mIndex).getAsInteger(pmNazwa);
 	}
 
-	public String getAsString(String pmNazwa) {
+	public String getAsString(SystemTables pmNazwa) {
 		return this.get(mIndex).getAsString(pmNazwa);
 	}
 
-	public Timestamp getAsTimestamp(String pmNazwa) {
+	public Timestamp getAsTimestamp(SystemTables pmNazwa) {
 		return this.get(mIndex).getAsTimestamp(pmNazwa);
 	}
 
@@ -37,7 +38,7 @@ public class LRecordSet extends ArrayList<LRecord> {
 		mIndex = pmIndex;
 	}
 
-	public LocalDate getAsLocalDate(String pmDataUrodzenia) {
+	public LocalDate getAsLocalDate(SystemTables pmDataUrodzenia) {
 
 		return this.get(mIndex).getAsLocalDate(pmDataUrodzenia);
 	}
@@ -50,15 +51,5 @@ public class LRecordSet extends ArrayList<LRecord> {
 	public Integer getAsInteger(ZestawienieColumns pmUrlopNalezny) {
 
 		return get(mIndex).getAsInteger(pmUrlopNalezny);
-	}
-
-	public String getAsString(ZestawienieColumns pmPole) {
-
-		return getAsString(pmPole.toString());
-	}
-
-	public LocalDate getAsLocalDate(ZestawienieColumns pmDataZwolnienia) {
-
-		return getAsLocalDate(pmDataZwolnienia.toString());
 	}
 }

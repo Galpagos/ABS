@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.Optional;
 
+import dbAccesspl.home.Database.Table.Zestawienie.AliasDB;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
+import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
 
 public class AccessDB {
 	private static final String PATH_DATABASE = "jdbc:ucanaccess://BAZA.accdb";
@@ -28,9 +31,16 @@ public class AccessDB {
 				while (rs.next()) {
 					LRecord lvMapa = new LRecord();
 					for (int column = 1; column <= columnCount; column++) {
-						// SystemTablesNames.getByName(metaData.getTableName(column));
-
-						lvMapa.put(metaData.getColumnName(column), rs.getObject(column));
+						SystemTablesNames lvTabela = SystemTablesNames.getByName(metaData.getTableName(column));
+						String lvPoleS = metaData.getColumnName(column);
+						if (lvTabela != null) {
+							Optional<? extends SystemTables> lvPole = lvTabela.getTabela().stream()
+									.filter(lvA -> lvPoleS.equalsIgnoreCase(lvA.toString()))//
+									.findAny();
+							if (lvPole.isPresent())
+								lvMapa.put(lvPole.get(), rs.getObject(column));
+						} else
+							lvMapa.put(new AliasDB(lvPoleS, Object.class), rs.getObject(column));
 
 					}
 					lvWynik.add(lvMapa);

@@ -6,6 +6,7 @@ import java.util.Optional;
 import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import pl.home.Database.components.AccessDB;
 import pl.home.Database.components.LRecordSet;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
@@ -49,11 +50,12 @@ public class AbsencjaRepositoryDB extends AccessDB implements AbsencjaRepositor 
 		if (lvDane == null || lvDane.isEmpty())
 			return Optional.empty();
 		return Optional.of(AbsencjaDTO.builder()//
-				.setId(lvDane.getAsInteger("Id_tabeli"))//
-				.setIdPracownika(lvDane.getAsInteger("Id_pracownika"))//
-				.setRodzaj(SLRodzajeAbsencji.getByKod(lvDane.getAsString("RODZAJ")))//
-				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane.getAsString("EKWIWALENT")))//
-				.setOkres(new Interval(lvDane.getAsTimestamp("Od_kiedy"), lvDane.getAsTimestamp("Do_kiedy"))));
+				.setId(lvDane.getAsInteger(AbsencjeColumns.ID_tabeli))//
+				.setIdPracownika(lvDane.getAsInteger(AbsencjeColumns.ID_pracownika))//
+				.setRodzaj(SLRodzajeAbsencji.getByKod(lvDane.getAsString(AbsencjeColumns.RODZAJ)))//
+				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane.getAsString(AbsencjeColumns.EKWIWALENT)))//
+				.setOkres(new Interval(lvDane.getAsTimestamp(AbsencjeColumns.Od_kiedy),
+						lvDane.getAsTimestamp(AbsencjeColumns.Do_kiedy))));
 	}
 
 	@Override

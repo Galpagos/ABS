@@ -57,7 +57,7 @@ public class PracownikRepository extends AccessDB {
 		return QueryBuilder.SELECT()//
 				.select(Pracownik)//
 				.andWarunek(ID_tabeli, pmId)//
-				.execute().getAsString(Pracownik.toString());
+				.execute().getAsString(Pracownik);
 	}
 
 	public List<PracownikDTO> getListaWszystkichPracownikow() {
@@ -80,7 +80,7 @@ public class PracownikRepository extends AccessDB {
 		lvPracownik.setId(pmRecord.getAsInteger(ID_tabeli));
 		lvPracownik.setNazwa(pmRecord.getAsString(Pracownik));
 		lvPracownik.setDataZwolnienia(pmRecord.getAsLocalDate(ZestawienieColumns.Data_Zwolnienia));
-		if (pmRecord.containsKey(AbsencjeColumns.RODZAJ.toString())) {
+		if (pmRecord.containsKey(AbsencjeColumns.RODZAJ)) {
 			AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 			lvAbsencja.setRodzaj(SLRodzajeAbsencji.getByKod(pmRecord.getAsString(AbsencjeColumns.RODZAJ)));
 			lvAbsencja.setOkres(new Interval(pmRecord.getAsLocalDate(AbsencjeColumns.Od_kiedy),

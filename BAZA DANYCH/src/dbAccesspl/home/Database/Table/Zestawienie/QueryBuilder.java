@@ -138,7 +138,8 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 
 	@Override
 	public int count() {
-		return executeQuery("SELECT Count(1) as TOTAL FROM " + mTabela + mWarunek.toString()).getAsInteger("TOTAL");// count(*)
+		return executeQuery("SELECT Count(1) as TOTAL FROM " + mTabela + mWarunek.toString())
+				.getAsInteger(new AliasDB("TOTAL", Integer.class));// count(*)
 	}
 
 	@Override
@@ -208,7 +209,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	public static int getNextId(SystemTables pmPole) {
 		Integer lvActalId = executeQuery(
 				"SELECT TOP 1 " + pmPole + " FROM " + pmPole.getTableName() + " ORDER BY ID_tabeli DESC")
-						.getAsInteger(pmPole.toString());
+						.getAsInteger(pmPole);
 		return (lvActalId == null ? 0 : lvActalId.intValue()) + 1;
 	}
 

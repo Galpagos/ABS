@@ -9,71 +9,52 @@ import java.util.Map;
 import Datownik.Data;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 
-public class LRecord extends HashMap<String, Object> {
+public class LRecord extends HashMap<SystemTables, Object> {
 
 	private static final long serialVersionUID = 1L;
-	private Map<Integer, String> mIndeksy;
+	private Map<Integer, SystemTables> mIndeksy;
 
 	public LRecord() {
-		mIndeksy = new HashMap<Integer, String>();
+		mIndeksy = new HashMap<Integer, SystemTables>();
 	}
 
 	@Override
-	public Object put(String pmString, Object pmObject) {
-		super.put(pmString, pmObject);
-		mIndeksy.put(mIndeksy.size() + 1, pmString);
+	public Object put(SystemTables pmPole, Object pmObject) {
+		super.put(pmPole, pmObject);
+		mIndeksy.put(mIndeksy.size() + 1, pmPole);
 		return pmObject;
 	}
 
-	public Integer getAsInteger(String pmNazwa) {
-
+	public Integer getAsInteger(SystemTables pmNazwa) {
 		return get(pmNazwa) == null ? null : Integer.parseInt(get(pmNazwa).toString());
 	}
 
-	public String getAsString(String pmNazwa) {
+	public String getAsString(SystemTables pmNazwa) {
 		if (get(pmNazwa) == null)
 			return "";
 
 		return get(pmNazwa).toString();
 	}
 
-	public Date getAsDate(String pmNazwa) {
+	public Date getAsDate(SystemTables pmNazwa) {
 		if (get(pmNazwa) == null)
 			return null;
 		return (Date) get(pmNazwa);
 	}
 
-	public Timestamp getAsTimestamp(String pmNazwa) {
-		return (Timestamp) get(pmNazwa);
-	}
-
-	public Integer getAsInteger(SystemTables pmNazwa) {
-		return getAsInteger(pmNazwa.toString());
-	}
-
-	public String getAsString(SystemTables pmNazwa) {
-		return getAsString(pmNazwa.toString());
-	}
-
-	public Date getAsDate(SystemTables pmNazwa) {
-		return getAsDate(pmNazwa.toString());
-	}
-
 	public Timestamp getAsTimestamp(SystemTables pmNazwa) {
-		return getAsTimestamp(pmNazwa.toString());
+		if (get(pmNazwa) == null)
+			return null;
+		return (Timestamp) get(pmNazwa);
 	}
 
 	public Object getValue(int pmIndex) {
 		return get(mIndeksy.get(pmIndex));
 	}
 
-	public LocalDate getAsLocalDate(String pmDataUrodzenia) {
+	public LocalDate getAsLocalDate(SystemTables pmDataUrodzenia) {
 
 		return Data.LocalDateFromDate(getAsDate(pmDataUrodzenia));
-	}
-
-	public LocalDate getAsLocalDate(SystemTables pmNazwa) {
-		return getAsLocalDate(pmNazwa.toString());
 	}
 
 	public String getColumnName(Object pmCol) {

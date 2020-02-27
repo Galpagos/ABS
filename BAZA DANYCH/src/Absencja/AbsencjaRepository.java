@@ -14,6 +14,7 @@ import java.util.Vector;
 import Parsery.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.AliasDB;
 import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
 import pl.home.Database.components.AccessDB;
 
@@ -21,8 +22,8 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 
 	public static int GetCount(String pmTabela) {
 
-		String lvZapytanie = "SELECT Count(*) as TOTAL FROM " + pmTabela;
-		return executeQuery(lvZapytanie).get(0).getAsInteger("TOTAL");
+		String lvZapytanie = "SELECT Count(1) as TOTAL FROM " + pmTabela;
+		return executeQuery(lvZapytanie).getAsInteger(new AliasDB("TOTAL", Integer.class));
 	}
 
 	public static Object[][] getRecordSets(String pmZapytanie) {

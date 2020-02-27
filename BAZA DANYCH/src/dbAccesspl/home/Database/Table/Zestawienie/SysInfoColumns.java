@@ -19,6 +19,6 @@ public enum SysInfoColumns implements SystemTables {
 	@Override
 	public String getTableName() {
 
-		return " AD_SYS_INFO ";
+		return "AD_SYS_INFO";
 	}
 }

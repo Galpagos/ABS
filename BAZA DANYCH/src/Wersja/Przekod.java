@@ -12,6 +12,7 @@ import com.healthmarketscience.jackcess.Database;
 import com.healthmarketscience.jackcess.DatabaseBuilder;
 
 import Enums.SLRodzajeAbsencji;
+import dbAccesspl.home.Database.Table.Zestawienie.SysInfoColumns;
 import pl.home.Database.components.AccessDB;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
@@ -80,6 +81,6 @@ public class Przekod extends AccessDB {
 	}
 
 	private static String pobierzWersje() {
-		return executeQuery("SELECT WARTOSC FROM AD_SYS_INFO WHERE NAZWA='Wersja'").getAsString("WARTOSC");
+		return executeQuery("SELECT WARTOSC FROM AD_SYS_INFO WHERE NAZWA='Wersja'").getAsString(SysInfoColumns.WARTOSC);
 	}
 }
