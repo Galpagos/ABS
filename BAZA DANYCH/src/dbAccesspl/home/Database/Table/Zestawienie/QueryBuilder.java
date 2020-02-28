@@ -40,7 +40,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 		return new QueryBuilder(TypZapytania.INSERT);
 	}
 
-	public static DbCount COUNT() {
+	public static DbCount COUNT() { // NO_UCD (unused code)
 		return new QueryBuilder(TypZapytania.COUNT);
 	}
 

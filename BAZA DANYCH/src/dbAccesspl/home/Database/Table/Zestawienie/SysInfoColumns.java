@@ -2,7 +2,7 @@ package dbAccesspl.home.Database.Table.Zestawienie;
 
 public enum SysInfoColumns implements SystemTables {
 
-	NAZWA(String.class, "Parametr"), //
+	NAZWA(String.class, "Parametr"), // // NO_UCD (unused code)
 	WARTOSC(String.class, "Wartoœæ");
 
 	private Class<?> mKlasa;

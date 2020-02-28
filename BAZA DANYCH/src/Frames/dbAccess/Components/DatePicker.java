@@ -17,18 +17,18 @@ import javax.swing.JPanel;
 
 public class DatePicker {
 	// define variables
-	int month = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
-	int year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+	private int month = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
+	private int year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
 	// create object of JLabel with alignment
-	JLabel l = new JLabel("", JLabel.CENTER);
+	private JLabel l = new JLabel("", JLabel.CENTER);
 	// define variable
-	String day = "";
+	private String day = "";
 	// declaration
-	JDialog d;
+	private JDialog d;
 	// create object of JButton
-	JButton[] button = new JButton[49];
-	String[] Miesiace = { "Styczeñ", "Luty", "Marzec", "Kwiecieñ", "Maj", "Czerwiec", "Lipiec", "Sierpieñ", "Wrzesieñ",
-			"Pa¿dziernik", "Listopad", "Grudzieñ" };
+	private JButton[] button = new JButton[49];
+	private String[] Miesiace = { "Styczeñ", "Luty", "Marzec", "Kwiecieñ", "Maj", "Czerwiec", "Lipiec", "Sierpieñ",
+			"Wrzesieñ", "Pa¿dziernik", "Listopad", "Grudzieñ" };
 
 	public DatePicker()// JFrame parent)//create constructor
 	{
@@ -118,7 +118,7 @@ public class DatePicker {
 		d.setVisible(true);
 	}
 
-	public void displayDate() {
+	private void displayDate() {
 		for (int x = 7; x < button.length; x++)// for loop
 		{
 			button[x].setText("");// set text

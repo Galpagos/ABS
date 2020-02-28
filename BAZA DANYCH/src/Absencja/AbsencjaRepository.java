@@ -20,13 +20,13 @@ import pl.home.Database.components.AccessDB;
 
 public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 
-	public static int GetCount(String pmTabela) {
+	private static int GetCount(String pmTabela) {
 
 		String lvZapytanie = "SELECT Count(1) as TOTAL FROM " + pmTabela;
 		return executeQuery(lvZapytanie).getAsInteger(new AliasDB("TOTAL", Integer.class));
 	}
 
-	public static Object[][] getRecordSets(String pmZapytanie) {
+	private static Object[][] getRecordSets(String pmZapytanie) {
 		Object[][] lvData;
 		try {
 			Connection conn = init();

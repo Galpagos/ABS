@@ -42,15 +42,5 @@ public enum SLMiesiace {
 		} else {
 			return new Interval(Year.of(pmRok));
 		}
-
 	}
-
-	public static SLMiesiace getByValue(int i) {
-		for (SLMiesiace e : SLMiesiace.values()) {
-			if (i == e.getMiesiacInt())
-				return e;
-		}
-		return null;
-	}
-
 }

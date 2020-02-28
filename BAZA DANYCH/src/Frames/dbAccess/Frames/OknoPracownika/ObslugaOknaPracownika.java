@@ -14,7 +14,6 @@ import Frames.dbAccess.Components.ComboPicker;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
-import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
@@ -23,12 +22,11 @@ import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
 public class ObslugaOknaPracownika {
-	InterfejsOknaPracownika mOkno;
+	private InterfejsOknaPracownika mOkno;
 
-	PracownikRepository mRepoPracownika = new PracownikRepository();
-	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
-	ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
-	ObslugaGrup mObslugaGrup = new ObslugaGrup();
+	private ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
+	private ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
+	private ObslugaGrup mObslugaGrup = new ObslugaGrup();
 
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika) {
 		mOkno = pmOknoPracownika;

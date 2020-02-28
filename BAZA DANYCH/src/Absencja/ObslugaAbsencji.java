@@ -19,7 +19,7 @@ import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
 public class ObslugaAbsencji {
-	AbsencjaRepositor mRepo = new AbsencjaRepository();
+	private AbsencjaRepositor mRepo = new AbsencjaRepository();
 
 	public List<AbsencjaDTO> pobierzAbsencjePracownika(int pmId) {
 		List<AbsencjaDTO> lvLista = new ArrayList<>();
@@ -49,20 +49,13 @@ public class ObslugaAbsencji {
 				.setOkres(Interval.OkreszBazy(lvDane[0][2], lvDane[0][3]));
 	}
 
-	public int ileDniRoboczych(AbsencjaDTO pmAbs) {
+	int ileDniRoboczych(AbsencjaDTO pmAbs) {
 		if (pmAbs.getOkres() == null)
 			return 0;
 		return LicznikDaty.ileDniRoboczych(pmAbs.getOkres());
 	}
 
-	public Map<SLRodzajeAbsencji, Integer> zliczDniRoboczeWAbsencjach(List<AbsencjaDTO> pmLista) {
-		return pmLista //
-				.stream() //
-				.collect(Collectors.groupingBy(AbsencjaDTO::getRodzaj, Collectors.summingInt(this::ileDniRoboczych)));
-	}
-
-	public int ileDniRoboczychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj,
-			Interval pmOkres) {
+	int ileDniRoboczychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj, Interval pmOkres) {
 		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmIdPracownika).stream()//
 				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
 				.collect(Collectors.toList());
@@ -95,7 +88,7 @@ public class ObslugaAbsencji {
 			mRepo.usunAbsencje(pmID);
 	}
 
-	public int ileDniKalendarzowychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj,
+	int ileDniKalendarzowychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj,
 			Interval pmOkres) {
 		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmIdPracownika).stream()//
 				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
@@ -109,14 +102,14 @@ public class ObslugaAbsencji {
 		return lvWynik;
 	}
 
-	public Map<SLRodzajeAbsencji, Integer> zliczDniKalendarzoweWAbsencjach(List<AbsencjaDTO> pmLista) {
+	private Map<SLRodzajeAbsencji, Integer> zliczDniKalendarzoweWAbsencjach(List<AbsencjaDTO> pmLista) {
 		return pmLista //
 				.stream() //
 				.collect(Collectors.groupingBy(AbsencjaDTO::getRodzaj,
 						Collectors.summingInt(this::ileDniKalendarzowych)));
 	}
 
-	public int ileDniKalendarzowych(AbsencjaDTO pmAbsencja) {
+	int ileDniKalendarzowych(AbsencjaDTO pmAbsencja) {
 		if (pmAbsencja.getOkres() == null)
 			return 0;
 		return LicznikDaty.ileDniKalendarzowych(pmAbsencja.getOkres());
@@ -125,7 +118,7 @@ public class ObslugaAbsencji {
 	private LocalDate lvDataGraniczna = null;
 	private int licznik = 33;
 
-	public LocalDate dzienKoncaWynagrodzeniaChorobowego(AbsencjaDTO pmAbsencja, int pmLimit) {
+	LocalDate dzienKoncaWynagrodzeniaChorobowego(AbsencjaDTO pmAbsencja, int pmLimit) {
 		licznik = pmLimit;
 		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
 		lvLista.add(pmAbsencja);

@@ -5,16 +5,15 @@ import java.util.List;
 
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
-import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import pl.home.components.frames.src.SrcOknoPrzygotowaniaListyPracownikow;
 
 public class ObslugaPrzygotowaniaListyPracownikow {
-	SrcOknoPrzygotowaniaListyPracownikow mOkno;
-	PracownikRepository mRepoPracownik = new PracownikRepository();
-	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
-	ObslugaGrup mObslugaGrup = new ObslugaGrup();
+	private SrcOknoPrzygotowaniaListyPracownikow mOkno;
+	private PracownikRepository mRepoPracownik = new PracownikRepository();
+
+	private ObslugaGrup mObslugaGrup = new ObslugaGrup();
 
 	public ObslugaPrzygotowaniaListyPracownikow(
 			SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {

@@ -1,6 +1,5 @@
 package Datownik;
 
-import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -57,11 +56,6 @@ public class LicznikDaty {
 				}
 			}
 		}
-	}
-
-	public static LocalDate LDTparseFromObject(Object pmData) {
-		Timestamp lvStart = (Timestamp) pmData;
-		return lvStart.toLocalDateTime().toLocalDate();
 	}
 
 	public static int liczbaDniWAbsencjach(List<AbsencjaDTO> pmAbsencja) {

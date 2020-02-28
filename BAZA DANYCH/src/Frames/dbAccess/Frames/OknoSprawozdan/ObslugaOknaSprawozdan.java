@@ -17,7 +17,7 @@ import pl.home.components.frames.mainframes.PobieranieModulow;
 import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
 
 public class ObslugaOknaSprawozdan {
-	DaneDoSprawozdaniaMiesiecznego mDane;
+	private DaneDoSprawozdaniaMiesiecznego mDane;
 	private int mRok = 2019;
 
 	public ObslugaOknaSprawozdan() {

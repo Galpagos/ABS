@@ -17,11 +17,11 @@ import pl.home.components.frames.mainframes.OknoSprawozdan;
 import pl.home.components.frames.parameters.OSprawozdanWejscie;
 
 public class ObslugaOknaGlownego {
-	InterfejsOknaGlownego mOkno;
-	RepositoryOknaGlownego mRepo;
-	ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
-	DniWolneRepository mRepoDniWolne = new DniWolneRepository();
-	PracownikRepository mRepoPracownika = new PracownikRepository();
+	private InterfejsOknaGlownego mOkno;
+	private RepositoryOknaGlownego mRepo;
+	private ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
+	private DniWolneRepository mRepoDniWolne = new DniWolneRepository();
+	private PracownikRepository mRepoPracownika = new PracownikRepository();
 
 	public ObslugaOknaGlownego(InterfejsOknaGlownego pmSrcOknoGlowne) {
 		mOkno = pmSrcOknoGlowne;

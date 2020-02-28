@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class ComboPicker {
-	ObsluzenieComboPicker mObsluga;
+	private ObsluzenieComboPicker mObsluga;
 
 	public ObsluzenieComboPicker getObsluga() {
 		return mObsluga;
@@ -30,7 +30,7 @@ public class ComboPicker {
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnNowy;
 	private JDialog d;
-	JButton btnUsu;
+	private JButton btnUsu;
 
 	public JButton getBtnUsu() {
 		return btnUsu;
@@ -105,6 +105,7 @@ public class ComboPicker {
 		{
 			JButton okButton = new JButton("OK");
 			okButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					d.dispose();
 				}
@@ -116,6 +117,7 @@ public class ComboPicker {
 		{
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					cbGrupy.setSelectedItem(null);
 					d.dispose();
@@ -171,7 +173,7 @@ public class ComboPicker {
 
 	}
 
-	public void ustawCombo() {
+	private void ustawCombo() {
 		ComboBoxModel<Object> mModel = mObsluga.getComboBoxModel();
 		cbGrupy.setModel(mModel);
 

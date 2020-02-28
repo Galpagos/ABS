@@ -5,7 +5,7 @@ import javax.swing.table.AbstractTableModel;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 import pl.home.Database.components.LRecordSet;
 
-public class LTableModel extends AbstractTableModel {
+class LTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	private LRecordSet mData;
@@ -57,7 +57,7 @@ public class LTableModel extends AbstractTableModel {
 		return false;
 	}
 
-	public LTableModel(LRecordSet pmData) {
+	LTableModel(LRecordSet pmData) {
 		mData = pmData;
 	}
 }

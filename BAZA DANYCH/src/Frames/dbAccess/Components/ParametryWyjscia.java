@@ -2,7 +2,7 @@ package Frames.dbAccess.Components;
 
 public class ParametryWyjscia {
 
-	boolean mCzyAccept = false;
+	private boolean mCzyAccept = false;
 
 	public boolean isAccepted() {
 		return mCzyAccept;
