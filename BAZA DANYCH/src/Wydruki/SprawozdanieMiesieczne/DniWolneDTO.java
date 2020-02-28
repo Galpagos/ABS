@@ -1,6 +1,6 @@
 package Wydruki.SprawozdanieMiesieczne;
 
-public class DniWolneDTO {
+class DniWolneDTO {
 	int mDzienWMiesiacu;
 	String mPowod;
 

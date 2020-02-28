@@ -19,9 +19,15 @@ public class ListaPlac {
 	private final BigDecimal KWOTA_MIESIECZNA = new BigDecimal(2600.00).setScale(2);
 	private final BigDecimal KWOTA_ZA_DZIEN = KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.8629))
 			.setScale(8, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(30), 8, RoundingMode.HALF_UP);
+	private ListaPlacRepository mRepo;
 
 	public ListaPlac(YearMonth pmYearMonth) {
 		mRokMiesiac = pmYearMonth;
+		mRepo = new ListaPlacRepositoryDB();
+	}
+
+	void setListaPlacRepository(ListaPlacRepository pmRepo) {
+		mRepo = pmRepo;
 	}
 
 	public List<MiesiecznaPlacaPracownika> wyliczWyplate(List<PracownikDTO> pmLista) {
@@ -29,7 +35,6 @@ public class ListaPlac {
 				.stream()//
 				.map(lvPracownik -> wyliczWyplatePracownika(lvPracownik))//
 				.collect(Collectors.toList());
-
 	}
 
 	private MiesiecznaPlacaPracownika wyliczWyplatePracownika(PracownikDTO pmPracownik) {
@@ -77,7 +82,7 @@ public class ListaPlac {
 				lvKwotaMiesieczna//
 						.divide(BigDecimal.valueOf(liczbaDniRoboczychWMiesiacu()), 8, RoundingMode.HALF_UP)//
 						.multiply(pmAbsencja.getProcent().getProcent())//
-						.multiply(BigDecimal.valueOf(LicznikDaty.ileDniRobotnych(Arrays.asList(pmAbsencja)))));
+						.multiply(BigDecimal.valueOf(mRepo.ileDniRoboczych(pmAbsencja.getOkres()))));
 
 	}
 
@@ -134,6 +139,7 @@ public class ListaPlac {
 	}
 
 	Integer liczbaDniRoboczychWMiesiacu() {
-		return Integer.valueOf(LicznikDaty.ileDniRobotnych(mRokMiesiac));
+		return mRepo.getLiczbaDniRoboczychWMiesiacu(mRokMiesiac);
+
 	}
 }

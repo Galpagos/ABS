@@ -21,11 +21,6 @@ public class ParseryDB {
 		return "#" + mformat.format(pmDate) + "#";
 	}
 
-	public static String DateParserToMsg(Date pmDate) {
-		SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
-		return mformat.format(pmDate);
-	}
-
 	public static LocalDate DateParseToLocalDate(Date pmData) {
 		return pmData.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}

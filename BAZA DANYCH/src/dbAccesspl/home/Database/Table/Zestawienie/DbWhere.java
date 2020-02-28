@@ -2,7 +2,7 @@ package dbAccesspl.home.Database.Table.Zestawienie;
 
 import java.time.LocalDate;
 
-public abstract interface DbWhere {
+abstract interface DbWhere {
 	public QueryBuilder andWarunek(String pmWarunek);
 
 	public QueryBuilder orWarunek(String pmWarunek);

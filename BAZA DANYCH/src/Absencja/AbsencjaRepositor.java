@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 
-public interface AbsencjaRepositor {
+interface AbsencjaRepositor {
 
 	Object[][] getAbsencjePracownika(int pmId);
 

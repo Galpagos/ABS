@@ -7,8 +7,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -16,8 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import Datownik.Data;
 
 public class DatePicker {
 	// define variables
@@ -154,36 +150,11 @@ public class DatePicker {
 		d.setTitle(Miesiace[(36 + month) % 12]);
 	}
 
-	public java.util.Date setPickedDate() {
-		// if condition
-		if (day.equals(""))
-			return null;
-
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		java.util.Calendar cal = java.util.Calendar.getInstance();
-		cal.set(year, month, Integer.parseInt(day));
-		try {
-			return new SimpleDateFormat("yyyy-MM-dd").parse(sdf.format(new Date(cal.getTimeInMillis())));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public LocalDate setPickedLocalDate() {
 		if (day.equals(""))
 			return null;
 
 		return LocalDate.of(year, (120 + (month)) % 12 + 1, Integer.parseInt(day));
-
-	}
-
-	public LocalDate setPickedDateTime() {
-		if (day.equals(""))
-			return null;
-
-		return Data.ex(year, month, Integer.parseInt(day));
 
 	}
 }

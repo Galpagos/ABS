@@ -1,14 +1,14 @@
 package Grupy;
 
 public class GrupaDTO {
-	int mID;
-	String mNazwa;
+	private int mID;
+	private String mNazwa;
 
 	public int getID() {
 		return mID;
 	}
 
-	public GrupaDTO setID(int pmID) {
+	GrupaDTO setID(int pmID) {
 		mID = pmID;
 		return this;
 	}

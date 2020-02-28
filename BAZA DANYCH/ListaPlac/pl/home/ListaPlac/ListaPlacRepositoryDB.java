@@ -1,46 +1,23 @@
 package pl.home.ListaPlac;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import Datownik.Data;
-import Parsery.ParseryDB;
-import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
-import dbAccesspl.home.Database.Table.Zestawienie.DniWolneColumns;
+import Datownik.Interval;
+import Datownik.LicznikDaty;
 import pl.home.Database.components.AccessDB;
-import pl.home.Database.components.LRecordSet;
 
-public class ListaPlacRepositoryDB extends AccessDB implements ListaPlacRepository {
+class ListaPlacRepositoryDB extends AccessDB implements ListaPlacRepository {
 
 	@Override
-	public List<LocalDate> getListaDniWolnychWMiesiacu(YearMonth pmMiesiac) {
-		List<LocalDate> lvLista = new ArrayList<>();
+	public Integer getLiczbaDniRoboczychWMiesiacu(YearMonth pmRokMiesiac) {
 
-		LRecordSet lvDniWolne = executeQuery(""//
-				+ " SELECT "//
-				+ "   Data "//
-				+ " FROM "//
-				+ "   DniWolne "//
-				+ " WHERE "//
-				+ " Data BEtween " + ParseryDB.DateParserToSQL_SELECT(Data.utworzDateNaPierwszyDzien(pmMiesiac))
-				+ " and " + ParseryDB.DateParserToSQL_SELECT(Data.utworzDateNaOstatniDzien(pmMiesiac)));
-
-		if (lvDniWolne != null && !lvDniWolne.isEmpty())
-			lvLista = lvDniWolne//
-					.stream()//
-					.map(lvRecord -> lvDniWolne.getAsTimestamp(DniWolneColumns.Data).toLocalDateTime().toLocalDate())//
-					.collect(Collectors.toList());
-
-		return lvLista;
-
+		return Integer.valueOf(LicznikDaty.ileDniRobotnych(pmRokMiesiac));
 	}
 
 	@Override
-	public List<AbsencjaDTO> getListaAbsencjiUrlopu(YearMonth pmRokMiesiac, int pmId) {
+	public Integer ileDniRoboczych(Interval pmOkres) {
 
-		return null;
+		return LicznikDaty.ileDniRoboczych(pmOkres);
 	}
+
 }

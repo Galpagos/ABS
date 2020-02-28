@@ -1,6 +1,6 @@
 package Enums;
 
-public enum TabeleDB {
+public enum TabeleDB { // NO_UCD (unused code)
 	AD_SYS_INFO("AD_SYS_INFO", "ID_TABELI");
 
 	String mKod;

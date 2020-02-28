@@ -11,7 +11,7 @@ import javax.swing.table.TableCellRenderer;
 
 import Wydruki.PrzygotowanieDanych.PustePole;
 
-public class CellRenderListyObecnosci extends JLabel implements TableCellRenderer {
+class CellRenderListyObecnosci extends JLabel implements TableCellRenderer {
 	/**
 	 * 
 	 */

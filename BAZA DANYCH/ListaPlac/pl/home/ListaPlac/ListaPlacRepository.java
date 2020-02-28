@@ -1,14 +1,13 @@
 package pl.home.ListaPlac;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
 
-import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import Datownik.Interval;
 
-public interface ListaPlacRepository {
+interface ListaPlacRepository {
 
-	public List<LocalDate> getListaDniWolnychWMiesiacu(YearMonth pmMiesiac);
+	public Integer getLiczbaDniRoboczychWMiesiacu(YearMonth pmRokMiesiac);
 
-	public List<AbsencjaDTO> getListaAbsencjiUrlopu(YearMonth pmRokMiesiac, int pmId);
+	public Integer ileDniRoboczych(Interval pmOkres);
+
 }

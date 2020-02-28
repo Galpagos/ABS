@@ -7,16 +7,16 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 
 public class MiesiecznaPlacaPracownika {
 
-	BigDecimal mKwotaChorobowa = BigDecimal.ZERO.setScale(2);
-	BigDecimal mKwotaZaPrace = BigDecimal.ZERO.setScale(2);
-	BigDecimal mKwotaZaUrlopy = BigDecimal.ZERO.setScale(2);
-	PracownikDTO mPracownik;
+	private BigDecimal mKwotaChorobowa = BigDecimal.ZERO.setScale(2);
+	private BigDecimal mKwotaZaPrace = BigDecimal.ZERO.setScale(2);
+	private BigDecimal mKwotaZaUrlopy = BigDecimal.ZERO.setScale(2);
+	private PracownikDTO mPracownik;
 
 	public BigDecimal getKwotaChorobowa() {
 		return mKwotaChorobowa.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	public MiesiecznaPlacaPracownika addKwotaChorobowa(BigDecimal pmKwotaChorobowa) {
+	MiesiecznaPlacaPracownika addKwotaChorobowa(BigDecimal pmKwotaChorobowa) {
 		this.mKwotaChorobowa = mKwotaChorobowa.add(pmKwotaChorobowa);
 		return this;
 	}
@@ -25,7 +25,7 @@ public class MiesiecznaPlacaPracownika {
 		return mKwotaZaPrace.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	public MiesiecznaPlacaPracownika setKwotaZaPrace(BigDecimal pmKwotaZaPrace) {
+	MiesiecznaPlacaPracownika setKwotaZaPrace(BigDecimal pmKwotaZaPrace) {
 		this.mKwotaZaPrace = pmKwotaZaPrace;
 		return this;
 	}
@@ -34,7 +34,7 @@ public class MiesiecznaPlacaPracownika {
 		return mKwotaZaUrlopy.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	public MiesiecznaPlacaPracownika addKwotaZaUrlopy(BigDecimal pmKwotaZaUrlopy) {
+	MiesiecznaPlacaPracownika addKwotaZaUrlopy(BigDecimal pmKwotaZaUrlopy) {
 		this.mKwotaZaUrlopy = mKwotaZaUrlopy.add(pmKwotaZaUrlopy);
 		return this;
 	}
@@ -43,7 +43,7 @@ public class MiesiecznaPlacaPracownika {
 		return mPracownik;
 	}
 
-	public MiesiecznaPlacaPracownika setPracownik(PracownikDTO pmPracownik) {
+	MiesiecznaPlacaPracownika setPracownik(PracownikDTO pmPracownik) {
 		this.mPracownik = pmPracownik;
 		return this;
 	}

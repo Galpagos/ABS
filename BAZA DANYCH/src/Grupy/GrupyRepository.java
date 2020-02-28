@@ -12,9 +12,9 @@ import pl.home.Database.components.AccessDB;
 import pl.home.Database.components.LRecord;
 import pl.home.Database.components.LRecordSet;
 
-public class GrupyRepository extends AccessDB {
+class GrupyRepository extends AccessDB {
 
-	public List<GrupaDTO> pobierzGrupy() {
+	List<GrupaDTO> pobierzGrupy() {
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
 				.select(ID_tabeli, Nazwa)//
 				.execute();
@@ -22,7 +22,7 @@ public class GrupyRepository extends AccessDB {
 		return parsujGrupy(lvWynik);
 	}
 
-	public List<GrupaDTO> pobierzGrupyPracownika(int pmId) {
+	List<GrupaDTO> pobierzGrupyPracownika(int pmId) {
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
 				.select(ID_tabeli, Nazwa)//
 				.joinOn(GrupyPowiazaniaColumns.ID_GRUPY, ID_tabeli)//
@@ -32,7 +32,7 @@ public class GrupyRepository extends AccessDB {
 		return parsujGrupy(lvWynik);
 	}
 
-	public void dodajGrupe(String pmNazwa) {
+	void dodajGrupe(String pmNazwa) {
 		QueryBuilder.INSERT()//
 				.set(ID_tabeli, QueryBuilder.getNextId(ID_tabeli))//
 				.set(Nazwa, pmNazwa)//
