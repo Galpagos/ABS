@@ -10,5 +10,5 @@ import lombok.Getter;
 @Builder
 public class PModWyjscie extends ParametryWyjscia {
 
-	private @Getter List<SLRodzajeAbsencji> listaAbsencji;
+	private @Getter List<SLRodzajeAbsencji> mListaAbsencji;
 }

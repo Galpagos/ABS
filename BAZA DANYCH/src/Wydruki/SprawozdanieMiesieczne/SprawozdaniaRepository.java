@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
-import dbAccess.AbsencjaBean;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.DniWolneColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
@@ -30,24 +29,6 @@ public class SprawozdaniaRepository {
 		return lvWynik.stream()//
 				.map(lvRecord -> parsujAbsencje(lvRecord))//
 				.collect(Collectors.toList());
-
-//		StringBuilder lvZapytanie = new StringBuilder()//
-//				.append("Select ")//
-//				.append(AbsencjaBean.kolumnaID)//
-//				.append(",")//
-//				.append(AbsencjaBean.kolumnaIdPracownika)//
-//				.append(",")//
-//				.append(AbsencjaBean.kolumnaOdKiedy).append(",")//
-//				.append(AbsencjaBean.kolumnaDoKiedy).append(",")//
-//				.append(AbsencjaBean.kolumnaRodzajAbsencji) //
-//				.append(",EKWIWALENT")//
-//				.append(" from ")//
-//				.append(AbsencjaBean.NazwaTabeli)//
-//				.append(" where ").append(AbsencjaBean.kolumnaIdPracownika).append("=")//
-//				.append(pmIdPrac)//
-//				.append(warunekNaModul(pmList));
-//
-//		return dbAccess.getRecordSets(lvZapytanie.toString());
 	}
 
 	private AbsencjaDTO parsujAbsencje(LRecord pmRecord) {
@@ -78,7 +59,7 @@ public class SprawozdaniaRepository {
 		if (pmLista == null || pmLista.size() == 0)
 			return "";
 		StringBuilder lvWarunek = new StringBuilder();
-		lvWarunek.append(AbsencjaBean.kolumnaRodzajAbsencji);
+		lvWarunek.append(" RODZAJ ");
 		lvWarunek.append(" IN ( 'TEST");
 		for (SLRodzajeAbsencji lvRodzaj : pmLista) {
 			lvWarunek.append("','");

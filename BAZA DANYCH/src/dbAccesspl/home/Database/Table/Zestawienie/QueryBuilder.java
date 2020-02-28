@@ -172,7 +172,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 
 	private String withTop() {
 
-		return mTop != null ? " TOP " + mTop : "";
+		return mTop != null ? " TOP " + mTop + " " : "";
 	}
 
 	private String mapToInsert() {

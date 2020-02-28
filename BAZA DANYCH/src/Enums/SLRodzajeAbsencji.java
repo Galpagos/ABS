@@ -28,14 +28,14 @@ public enum SLRodzajeAbsencji implements InterfejsSlownika {
 	UB("UB", "UB", new Color(255, 38, 38), "20", SLEkwiwalentZaUrlop.PROCENT_0), //
 	BRAK_STOSUNKU_PRACY("BSP", "Brak stosunku pracy", Color.BLACK, "21", SLEkwiwalentZaUrlop.PROCENT_0);
 
-	private final String nazwa;
+	private final String mNazwa;
 	private final Color mColor;
 	private final String mSkrot;
 	private final String mKod;
 	private final SLEkwiwalentZaUrlop mProcent;
 
 	SLRodzajeAbsencji(String pmSkrot, String nazwa, Color pmColor, String pmKod, SLEkwiwalentZaUrlop pmProcent) {
-		this.nazwa = nazwa;
+		this.mNazwa = nazwa;
 		mColor = pmColor;
 		mSkrot = pmSkrot;
 		mKod = pmKod;
@@ -44,7 +44,7 @@ public enum SLRodzajeAbsencji implements InterfejsSlownika {
 	}
 
 	public String getNazwa() {
-		return nazwa;
+		return mNazwa;
 	}
 
 	public Color getColor() {
@@ -53,12 +53,12 @@ public enum SLRodzajeAbsencji implements InterfejsSlownika {
 
 	@Override
 	public String toString() {
-		return nazwa;
+		return mNazwa;
 	}
 
 	public static SLRodzajeAbsencji AbsencjaPoNazwie(String pmNazwa) {
 		for (SLRodzajeAbsencji e : SLRodzajeAbsencji.values()) {
-			if (e.nazwa.equalsIgnoreCase(pmNazwa)) {
+			if (e.mNazwa.equalsIgnoreCase(pmNazwa)) {
 				return e;
 			}
 		}
@@ -85,6 +85,18 @@ public enum SLRodzajeAbsencji implements InterfejsSlownika {
 
 	public SLEkwiwalentZaUrlop DEFAULT_PROCENT() {
 		return mProcent;
+	}
+
+	@Override
+	public String getNazwaByKod(String pmKod) {
+
+		return getByKod(pmKod).getNazwa();
+	}
+
+	@Override
+	public Object getOpis() {
+
+		return mNazwa;
 	}
 
 }

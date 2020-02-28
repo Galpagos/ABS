@@ -21,7 +21,7 @@ public class LRecord extends HashMap<SystemTables, Object> {
 	@Override
 	public Object put(SystemTables pmPole, Object pmObject) {
 		super.put(pmPole, pmObject);
-		mIndeksy.put(mIndeksy.size() + 1, pmPole);
+		mIndeksy.put(mIndeksy.size(), pmPole);
 		return pmObject;
 	}
 
@@ -57,8 +57,13 @@ public class LRecord extends HashMap<SystemTables, Object> {
 		return Data.LocalDateFromDate(getAsDate(pmDataUrodzenia));
 	}
 
-	public String getColumnName(Object pmCol) {
+	public String getColumnName(int pmCol) {
+		if (pmCol > mIndeksy.size())
+			return "  ";
+		return mIndeksy.get(pmCol).getColumnName();
+	}
 
-		return (String) this.get(pmCol);
+	public SystemTables getColumn(int pmCol) {
+		return mIndeksy.get(pmCol);
 	}
 }

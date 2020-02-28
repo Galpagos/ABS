@@ -17,7 +17,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import Frames.dbAccess.Components.JTableModelFromLRecords;
+import Frames.dbAccess.Components.LTableModel;
 import Frames.dbAccess.Frames.OknoGlowne.InterfejsOknaGlownego;
 import Frames.dbAccess.Frames.OknoGlowne.ObslugaOknaGlownego;
 import Frames.dbAccess.Frames.OknoGlowne.Przekoder;
@@ -93,9 +93,8 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		if (!cbCzyUsunieci.isSelected())
 			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
 
-		JTableModelFromLRecords lvDTM = new JTableModelFromLRecords(lvZapytanieLS.execute());
+		TableModel lvDTM = new LTableModel(lvZapytanieLS.execute());
 		pmTabela.setModel(lvDTM);
-		lvDTM.fireTableDataChanged();
 		TableColumnModel lvTcm = pmTabela.getColumnModel();
 		if (lvTcm.getColumnCount() != 0) {
 			lvTcm.removeColumn(lvTcm.getColumn(0));

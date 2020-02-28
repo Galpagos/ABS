@@ -2,6 +2,7 @@ package Frames.dbAccess.Components;
 
 import javax.swing.table.AbstractTableModel;
 
+import dbAccesspl.home.Database.Table.Zestawienie.SystemTables;
 import pl.home.Database.components.LRecordSet;
 
 public class LTableModel extends AbstractTableModel {
@@ -26,7 +27,15 @@ public class LTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		return mData.get(row).getValue(col);
+
+		Object lvValue = mData.get(row).getValue(col);
+		if (lvValue == null)
+			return null;
+		SystemTables lvKolumna = mData.get(row).getColumn(col);
+		if (lvKolumna.getOpisFunkcja() == null)
+			return lvValue;
+
+		return lvKolumna.getOpisFunkcja().apply(String.valueOf(lvValue)).getOpis();
 	}
 
 	@Override

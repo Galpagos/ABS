@@ -11,7 +11,6 @@ import Frames.dbAccess.Components.DatePicker;
 import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
-import dbAccess.DniWolneBean;
 import pl.home.DniWolne.DniWolneRepository;
 import pl.home.DniWolne.DzienWolnyDTO;
 import pl.home.components.frames.mainframes.OknoSprawozdan;
@@ -76,7 +75,7 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void dodajDzienWolny() {
-		DniWolneBean lvDzienWolny = new DniWolneBean();
+		DzienWolnyDTO lvDzienWolny = new DzienWolnyDTO();
 		LocalDate lvData = new DatePicker().setPickedLocalDate();
 		if (lvData == null)
 			return;

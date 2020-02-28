@@ -1,22 +1,24 @@
 package pl.home.components.frames.mainframes;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import Datownik.Interval;
 import Enums.SLRodzajeAbsencji;
+import Frames.dbAccess.Components.LTableModel;
 import Frames.dbAccess.Frames.OknoPracownika.InterfejsOknaPracownika;
 import Frames.dbAccess.Frames.OknoPracownika.ObslugaOknaPracownika;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
-import dbAccess.AbsencjaBean;
-import dbAccess.dbAccess;
-import dbAccess.dbAccess.MyTableModel;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.DbSelect;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.parameters.OPracWejscie;
 import pl.home.components.frames.src.SrcOknoPracownika;
@@ -103,37 +105,33 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 
 	private JTable ustawTabele(JTable pmTabela, PracownikDTO pmPracownik) {
 
-//		DbSelect lvZapytanie = QueryBuilder.SELECT()//
-//				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy,
-//						AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
-//				.andWarunek(AbsencjeColumns.ID_pracownika, pmPracownik.getId())//
-//				.andAfterOrEqual(AbsencjeColumns.Od_kiedy, LocalDate.of((int) spnRok.getValue(), 1, 1))//
-//				.andBeforeOrEqual(AbsencjeColumns.Do_kiedy, YearMonth.of((int) spnRok.getValue(), 12).atEndOfMonth());
+		DbSelect lvZapytanie = QueryBuilder.SELECT()//
+				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy,
+						AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
+				.andWarunek(AbsencjeColumns.ID_pracownika, pmPracownik.getId())//
+				.andAfterOrEqual(AbsencjeColumns.Od_kiedy, LocalDate.of((int) spnRok.getValue(), 1, 1))//
+				.andBeforeOrEqual(AbsencjeColumns.Do_kiedy, YearMonth.of((int) spnRok.getValue(), 12).atEndOfMonth());
 
-		String lvZapytanie = "Select ID_tabeli, RODZAJ, Od_Kiedy,Do_kiedy,EKWIWALENT from Absencje where "//
-				+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getId()//
-				+ " AND (Year([" + AbsencjaBean.kolumnaDoKiedy + "]) = " + spnRok.getValue()//
-				+ " OR Year([" + AbsencjaBean.kolumnaOdKiedy + "]) = " + spnRok.getValue() + ")";
-		MyTableModel lvDTM;
-		try {
-			lvDTM = dbAccess.modelTabeliDB(lvZapytanie);
+//		String lvZapytanie = "Select ID_tabeli, RODZAJ, Od_Kiedy,Do_kiedy,EKWIWALENT from Absencje where "//
+//				+ AbsencjaBean.kolumnaIdPracownika + " = " + pmPracownik.getId()//
+//				+ " AND (Year([" + AbsencjaBean.kolumnaDoKiedy + "]) = " + spnRok.getValue()//
+//				+ " OR Year([" + AbsencjaBean.kolumnaOdKiedy + "]) = " + spnRok.getValue() + ")";
+		TableModel lvDTM;
 
-//		JTableModelFromLRecords lvDTM = new JTableModelFromLRecords(lvZapytanie.execute());
-			pmTabela.setModel(lvDTM);
-			lvDTM.fireTableDataChanged();
-			TableColumnModel lvTcm = pmTabela.getColumnModel();
-			for (int lvKolumna = pmTabela.getColumnCount() - 1; lvKolumna >= 0; lvKolumna--) {
+		// lvDTM = dbAccess.modelTabeliDB(lvZapytanie);
 
-				if (pmTabela.getColumnName(lvKolumna).contains("ID")) {
-					TableColumn k = lvTcm.getColumn(lvKolumna);
-					lvTcm.removeColumn(k);
-				}
-			}
-			pmTabela.repaint();
-		} catch (SQLException lvE) {
-			lvE.printStackTrace();
+		lvDTM = new LTableModel(lvZapytanie.execute());
+		pmTabela.setModel(lvDTM);
+		TableColumnModel lvTcm = pmTabela.getColumnModel();
+		if (lvTcm.getColumnCount() != 0) {
+			lvTcm.removeColumn(lvTcm.getColumn(0));
 		}
+		if (lvDTM.getRowCount() > 0)
+			pmTabela.setRowSelectionInterval(0, 0);
+		pmTabela.repaint();
+
 		return pmTabela;
+
 	}
 
 	@Override

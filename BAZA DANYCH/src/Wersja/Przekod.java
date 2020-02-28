@@ -69,7 +69,7 @@ public class Przekod extends AccessDB {
 				+ " UPDATE "//
 				+ "   Absencje "//
 				+ " SET "//
-				+ "   EKWIWALENT = '" + pmProcent.getKodString() + "',"//
+				+ "   EKWIWALENT = '" + pmProcent.getKod() + "',"//
 				+ "   RODZAJ = '" + pmAbsencja.getKod() + "'"//
 				+ " WHERE"//
 				+ "   Rodzaj_absencji = '" + pmAbsencja.getNazwa() + "'");

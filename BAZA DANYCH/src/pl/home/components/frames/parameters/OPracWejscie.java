@@ -9,5 +9,5 @@ import lombok.Getter;
 
 public class OPracWejscie implements ParametryWejscia {
 
-	private @Getter PracownikDTO pracownik;
+	private @Getter PracownikDTO mPracownik;
 }

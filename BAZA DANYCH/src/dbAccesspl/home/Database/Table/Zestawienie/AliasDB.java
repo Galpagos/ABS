@@ -53,4 +53,9 @@ public class AliasDB implements SystemTables {
 		return true;
 	}
 
+	@Override
+	public String getColumnName() {
+
+		return mAlias;
+	}
 }

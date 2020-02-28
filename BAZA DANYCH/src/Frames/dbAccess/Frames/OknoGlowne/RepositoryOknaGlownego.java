@@ -4,11 +4,11 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-import dbAccess.DniWolneBean;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.DniWolneColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
 import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
+import pl.home.DniWolne.DzienWolnyDTO;
 
 public class RepositoryOknaGlownego {
 	public void dodajPracownikaDB(String pmNazwa) {
@@ -32,7 +32,7 @@ public class RepositoryOknaGlownego {
 				.execute();
 	}
 
-	public void zapiszNowyDzienWolny(DniWolneBean pmDzien) {
+	public void zapiszNowyDzienWolny(DzienWolnyDTO pmDzien) {
 		QueryBuilder.INSERT()//
 				.set(DniWolneColumns.ID_tabeli, QueryBuilder.getNextId(DniWolneColumns.ID_tabeli))//
 				.set(DniWolneColumns.Data, pmDzien.getData())//
