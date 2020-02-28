@@ -1,5 +1,9 @@
 package pl.home.components.frames.src;
 
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data_Zwolnienia;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
+
 import java.awt.Dimension;
 
 import javax.swing.JButton;
@@ -8,17 +12,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SortOrder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 
+import Frames.dbAccess.Components.LTable;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.DbSelect;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
+import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
 
 @SuppressWarnings("serial")
 public abstract class SrcOknoGlowne extends JFrame {
 
-	protected JTable tbPracownicy;
+	protected LTable tbPracownicy;
 	protected JButton btnDodajPracownika;
 	protected JButton btnPokazPracownika;
 	protected JButton btnUsunPracownika;
@@ -43,21 +50,7 @@ public abstract class SrcOknoGlowne extends JFrame {
 		mContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mContentPane);
 
-		tbPracownicy = new JTable();
-		tbPracownicy.setAutoCreateRowSorter(true);
-		mScrollPane = new JScrollPane(tbPracownicy);
-		mScrollPane.setAutoscrolls(true);
-		mScrollPane.setPreferredSize(new Dimension(250, 202));
-		mScrollPane.setMaximumSize(new Dimension(300, 267));
-		mScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		mScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		mScrollPane.setBounds(5, 5, 250, 438);
-
-		DefaultTableCellRenderer lvRightRenderer = new DefaultTableCellRenderer();
-		lvRightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 		mContentPane.setLayout(null);
-
-		mContentPane.add(mScrollPane);
 
 		mButtonPanel = new JPanel();
 		mButtonPanel.setBounds(255, 5, 547, 503);
@@ -116,5 +109,35 @@ public abstract class SrcOknoGlowne extends JFrame {
 		JLabel lblFiltr = new JLabel("Filtr:");
 		lblFiltr.setBounds(30, 458, 115, 46);
 		mContentPane.add(lblFiltr);
+		tbPracownicy = utworzTabele();
+		mScrollPane = new JScrollPane(tbPracownicy);
+
+		mScrollPane.setAutoscrolls(true);
+		mScrollPane.setPreferredSize(new Dimension(250, 202));
+		mScrollPane.setMaximumSize(new Dimension(300, 267));
+		mScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		mScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		mScrollPane.setBounds(5, 5, 250, 438);
+
+		mContentPane.add(mScrollPane);
+	}
+
+	private LTable utworzTabele() {
+
+		DbSelect lvZapytanieLS = QueryBuilder//
+				.SELECT()//
+				.select(ID_tabeli, Pracownik)//
+				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"");
+
+		if (!cbCzyUsunieci.isSelected())
+			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
+
+		LTable lvTabela = new LTable(lvZapytanieLS.execute());
+		lvTabela.hideColumn(ZestawienieColumns.ID_tabeli);
+		lvTabela.addSorter(Pracownik, SortOrder.ASCENDING);
+		lvTabela.odswiez();
+		lvTabela.repaint();
+
+		return lvTabela;
 	}
 }

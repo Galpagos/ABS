@@ -1,23 +1,30 @@
 package pl.home.components.frames.src;
 
 import java.awt.Font;
+import java.time.LocalDate;
+import java.time.YearMonth;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import Frames.dbAccess.Components.AbstractOkno;
+import Frames.dbAccess.Components.LTable;
+import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.QueryBuilder;
+import pl.home.Database.components.LRecordSet;
 import pl.home.components.frames.parameters.OPracWejscie;
 import pl.home.components.frames.parameters.OPracWyjscie;
 
 @SuppressWarnings("serial")
 public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPracWyjscie> {
+
+	protected PracownikDTO mPracownik;
 
 	public SrcOknoPracownika(OPracWejscie pmParams) {
 		super(pmParams);
@@ -26,9 +33,8 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 	protected JLabel lblDataUrodzenia;
 	protected JLabel lblUrlopNalezny;
 	private JPanel contentPane;
-	protected JTable tbAbsencje;
+	protected LTable tbAbsencje;
 	private JScrollPane mScrollPane;
-	protected JButton mbtnWyjscie;
 	protected JSpinner spnRok;
 	protected JButton btnModyfikuj;
 	protected JButton btnUsun;
@@ -75,10 +81,6 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 
 	private void utworzOkno() {
 		contentPane = new JPanel();
-		tbAbsencje = new JTable();
-
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 927, 473);
 
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -87,23 +89,15 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		spnRok.setModel(new SpinnerNumberModel(2020, 2016, 2025, 1));
 		spnRok.setBounds(118, 397, 97, 22);
 
-		tbAbsencje.setAutoCreateRowSorter(true);
 		contentPane.setLayout(null);
-
-		mScrollPane = new JScrollPane(tbAbsencje);
-		mScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		mScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		mScrollPane.setBounds(12, 100, 749, 284);
-		contentPane.add(mScrollPane);
 
 		lblPracownik = new JLabel("Pracownik: ");
 		lblPracownik.setBounds(12, 13, 334, 39);
 		contentPane.add(lblPracownik);
 
-		mbtnWyjscie = new JButton("Wr\u00F3\u0107");
-
-		mbtnWyjscie.setBounds(785, 377, 97, 25);
-		contentPane.add(mbtnWyjscie);
+		mcancelButton.setBounds(785, 377, 97, 25);
+		contentPane.add(mcancelButton);
+		contentPane.add(mcancelButton);
 
 		contentPane.add(spnRok);
 
@@ -134,7 +128,12 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		btnDodajGrup.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnDodajGrup.setBounds(737, 20, 160, 25);
 		contentPane.add(btnDodajGrup);
-
+		tbAbsencje = utworzTabele();
+		mScrollPane = new JScrollPane(tbAbsencje);
+		mScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		mScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		mScrollPane.setBounds(12, 100, 749, 284);
+		contentPane.add(mScrollPane);
 	}
 
 	@Override
@@ -149,7 +148,6 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		btnUsunGrupe.addActionListener(e -> usunGrupe());
 		btnUstawDatUrodzenia.addActionListener(lvE -> ustawDateUrodzenia());
 		btnUstawUrlop.addActionListener(lvE -> ustawUrlopNalezny());
-		mbtnWyjscie.addActionListener(lvE -> dispose());
 		btnModyfikuj.addActionListener(lvE -> modyfikujAbsencje());
 		btnUsun.addActionListener(lvE -> usunAbsencje());
 		btnDodajGrup.addActionListener(lvE -> przypiszGrupe());
@@ -174,6 +172,27 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 
 	@Override
 	protected void onOpen() {
+
+	}
+
+	private LTable utworzTabele() {
+
+		LTable lvTabela = new LTable(getZapytanieDoTabeli());
+		lvTabela.hideColumn(AbsencjeColumns.ID_tabeli);
+		lvTabela.odswiez();
+
+		return lvTabela;
+
+	}
+
+	protected LRecordSet getZapytanieDoTabeli() {
+		return QueryBuilder.SELECT()//
+				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy,
+						AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
+				.andWarunek(AbsencjeColumns.ID_pracownika, mPracownik.getId())//
+				.andAfterOrEqual(AbsencjeColumns.Od_kiedy, LocalDate.of((int) spnRok.getValue(), 1, 1))//
+				.andBeforeOrEqual(AbsencjeColumns.Do_kiedy, YearMonth.of((int) spnRok.getValue(), 12).atEndOfMonth())//
+				.execute();
 
 	}
 

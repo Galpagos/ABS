@@ -19,7 +19,7 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 		mParams = pmParams;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
+		setBounds(100, 100, 927, 473);
 		createOkButton();
 
 		createCancelButton();

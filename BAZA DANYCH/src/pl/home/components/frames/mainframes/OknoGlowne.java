@@ -5,19 +5,11 @@ import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_t
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
 import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JTable;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
-import Frames.dbAccess.Components.LTableModel;
+import Frames.dbAccess.Components.LTable;
 import Frames.dbAccess.Frames.OknoGlowne.InterfejsOknaGlownego;
 import Frames.dbAccess.Frames.OknoGlowne.ObslugaOknaGlownego;
 import Frames.dbAccess.Frames.OknoGlowne.Przekoder;
@@ -83,7 +75,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		};
 	}
 
-	private JTable ustawTabele(JTable pmTabela) {
+	private void ustawTabele(LTable pmTabela) {
 
 		DbSelect lvZapytanieLS = QueryBuilder//
 				.SELECT()//
@@ -93,24 +85,8 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		if (!cbCzyUsunieci.isSelected())
 			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
 
-		TableModel lvDTM = new LTableModel(lvZapytanieLS.execute());
-		pmTabela.setModel(lvDTM);
-		TableColumnModel lvTcm = pmTabela.getColumnModel();
-		if (lvTcm.getColumnCount() != 0) {
-			lvTcm.removeColumn(lvTcm.getColumn(0));
+		pmTabela.reload(lvZapytanieLS.execute());
 
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(pmTabela.getModel());
-			pmTabela.setRowSorter(sorter);
-
-			List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-			sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-			sorter.setSortKeys(sortKeys);
-		}
-		if (lvDTM.getRowCount() > 0)
-			pmTabela.setRowSelectionInterval(0, 0);
-		pmTabela.repaint();
-
-		return pmTabela;
 	}
 
 	@Override
