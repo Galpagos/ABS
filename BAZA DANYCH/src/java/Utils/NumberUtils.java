@@ -3,10 +3,8 @@ package Utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class NumberUtils
-{
-	public static BigDecimal round(double value, int places)
-	{
+public class NumberUtils {
+	public static BigDecimal round(double value, int places) {
 		if (places < 0)
 			throw new IllegalArgumentException();
 

@@ -3,12 +3,10 @@ package Frames.dbAccess.Components;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -22,8 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import com.sun.org.apache.xerces.internal.dom.AbortException;
 
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
 
@@ -91,6 +87,8 @@ public class ResultTableWindow extends JFrame {
 				JButton okButton = new JButton("OK");
 				okButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 				okButton.addActionListener(new ActionListener() {
+
+					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();
 					}
@@ -107,14 +105,8 @@ public class ResultTableWindow extends JFrame {
 							lvWydruk.add(OrientationRequested.LANDSCAPE);
 
 							mtable.print(JTable.PrintMode.FIT_WIDTH, mheader, mFinal, true, lvWydruk, false);
-						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
+						} catch (Exception e1) {
 							e1.printStackTrace();
-						} catch (PrinterException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (AbortException e2) {
-							e2.printStackTrace();
 						}
 					});
 					buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));

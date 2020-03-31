@@ -16,6 +16,7 @@ public class KomorkaSprawozdaniaRocznegoDTO {
 		mMapa = pmMapa;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder lvS = new StringBuilder();
 		lvS.append(getValue() + "<X>");

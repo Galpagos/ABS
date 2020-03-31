@@ -18,7 +18,7 @@ import Enums.SLRodzajeAbsencji;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
-class ObslugaAbsencjiTest {
+public class ObslugaAbsencjiTest {
 	@Mock
 	AbsencjaRepositor mRepo;
 	Object[][] mObj;
