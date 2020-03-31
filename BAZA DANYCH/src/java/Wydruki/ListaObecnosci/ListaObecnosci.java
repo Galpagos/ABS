@@ -21,27 +21,16 @@ public class ListaObecnosci {
 	private List<PracownikDTO> mListaPrawa;
 	private LocalDate mDataObecnosci;
 	private List<PracownikDTO> mListaNieobecnosci;
-	private iDaneDoListyObecnosci mDane;
+	private DaneDoListyObecnosci mDane;
 	private ResultTableWindow mOknoWyniku;
 
-	public ListaObecnosci(LocalDate pmDataObecnosci, List<PracownikDTO> pmLewaLista, List<PracownikDTO> pmListaPrawa) {
-		mListaLewa = pmLewaLista;
-		mListaPrawa = pmListaPrawa;
-		mDataObecnosci = pmDataObecnosci;
-		mListaNieobecnosci = new ObslugaPracownka().getListaNieobecnych(mDataObecnosci);
-
-		wyrownajListy();
-		utworzNaglowek();
-		uzupelnijRecordy();
-		pokazResult();
-	}
-
-	public ListaObecnosci(iDaneDoListyObecnosci pmDane) {
+	public ListaObecnosci(DaneDoListyObecnosci pmDane) {
 		mDane = pmDane;
-		mListaNieobecnosci = new ObslugaPracownka().getListaNieobecnych(mDane.getData());
-		mListaLewa = mDane.getListaLewa();
-		mListaPrawa = mDane.getListaPrawa();
-		mDataObecnosci = mDane.getData();
+
+		mListaNieobecnosci = new ObslugaPracownka().getListaNieobecnych(pmDane.getData());
+		mListaLewa = pmDane.getListaLewa();
+		mListaPrawa = pmDane.getListaPrawa();
+		mDataObecnosci = pmDane.getData();
 
 		wyrownajListy();
 		utworzNaglowek();

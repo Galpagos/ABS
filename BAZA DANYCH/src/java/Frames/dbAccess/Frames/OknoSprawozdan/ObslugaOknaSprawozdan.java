@@ -7,13 +7,14 @@ import java.util.List;
 import Enums.SLMiesiace;
 import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.DatePicker;
-import Wydruki.ListaObecnosci.OknoListaObecnosci;
 import Wydruki.ListaPlac.ListaPlacWydruk;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.SprawozdanieMiesieczne.SprawozdanieMiesieczne;
 import Wydruki.SprawozdanieRoczne.SprawozdanieRoczne;
+import pl.home.components.frames.mainframes.OknoListyObecnosci;
 import pl.home.components.frames.mainframes.OknoPrzygotowaniaListyPracownikow;
 import pl.home.components.frames.mainframes.PobieranieModulow;
+import pl.home.components.frames.parameters.ListaObecnosciWejscie;
 import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
 
 public class ObslugaOknaSprawozdan {
@@ -74,10 +75,7 @@ public class ObslugaOknaSprawozdan {
 	}
 
 	public void generujListeObecnosci() {
-
-		String[] lvArg = new String[0];
-		OknoListaObecnosci.main(lvArg);
-
+		new OknoListyObecnosci(new ListaObecnosciWejscie());
 	}
 
 	public void generujListePlac() {

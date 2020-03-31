@@ -8,6 +8,7 @@ public enum Komunikat {
 	Nachodz¹NaSiebieOkresy("Wystêpuje ju¿ absencja w tym okresie!", "B³¹d", JOptionPane.ERROR_MESSAGE), //
 	DataPoPrzedDataPrzed("Data koñcowa musi byæ po dacie pocz¹tkowej", "B³¹d", JOptionPane.ERROR_MESSAGE), //
 	DatayWtymSamymRoku("Data koñcowa i pocz¹tkowa powinny byæ w tym samym roku!", "B³¹d", JOptionPane.ERROR_MESSAGE);//
+
 	private String mOpis;
 	private String mNazwa;
 	private int mRodzaj;

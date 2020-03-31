@@ -27,8 +27,8 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 		readParams();
 		budujOkno();
 		przypiszMetody();
-		odswiezKontrolki();
 		onOpen();
+		odswiezKontrolki();
 		setVisible(true);
 	}
 
