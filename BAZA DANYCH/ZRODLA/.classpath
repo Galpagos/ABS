@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/java"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="var" path="M2_REPO/org/junit/jupiter/junit-jupiter-api/5.6.0/junit-jupiter-api-5.6.0.jar" sourcepath="M2_REPO/org/junit/jupiter/junit-jupiter-api/5.6.0/junit-jupiter-api-5.6.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar" sourcepath="M2_REPO/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar" sourcepath="M2_REPO/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/junit/platform/junit-platform-commons/1.6.0/junit-platform-commons-1.6.0.jar" sourcepath="M2_REPO/org/junit/platform/junit-platform-commons/1.6.0/junit-platform-commons-1.6.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/junit/jupiter/junit-jupiter-engine/5.6.0/junit-jupiter-engine-5.6.0.jar" sourcepath="M2_REPO/org/junit/jupiter/junit-jupiter-engine/5.6.0/junit-jupiter-engine-5.6.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/junit/platform/junit-platform-engine/1.6.0/junit-platform-engine-1.6.0.jar" sourcepath="M2_REPO/org/junit/platform/junit-platform-engine/1.6.0/junit-platform-engine-1.6.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mockito/mockito-core/3.2.4/mockito-core-3.2.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/bytebuddy/byte-buddy/1.10.5/byte-buddy-1.10.5.jar" sourcepath="M2_REPO/net/bytebuddy/byte-buddy/1.10.5/byte-buddy-1.10.5-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/bytebuddy/byte-buddy-agent/1.10.5/byte-buddy-agent-1.10.5.jar" sourcepath="M2_REPO/net/bytebuddy/byte-buddy-agent/1.10.5/byte-buddy-agent-1.10.5-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/objenesis/objenesis/2.6/objenesis-2.6.jar" sourcepath="M2_REPO/org/objenesis/objenesis/2.6/objenesis-2.6-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar" sourcepath="M2_REPO/org/projectlombok/lombok/1.18.12/lombok-1.18.12-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/sf/ucanaccess/ucanaccess/5.0.0/ucanaccess-5.0.0.jar" sourcepath="M2_REPO/net/sf/ucanaccess/ucanaccess/5.0.0/ucanaccess-5.0.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/hsqldb/hsqldb/2.5.0/hsqldb-2.5.0.jar" sourcepath="M2_REPO/org/hsqldb/hsqldb/2.5.0/hsqldb-2.5.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/healthmarketscience/jackcess/jackcess/3.0.1/jackcess-3.0.1.jar" sourcepath="M2_REPO/com/healthmarketscience/jackcess/jackcess/3.0.1/jackcess-3.0.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.2/commons-logging-1.2.jar" sourcepath="M2_REPO/commons-logging/commons-logging/1.2/commons-logging-1.2-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/commons"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
