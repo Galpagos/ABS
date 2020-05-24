@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.swing.table.DefaultTableModel;
 
-import Enums.SLMiesiace;
-import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ResultTableWindow;
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.ListaObecnosci.CellRenderPustePole;
@@ -20,6 +18,8 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import Wydruki.PrzygotowanieDanych.PustePole;
 import Wydruki.SprawozdanieMiesieczne.SprawozdaniaRepository;
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
+import enums.SLMiesiace;
+import enums.SLRodzajeAbsencji;
 
 public class SprawozdanieRoczne implements wynikWResultTableWindow {
 	DefaultTableModel mModel = new DefaultTableModel();
@@ -187,8 +187,8 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 
 		mModel.addColumn("Wykorzystano");
 		if (mCzyWersjaRozszerzona) {
-			mModel.addColumn("Nale¿ny Urlop");
-			mModel.addColumn("Ró¿nica");
+			mModel.addColumn("NaleÅ¼ny Urlop");
+			mModel.addColumn("RÃ³Å¼nica");
 		}
 	}
 

@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
-import Enums.Komunikat;
-import Enums.SLMiesiace;
-import Enums.SLRodzajeAbsencji;
 import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import enums.SLMiesiace;
+import enums.SLRodzajeAbsencji;
+import enums.WalidacjeTwarde;
 
 public class WalidatorAbsenci {
 	private AbsencjaRepositor mRepo = new AbsencjaRepository();
@@ -25,23 +25,23 @@ public class WalidatorAbsenci {
 	private ObslugaPracownka mObsPrac = new ObslugaPracownka();
 	private PracownikRepository mRepoPracownika = new PracownikRepository();
 
-	public Optional<Komunikat> czyWystepujeAbsencjaWOkresie(AbsencjaDTO pmAbsencja) {
+	public Optional<WalidacjeTwarde> czyWystepujeAbsencjaWOkresie(AbsencjaDTO pmAbsencja) {
 		boolean lvWynik = !(mRepo.zliczAbsencjePracownikaWOkresie(pmAbsencja) == 0);
 		if (!lvWynik)
 			return Optional.empty();
 
-		return Optional.of(Komunikat.NachodzaNaSiebieOkresy);
+		return Optional.of(WalidacjeTwarde.NachodzaNaSiebieOkresy);
 	}
 
 	public boolean czyPrawidloweDaty(LocalDate pmOd, LocalDate pmDo) {
 		boolean lvWynik = pmDo.isBefore(pmOd);
 		if (lvWynik) {
-			Komunikat.DataPoPrzedDataPrzed.pokaz();
+			WalidacjeTwarde.DataPoPrzedDataPrzed.pokaz();
 			return false;
 		}
 
 		if (pmOd.getYear() != pmDo.getYear()) {
-			Komunikat.DatayWtymSamymRoku.pokaz();
+			WalidacjeTwarde.DatayWtymSamymRoku.pokaz();
 			return false;
 		}
 		return true;

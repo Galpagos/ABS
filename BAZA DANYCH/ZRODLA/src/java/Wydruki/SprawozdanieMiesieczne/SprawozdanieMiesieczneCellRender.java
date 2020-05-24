@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 
-import Enums.SLRodzajeAbsencji;
+import enums.SLRodzajeAbsencji;
 
 public class SprawozdanieMiesieczneCellRender extends JLabel implements TableCellRenderer {
 

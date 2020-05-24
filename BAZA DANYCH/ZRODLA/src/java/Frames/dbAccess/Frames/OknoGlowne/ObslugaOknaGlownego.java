@@ -1,20 +1,22 @@
 package Frames.dbAccess.Frames.OknoGlowne;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import ProjektGlowny.commons.Components.DatePicker;
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JOptionPane;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
-import Enums.Komunikat;
-import Enums.SLRodzajeAbsencji;
 import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
-import ProjektGlowny.commons.Components.DatePicker;
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import enums.Informacje;
+import enums.PytanieOWartosc;
+import enums.SLRodzajeAbsencji;
+import enums.WalidacjeTwarde;
 import pl.home.DniWolne.DniWolneRepository;
 import pl.home.DniWolne.DzienWolnyDTO;
 import pl.home.components.frames.mainframes.OknoAbsencji;
@@ -35,11 +37,7 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void pokazPracownika() {
-		if (mOkno.getZaznaczenieTabeli() < 0) {
-			Komunikat.oknoGlowneBrakZaznaczeniaWTabeli.pokaz();
-		} else {
-			mObslugaPracownika.pokazPracownika(mOkno.getPracownikZTabeli());
-		}
+		mObslugaPracownika.pokazPracownika(mOkno.getPracownikZTabeli());
 	}
 
 	public void dodajPracownika() {
@@ -49,72 +47,66 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void usunPracownika() {
-		if (mOkno.getZaznaczenieTabeli() < 0) {
-			Komunikat.oknoGlowneBrakZaznaczeniaWTabeli.pokaz();
-		} else {
-			mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
-			mOkno.odswiezTabele();
-			mOkno.odswiezKontrolki();
-		}
+		mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
+		mOkno.odswiezTabele();
+		mOkno.odswiezKontrolki();
 	}
 
 	public void pokazNieobecnych() {
-		String lvNieobecni = "";
-		LocalDate lvNaKiedy = new DatePicker().setPickedLocalDate();
+		LocalDate lvNaKiedy = mOkno.askLocalDate();
 		if (lvNaKiedy == null)
 			return;
+
 		List<PracownikDTO> lvDane = mRepoPracownika.pobierzNieobecnych(lvNaKiedy);
 
 		if (lvDane.isEmpty())
-			JOptionPane.showMessageDialog(null, "Brak nieobecności na dzień: " + lvNaKiedy, //
-					"Nieobecni dnia :" + lvNaKiedy, JOptionPane.INFORMATION_MESSAGE);
+			mOkno.info(Informacje.BRAK_NIEOBECNOSCI_DNIA, String.valueOf(lvNaKiedy));
 		else {
-			for (PracownikDTO lvPracownik : lvDane)
-				lvNieobecni = lvNieobecni + lvPracownik.getNazwa() + " od "
-						+ lvPracownik.getListaAbsencji().get(0).getOkres().getStart() + " do "
-						+ lvPracownik.getListaAbsencji().get(0).getOkres().getEnd() + " z powodu "
-						+ lvPracownik.getListaAbsencji().get(0).getRodzaj().getNazwa() + "\n";
-
-			JOptionPane.showMessageDialog(null, lvNieobecni, "Nieobecni dnia:" + lvNaKiedy,
-					JOptionPane.INFORMATION_MESSAGE);
+			String lvNieobecni = przygotujKomunikat(lvDane);
+			mOkno.info(Informacje.NIEOBECNI_DNIA, String.valueOf(lvNaKiedy), lvNieobecni);
 		}
 	}
 
+	private String przygotujKomunikat(List<PracownikDTO> lvDane) {
+		StringBuilder lvNieobecni = new StringBuilder();
+		for (PracownikDTO lvPracownik : lvDane)
+			lvNieobecni.append(lvPracownik.getNazwa() + " od " + lvPracownik.getListaAbsencji().get(0).getOkres().getStart() + " do "
+					+ lvPracownik.getListaAbsencji().get(0).getOkres().getEnd() + " z powodu " + lvPracownik.getListaAbsencji().get(0).getRodzaj().getNazwa()
+					+ "\n");
+		return lvNieobecni.toString();
+	}
+
 	public void dodajDzienWolny() {
-		DzienWolnyDTO lvDzienWolny = new DzienWolnyDTO();
-		LocalDate lvData = new DatePicker().setPickedLocalDate();
+		LocalDate lvData = mOkno.askLocalDate();
 		if (lvData == null)
 			return;
-		else {
-			if (DayOfWeek.SUNDAY.equals(lvData.getDayOfWeek()) || DayOfWeek.SATURDAY.equals(lvData.getDayOfWeek())) {
-				JOptionPane.showMessageDialog(null, "Nie można dodać dnia wolnego w weekend!", "Błąd",
-						JOptionPane.WARNING_MESSAGE);
-				return;
-			} else
-				lvDzienWolny.setData(lvData);
-		}
 
-		lvDzienWolny.setOpis(JOptionPane.showInputDialog("Podaj powód dnia wolnego: "));
+		if (DayOfWeek.SUNDAY.equals(lvData.getDayOfWeek()) || DayOfWeek.SATURDAY.equals(lvData.getDayOfWeek())) {
+			mOkno.err(WalidacjeTwarde.DzienWolnyWWeekend);
+			return;
+		}
+		DzienWolnyDTO lvDzienWolny = new DzienWolnyDTO();
+		lvDzienWolny.setData(lvData);
+		lvDzienWolny.setOpis(mOkno.askString(PytanieOWartosc.POWOD_DNIA_WOLNEGO));
 		if (lvDzienWolny.getOpis() == null)
 			return;
 		else
 			mRepo.zapiszNowyDzienWolny(lvDzienWolny);
-
-		JOptionPane.showMessageDialog(null, "Dnia: " + lvDzienWolny.getData() + " z powodu " + lvDzienWolny.getOpis(),
-				"Dodano dzień wolny", JOptionPane.INFORMATION_MESSAGE);
+		mOkno.info(Informacje.DODANO_DZIEN_WOLNY, lvDzienWolny.getData().toString(), lvDzienWolny.getOpis());
 
 	}
 
 	public void pokazDniWolne() {
 		List<DzienWolnyDTO> lvDane = mRepoDniWolne.pobierzOstatnieDniWolne();
-		String lvWynik = "";
+		String lvWynik = przygotujKomunikatDniWolnych(lvDane);
+		mOkno.info(Informacje.DNI_WOLNE, lvWynik);
+	}
+
+	private String przygotujKomunikatDniWolnych(List<DzienWolnyDTO> lvDane) {
+		StringBuilder lvWynik = new StringBuilder();
 		for (DzienWolnyDTO lvDzien : lvDane)
-			lvWynik = lvWynik + lvDzien.getData() + " z powodu " + lvDzien.getOpis() + "\n";
-		lvWynik = lvWynik.replaceAll("00:00:00.0", "");
-
-		JOptionPane.showMessageDialog(null, "Ostatnio wprowadzone 20 dni: \n" + lvWynik, "Dni Wolne",
-				JOptionPane.INFORMATION_MESSAGE);
-
+			lvWynik.append(lvDzien.getData() + " z powodu " + lvDzien.getOpis() + "\n");
+		return lvWynik.toString();
 	}
 
 	public void sprawozdanie() {
@@ -122,13 +114,9 @@ public class ObslugaOknaGlownego {
 	}
 
 	public void zwolnijPracownika() {
-		if (mOkno.getZaznaczenieTabeli() < 0) {
-			JOptionPane.showMessageDialog(null, "Wybierz pracownika!", "Ostrzeżenie", JOptionPane.WARNING_MESSAGE);
-		} else {
-			mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
-			mOkno.odswiezTabele();
-			mOkno.odswiezKontrolki();
-		}
+		mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
+		mOkno.odswiezTabele();
+		mOkno.odswiezKontrolki();
 	}
 
 	public void zatrudnijPracownika() {
@@ -148,8 +136,7 @@ public class ObslugaOknaGlownego {
 		lvAbsencja.setOkres(new Interval(new Date(), new Date()));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
 
-		OAbsencjiWejscie lvWejscie = OAbsencjiWejscie.builder().withAbsencja(lvAbsencja)
-				.withListaPracownikow(mOkno.getPracownicyZTabeli()).build();
+		OAbsencjiWejscie lvWejscie = OAbsencjiWejscie.builder().withAbsencja(lvAbsencja).withListaPracownikow(mOkno.getPracownicyZTabeli()).build();
 		new OknoAbsencji(lvWejscie).get();
 	}
 }

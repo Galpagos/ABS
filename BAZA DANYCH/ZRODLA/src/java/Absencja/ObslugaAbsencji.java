@@ -10,10 +10,11 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 import Datownik.LicznikDaty;
-import Enums.SLMiesiace;
-import Enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import enums.SLMiesiace;
+import enums.SLRodzajeAbsencji;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;

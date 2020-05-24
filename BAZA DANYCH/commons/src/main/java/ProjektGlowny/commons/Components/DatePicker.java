@@ -1,5 +1,7 @@
 package ProjektGlowny.commons.Components;
 
+import java.util.Date;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog.ModalityType;
@@ -8,7 +10,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -27,8 +28,8 @@ public class DatePicker {
 	private JDialog d;
 	// create object of JButton
 	private JButton[] button = new JButton[49];
-	private String[] Miesiace = { "Stycze�", "Luty", "Marzec", "Kwiecie�", "Maj", "Czerwiec", "Lipiec", "Sierpie�",
-			"Wrzesie�", "Pa�dziernik", "Listopad", "Grudzie�" };
+	private String[] Miesiace = {"Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad",
+			"Grudzień"};
 
 	public DatePicker()// JFrame parent)//create constructor
 	{
@@ -38,7 +39,7 @@ public class DatePicker {
 
 		d.setModalityType(ModalityType.APPLICATION_MODAL);
 		// define string
-		String[] header = { "Ndz", "Pon", "Wt", "�r", "Czw", "Pt", "Sb" };
+		String[] header = {"Ndz", "Pon", "Wt", "Śr", "Czw", "Pt", "Sb"};
 		// create JPanel object and set layout
 		JPanel p1 = new JPanel(new GridLayout(7, 7));
 		// set size

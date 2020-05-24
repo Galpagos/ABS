@@ -3,12 +3,12 @@ package pl.home.components.frames.mainframes;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Frames.OknoPracownika.InterfejsOknaPracownika;
 import Frames.dbAccess.Frames.OknoPracownika.ObslugaOknaPracownika;
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import enums.SLRodzajeAbsencji;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.parameters.OPracWejscie;
 import pl.home.components.frames.src.SrcOknoPracownika;

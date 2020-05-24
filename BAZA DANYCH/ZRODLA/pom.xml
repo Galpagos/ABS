@@ -5,6 +5,10 @@
   <artifactId>ProjektGlowny</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
+   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
   <build>
     <sourceDirectory>src/java</sourceDirectory>
 	 <testSourceDirectory>src/test</testSourceDirectory> 
@@ -130,8 +134,11 @@
     <version>11</version>
     <type>pom</type>
 </dependency>
-
-
-
+<dependency>
+    <groupId>pl.home</groupId>
+    <artifactId>commons</artifactId>
+    <version>1.0</version>
+    <type>jar</type>
+</dependency>
   </dependencies>
 </project>

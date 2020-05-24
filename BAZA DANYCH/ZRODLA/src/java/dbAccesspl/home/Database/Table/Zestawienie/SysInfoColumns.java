@@ -5,7 +5,7 @@ import ProjektGlowny.commons.DbBuilder.SystemTables;
 public enum SysInfoColumns implements SystemTables {
 
 	NAZWA(String.class, "Parametr"), // // NO_UCD (unused code)
-	WARTOSC(String.class, "Wartoœæ");
+	WARTOSC(String.class, "WartoÅ›Ä‡");
 
 	private Class<?> mKlasa;
 	private String mColumnName;

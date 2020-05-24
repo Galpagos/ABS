@@ -6,8 +6,8 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-import Enums.Komunikat;
 import Frames.dbAccess.Components.ObsluzenieComboPicker;
+import enums.WalidacjeTwarde;
 
 public class ObslugaGrup implements ObsluzenieComboPicker {
 	private GrupyRepository mRepo = new GrupyRepository();
@@ -34,7 +34,7 @@ public class ObslugaGrup implements ObsluzenieComboPicker {
 	@Override
 	public void usun(Object pmObject) {
 		if (pmObject != null) {
-			if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
+			if (!WalidacjeTwarde.PotwierdzenieOperacjiUsuniecia())
 				return;
 			mRepo.usunGrupe(((GrupaDTO) pmObject).getID());
 		}

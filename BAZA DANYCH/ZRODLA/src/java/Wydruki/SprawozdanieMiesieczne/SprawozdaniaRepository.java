@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import Enums.SLRodzajeAbsencji;
 import ProjektGlowny.commons.DbBuilder.LRecord;
 import ProjektGlowny.commons.DbBuilder.LRecordSet;
 import ProjektGlowny.commons.DbBuilder.QueryBuilder;
@@ -14,6 +13,7 @@ import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.DniWolneColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
+import enums.SLRodzajeAbsencji;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 public class SprawozdaniaRepository {

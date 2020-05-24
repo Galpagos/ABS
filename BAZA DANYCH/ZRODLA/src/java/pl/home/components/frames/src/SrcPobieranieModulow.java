@@ -10,7 +10,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Enums.SLRodzajeAbsencji;
+import enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.Frames.AbstractOkno;
 import pl.home.components.frames.parameters.PModWejscie;
 import pl.home.components.frames.parameters.PModWyjscie;

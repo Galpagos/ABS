@@ -9,12 +9,13 @@ import javax.swing.JOptionPane;
 
 import Absencja.ObslugaAbsencji;
 import Absencja.WalidatorAbsenci;
-import Enums.Komunikat;
-import Enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.utils.Data;
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import enums.SLRodzajeAbsencji;
+import enums.WalidacjeTwarde;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 import pl.home.components.frames.src.SrcOknoAbsencji;
@@ -60,7 +61,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 		for (int i = 0; i < lvNoweAbsencje.size(); i++) {
 			AbsencjaDTO lvAbsencja = lvNoweAbsencje.get(i);
 
-			Optional<Komunikat> lvWalidacja = mWalidator.czyWystepujeAbsencjaWOkresie(lvAbsencja);
+			Optional<WalidacjeTwarde> lvWalidacja = mWalidator.czyWystepujeAbsencjaWOkresie(lvAbsencja);
 			if (lvNoweAbsencje.size() == 1 && lvWalidacja.isPresent()) {
 				{
 					lvWalidacja.get().pokaz();
@@ -68,7 +69,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 				}
 			} else if (lvWalidacja.isPresent()) {
 
-				JOptionPane.showMessageDialog(null, "Jeden z pracownikÛw ma juø wprowadzonπ absencje na ten dzien");
+				JOptionPane.showMessageDialog(null, "Jeden z pracownik√≥w ma ju≈º wprowadzonƒÖ absencje na ten dzie≈Ñ");
 				continue;
 			}
 

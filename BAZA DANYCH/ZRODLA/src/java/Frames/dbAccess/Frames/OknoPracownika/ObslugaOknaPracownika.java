@@ -1,23 +1,25 @@
 package Frames.dbAccess.Frames.OknoPracownika;
 
+import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.utils.Interval;
+
+import java.util.Date;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JOptionPane;
 
 import Absencja.ObslugaAbsencji;
-import Enums.Komunikat;
-import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.ComboPicker;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
 import Pracownik.ObslugaPracownka;
-import ProjektGlowny.commons.DbBuilder.QueryBuilder;
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import enums.SLRodzajeAbsencji;
+import enums.WalidacjeTwarde;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
@@ -44,21 +46,12 @@ public class ObslugaOknaPracownika {
 	}
 
 	public void ModyfikujAbsencje() {
-		if (mOkno.getZaznaczenieTabeli() < 0) {
-			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
-		} else {
-
-			OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mOkno.getAbsencjeZTabeli()).build();
-			new OknoAbsencji(lvParams);
-		}
+		OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mOkno.getAbsencjeZTabeli()).build();
+		new OknoAbsencji(lvParams);
 	}
 
 	public void UsunAbsencje() {
-		if (mOkno.getZaznaczenieTabeli() < 0) {
-			Komunikat.oknoPracownikaBrakZaznaczeniaWTabeli.pokaz();
-			return;
-		}
-		if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
+		if (!WalidacjeTwarde.PotwierdzenieOperacjiUsuniecia())
 			return;
 
 		int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();

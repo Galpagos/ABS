@@ -1,9 +1,11 @@
 package dbAccesspl.home.Database.Table.Zestawienie;
 
 import java.sql.Timestamp;
+
+import enums.SLRodzajeAbsencji;
+
 import java.util.function.Function;
 
-import Enums.SLRodzajeAbsencji;
 import ProjektGlowny.commons.DbBuilder.SystemTables;
 import ProjektGlowny.commons.enums.InterfejsSlownika;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
@@ -12,8 +14,8 @@ public enum AbsencjeColumns implements SystemTables {
 
 	ID_tabeli(Integer.class, "Identyfikator"), //
 	ID_pracownika(Integer.class, "Identyfikator pracownika"), //
-	Od_kiedy(Timestamp.class, "Data pocz¹tku okresu"), //
-	Do_kiedy(Timestamp.class, "Data koñca okresu"), //
+	Od_kiedy(Timestamp.class, "Data poczÄ…tku okresu"), //
+	Do_kiedy(Timestamp.class, "Data koÅ„ca okresu"), //
 	EKWIWALENT(String.class, "Procent ekwiwalentu", SLEkwiwalentZaUrlop::getByKod), //
 	RODZAJ(String.class, "Rodzaj absencji", SLRodzajeAbsencji::getByKod);
 

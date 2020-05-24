@@ -7,14 +7,15 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import Absencja.AbsencjaRepository;
-import Enums.Komunikat;
-import Enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.Components.DatePicker;
 import ProjektGlowny.commons.DbBuilder.QueryBuilder;
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import enums.SLRodzajeAbsencji;
+import enums.WalidacjeTwarde;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.mainframes.OknoPracownika;
 import pl.home.components.frames.parameters.OPracWejscie;
@@ -24,7 +25,7 @@ public class ObslugaPracownka {
 	AbsencjaRepository mRepoAbs = new AbsencjaRepository();
 
 	public void dodajNowegoPracownika() {
-		String lvNazwa = JOptionPane.showInputDialog("Podaj nazw� pracownika: ");
+		String lvNazwa = JOptionPane.showInputDialog("Podaj nazwę pracownika: ");
 		if (lvNazwa != null) {
 			mRepo.dodajPracownika(lvNazwa);
 			JOptionPane.showMessageDialog(null, "Dodano Pracownika " + lvNazwa, "Dodano Pracownika",
@@ -33,11 +34,11 @@ public class ObslugaPracownka {
 	}
 
 	public void usunPracownika(int pmId) {
-		if (!Komunikat.PotwierdzenieOperacjiUsuniecia())
+		if (!WalidacjeTwarde.PotwierdzenieOperacjiUsuniecia())
 			return;
 
 		String lvNazwa = mRepo.getPracownikNazwa(pmId);
-		JOptionPane.showMessageDialog(null, "Usunieto pracownika " + lvNazwa, "Usuwanie Pracownika",
+		JOptionPane.showMessageDialog(null, "Usunięto pracownika " + lvNazwa, "Usuwanie Pracownika",
 				JOptionPane.INFORMATION_MESSAGE);
 		mRepo.usunPracownika(pmId);
 	}

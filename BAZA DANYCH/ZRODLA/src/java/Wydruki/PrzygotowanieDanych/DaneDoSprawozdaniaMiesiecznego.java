@@ -1,9 +1,11 @@
 package Wydruki.PrzygotowanieDanych;
 
 import java.time.LocalDate;
+
+import enums.SLRodzajeAbsencji;
+
 import java.util.List;
 
-import Enums.SLRodzajeAbsencji;
 import ProjektGlowny.commons.utils.Interval;
 
 public class DaneDoSprawozdaniaMiesiecznego {

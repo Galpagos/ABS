@@ -52,8 +52,8 @@ public class ListaPlacWydruk implements wynikWResultTableWindow {
 
 	private void przygotujNaglowek() {
 		mModel.addColumn("Pracownik");
-		mModel.addColumn("Kwota za pracê");
-		mModel.addColumn("Kwota za chorobê");
+		mModel.addColumn("Kwota za pracÄ™");
+		mModel.addColumn("Kwota za chorobÄ™");
 		mModel.addColumn("Kwota za urlopy");
 		mModel.addColumn("Razem");
 

@@ -1,22 +1,22 @@
-package Enums;
+package enums;
 
 import java.time.Year;
 
 import ProjektGlowny.commons.utils.Interval;
 
 public enum SLMiesiace {
-	N01_STYCZEN(1, "StyczeÒ"), //
+	N01_STYCZEN(1, "Stycze≈Ñ"), //
 	NO2_LUTY(2, "Luty"), //
 	NO3_MARZEC(3, "Marzec"), //
-	NO4_KWIECIEN(4, "KwiecieÒ"), //
+	NO4_KWIECIEN(4, "Kwiecie≈Ñ"), //
 	NO5_MAJ(5, "Maj"), //
 	NO6_CZERWIEN(6, "Czewiec"), //
 	NO7_LIPIEC(7, "Lipiec"), //
-	NO8_SIERPIEN(8, "SierpieÒ"), //
-	NO9_WRZESIEN(9, "WrzesieÒ"), //
-	N10_PAZDZIERNIK(10, "Paüdziernik"), //
+	NO8_SIERPIEN(8, "Sierpie≈Ñ"), //
+	NO9_WRZESIEN(9, "Wrzesie≈Ñ"), //
+	N10_PAZDZIERNIK(10, "Pa≈∫dziernik"), //
 	N11_LISTOPAD(11, "Listopad"), //
-	N12_GRUDZIEN(12, "GrudzieÒ"), //
+	N12_GRUDZIEN(12, "Grudzie≈Ñ"), //
 	N00_ROK(0, "Rok");
 
 	private int mMiesiacInt;

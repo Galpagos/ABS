@@ -9,8 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Enums.SLRodzajeAbsencji;
 import Frames.dbAccess.Components.MyDataField;
+import enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.Components.DatePicker;
 import ProjektGlowny.commons.Frames.AbstractOkno;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;

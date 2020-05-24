@@ -9,10 +9,11 @@ import java.util.stream.Collectors;
 
 import Absencja.ObslugaAbsencji;
 import Datownik.LicznikDaty;
-import Enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import enums.SLRodzajeAbsencji;
 
 public class ListaPlac {
 	YearMonth mRokMiesiac;

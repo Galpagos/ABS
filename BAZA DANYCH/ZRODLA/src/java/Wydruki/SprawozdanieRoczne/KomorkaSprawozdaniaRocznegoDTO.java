@@ -3,7 +3,7 @@ package Wydruki.SprawozdanieRoczne;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import Enums.SLRodzajeAbsencji;
+import enums.SLRodzajeAbsencji;
 
 public class KomorkaSprawozdaniaRocznegoDTO {
 	private Map<SLRodzajeAbsencji, Long> mMapa;

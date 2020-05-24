@@ -8,7 +8,8 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import Enums.SLMiesiace;
+import enums.SLMiesiace;
+
 import ProjektGlowny.commons.utils.Interval;
 
 public class IntervalTest {

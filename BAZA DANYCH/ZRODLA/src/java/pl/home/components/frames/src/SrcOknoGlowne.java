@@ -4,27 +4,37 @@ import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
+import ProjektGlowny.commons.Components.DatePicker;
+import ProjektGlowny.commons.Components.LTable;
+import ProjektGlowny.commons.DbBuilder.DbSelect;
+import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.Frames.InterfejsAbstractOkno;
+import ProjektGlowny.commons.Frames.Komunikat;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import java.awt.Dimension;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SortOrder;
 import javax.swing.border.EmptyBorder;
 
-import ProjektGlowny.commons.Components.LTable;
-import ProjektGlowny.commons.DbBuilder.DbSelect;
-import ProjektGlowny.commons.DbBuilder.QueryBuilder;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
 
 @SuppressWarnings("serial")
-public abstract class SrcOknoGlowne extends JFrame {
-
+public abstract class SrcOknoGlowne extends JFrame implements InterfejsAbstractOkno {
+	private static final String TYTUL = "Tytul";
+	private static final String KOMUNIKAT = "Komunikat";
 	protected LTable tbPracownicy;
 	protected JButton btnDodajPracownika;
 	protected JButton btnPokazPracownika;
@@ -144,5 +154,52 @@ public abstract class SrcOknoGlowne extends JFrame {
 		lvTabela.repaint();
 
 		return lvTabela;
+	}
+
+	@Override
+	public void info(Komunikat pmKomunikat, String... pmArgs) {
+		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		JOptionPane.showMessageDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL), JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	@Override
+	public boolean ask(Komunikat pmKomunikat, String... pmArgs) {
+		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		int reply = JOptionPane.showConfirmDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL), JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void err(Komunikat pmKomunikat, String... pmArgs) {
+		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		JOptionPane.showMessageDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL), JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public String askString(Komunikat pmKomunikat, String... pmArgs) {
+		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		return JOptionPane.showInputDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL));
+	}
+
+	private Map<String, String> przygotujKomunikat(Komunikat pmKomunikat, String... pmArgs) {
+		Map<String, String> lvMap = new HashMap<>();
+		String lvKomunikat = pmKomunikat.getKomunikat();
+		String lvTytul = pmKomunikat.getTytul();
+		for (int i = 0; i < pmArgs.length; i++) {
+			lvKomunikat = lvKomunikat.replaceFirst(Komunikat.ARG, pmArgs[i]);
+			lvTytul = lvTytul.replaceFirst(Komunikat.ARG, pmArgs[i]);
+		}
+		lvMap.put(KOMUNIKAT, lvKomunikat);
+		lvMap.put(TYTUL, lvTytul);
+		return lvMap;
+	}
+
+	@Override
+	public LocalDate askLocalDate() {
+		return new DatePicker().setPickedLocalDate();
 	}
 }

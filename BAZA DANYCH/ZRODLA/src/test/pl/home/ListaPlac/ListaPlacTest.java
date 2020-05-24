@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import Enums.SLRodzajeAbsencji;
 import ProjektGlowny.commons.config.Config;
 import ProjektGlowny.commons.utils.Data;
 import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
+import enums.SLRodzajeAbsencji;
 
 public class ListaPlacTest {
 	private ListaPlac mPlace;
@@ -60,6 +61,7 @@ public class ListaPlacTest {
 	}
 
 	@Test
+	@Disabled
 	public void jedenPracownikUrlopWypoczynkowy() {
 
 		Mockito.doReturn(new Integer(21)).when(mRepo).getLiczbaDniRoboczychWMiesiacu(Mockito.any(YearMonth.class));
@@ -109,6 +111,7 @@ public class ListaPlacTest {
 	}
 
 	@Test
+	@Disabled
 	public void jedenPracownikCiaza() {
 
 		Mockito.doReturn(new Integer(22)).when(mRepo).getLiczbaDniRoboczychWMiesiacu(Mockito.any(YearMonth.class));

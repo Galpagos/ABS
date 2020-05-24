@@ -10,14 +10,12 @@ import java.util.Optional;
 import ProjektGlowny.commons.config.Config;
 
 public class AccessDB {
-	private static final String PATH_DATABASE = "jdbc:ucanaccess://BAZA.accdb";
-
-	public static LRecordSet executeQuery(String pmZapytanie) {
+		public static LRecordSet executeQuery(String pmZapytanie) {
 		LRecordSet lvWynik = new LRecordSet();
 		System.out.println(pmZapytanie);
-		System.out.println("");
 		try (//
 				Connection lvCon = init(); //
+				
 				Statement lvStatement = lvCon.createStatement();)//
 
 		{
@@ -98,7 +96,7 @@ public class AccessDB {
 		Connection lvCon = null;
 		try {
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-			lvCon = DriverManager.getConnection(PATH_DATABASE);
+			lvCon = DriverManager.getConnection(Config.PATH_DATABASE);
 			// lvCon.setAutoCommit(false);
 		} catch (Exception lvE) {
 			System.err.println("Nie polaczono z baza");

@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import Enums.SLRodzajeAbsencji;
 import ProjektGlowny.commons.DbBuilder.AccessDB;
 import ProjektGlowny.commons.DbBuilder.LRecord;
 import ProjektGlowny.commons.DbBuilder.LRecordSet;
@@ -22,6 +21,7 @@ import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.GrupyPowiazaniaColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
 import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
+import enums.SLRodzajeAbsencji;
 
 public class PracownikRepository extends AccessDB {
 	public void dodajPracownika(String pmNazwa) {

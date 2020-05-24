@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.JCheckBox;
 
-import Enums.SLRodzajeAbsencji;
+import enums.SLRodzajeAbsencji;
 import pl.home.components.frames.parameters.PModWejscie;
 import pl.home.components.frames.parameters.PModWyjscie;
 import pl.home.components.frames.src.SrcPobieranieModulow;

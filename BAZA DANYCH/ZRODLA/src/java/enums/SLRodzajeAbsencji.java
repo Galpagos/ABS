@@ -1,4 +1,4 @@
-package Enums;
+package enums;
 
 import java.awt.Color;
 

@@ -2,7 +2,8 @@ package Wydruki.PrzygotowanieDanych;
 
 import java.time.LocalDate;
 
-import Enums.SLRodzajeAbsencji;
+import enums.SLRodzajeAbsencji;
+
 import ProjektGlowny.commons.utils.Interval;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 

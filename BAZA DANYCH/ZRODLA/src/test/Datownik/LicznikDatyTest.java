@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Enums.SLMiesiace;
 import ProjektGlowny.commons.config.Config;
 import ProjektGlowny.commons.utils.Interval;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
+import enums.SLMiesiace;
 
 public class LicznikDatyTest {
 

@@ -30,7 +30,7 @@ public class OPrzygListyPracWejscie implements ParametryWejscia {
 
 	public static final class Builder {
 		private List<PracownikDTO> mLista = Collections.emptyList();
-		private String mNazwa = "Wybierz pracowników";
+		private String mNazwa = "Wybierz pracownikÃ³w";
 
 		private Builder() {
 		}

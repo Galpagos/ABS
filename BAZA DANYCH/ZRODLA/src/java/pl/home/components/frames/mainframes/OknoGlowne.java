@@ -4,10 +4,16 @@ import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
-import java.awt.EventQueue;
+import ProjektGlowny.commons.Components.LTable;
+import ProjektGlowny.commons.DbBuilder.DbSelect;
+import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.config.Config;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import java.awt.EventQueue;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -15,10 +21,6 @@ import javax.swing.event.DocumentListener;
 import Frames.dbAccess.Frames.OknoGlowne.InterfejsOknaGlownego;
 import Frames.dbAccess.Frames.OknoGlowne.ObslugaOknaGlownego;
 import Frames.dbAccess.Frames.OknoGlowne.Przekoder;
-import ProjektGlowny.commons.Components.LTable;
-import ProjektGlowny.commons.DbBuilder.DbSelect;
-import ProjektGlowny.commons.DbBuilder.QueryBuilder;
-import ProjektGlowny.commons.config.Config;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
 import pl.home.components.frames.src.SrcOknoGlowne;
@@ -143,5 +145,4 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 	public void odswiezTabele() {
 		ustawTabele(tbPracownicy);
 	}
-
 }

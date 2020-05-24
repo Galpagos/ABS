@@ -1,7 +1,2 @@
-BAZA DANYCH/BAZA.accdb
-BAZA DANYCH/.idea/
-*.class
-*.project
-BAZA DANYCH/commons/.settings/org.eclipse.core.resources.prefs
 *.prefs
-BAZA DANYCH/ZRODLA/.idea/
+*.jar
