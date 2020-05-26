@@ -18,6 +18,8 @@ import Pracownik.ObslugaPracownka;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import enums.InformacjeUniwersalne;
+import enums.PytanieOWartosc;
 import enums.SLRodzajeAbsencji;
 import enums.WalidacjeTwarde;
 import pl.home.components.frames.mainframes.OknoAbsencji;
@@ -51,7 +53,7 @@ public class ObslugaOknaPracownika {
 	}
 
 	public void UsunAbsencje() {
-		if (!WalidacjeTwarde.PotwierdzenieOperacjiUsuniecia())
+		if (!mOkno.ask(InformacjeUniwersalne.POTWIERDZENIE_USUNIECIA))
 			return;
 
 		int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();
@@ -87,7 +89,7 @@ public class ObslugaOknaPracownika {
 
 	public void ustawDateUrodzenia() {
 		new JOptionPane();
-		String lvUrlop = JOptionPane.showInputDialog("Podaj datę RRRR-MM-DD");
+		String lvUrlop = mOkno.askString(PytanieOWartosc.PODAJ_DATE);
 		if (lvUrlop == null)
 			return;
 		try {
@@ -96,7 +98,7 @@ public class ObslugaOknaPracownika {
 			lvData = sdf.parse(lvUrlop);
 			mObslugaPracownika.ustawDateUrodzeniaPracownikowi(mOkno.getPracownika().getId(), lvData);
 		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(null, "Podaj datę w odpowiednim formacie!");
+			mOkno.err(WalidacjeTwarde.NiewlasciwyFormatDaty);
 		}
 	}
 
@@ -111,14 +113,14 @@ public class ObslugaOknaPracownika {
 
 	public void ustawUrlopNalezny() {
 		new JOptionPane();
-		String lvUrlop = JOptionPane.showInputDialog("Podaj Wartość");
+		String lvUrlop = mOkno.askString(PytanieOWartosc.PODAJ_LICZBE);
 		int lvWartosc;
 		try {
 			lvWartosc = Integer.parseInt(lvUrlop);
 			mObslugaPracownika.ustawUrlopNalezny(mOkno.getPracownika().getId(), lvWartosc);
 
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Podaj Wartosc Liczbową!");
+			mOkno.err(WalidacjeTwarde.NiewlasciwyFormatLiczby);
 		}
 
 	}

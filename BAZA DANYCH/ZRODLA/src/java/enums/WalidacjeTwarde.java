@@ -8,6 +8,8 @@ public enum WalidacjeTwarde implements Komunikat {
 	NachodzaNaSiebieOkresy("Występuje już absencja w tym okresie!"), //
 	DataPoPrzedDataPrzed("Data końcowa musi być po dacie początkowej"), //
 	DzienWolnyWWeekend("Nie można dodać dnia wolnego w weekend!"), //
+	NiewlasciwyFormatDaty("Podaj datę w odpowiednim formacie!"), //
+	NiewlasciwyFormatLiczby("Podaj wartosc liczbową!"), //
 	DatayWtymSamymRoku("Data końcowa i początkowa powinny być w tym samym roku!");//
 
 	private String mOpis;
