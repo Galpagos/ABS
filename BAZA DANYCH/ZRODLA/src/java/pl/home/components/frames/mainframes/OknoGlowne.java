@@ -7,6 +7,7 @@ import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Prac
 import ProjektGlowny.commons.Components.LTable;
 import ProjektGlowny.commons.DbBuilder.DbSelect;
 import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.Frames.ParametryWyjscia;
 import ProjektGlowny.commons.config.Config;
 
 import java.util.Arrays;
@@ -29,41 +30,21 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	private static final long serialVersionUID = 1L;
 
-	ObslugaOknaGlownego mObsluga = new ObslugaOknaGlownego(this);
+	ObslugaOknaGlownego mObsluga = null;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				Config.setSystemTableNames(SystemTablesNames.ABSENCJE);
-				new OknoGlowne().setVisible(true);
+				new OknoGlowne().get();
+				System.exit(0);
 			}
 		});
 	}
 
 	public OknoGlowne() {
-		super();
-		addWindowListener(new Przekoder());
-		ustawTabele(tbPracownicy);
-		btnPokazPracownika.addActionListener(lvE -> mObsluga.pokazPracownika());
-		btnDodajPracownika.addActionListener(lvE -> mObsluga.dodajPracownika());
-		btnUsunPracownika.addActionListener(lvE -> mObsluga.usunPracownika());
-		btnWyjcie.addActionListener(lvE -> System.exit(0));
-		btnPokazNieobecnych.addActionListener(lvE -> mObsluga.pokazNieobecnych());
-		btnDodajDzienWolny.addActionListener(lvE -> mObsluga.dodajDzienWolny());
-		btnPokazDniWolne.addActionListener(lvE -> mObsluga.pokazDniWolne());
-		btnSprawozdanie.addActionListener(lvE -> mObsluga.sprawozdanie());
-		btnZwolnij.addActionListener(lvE -> mObsluga.zwolnijPracownika());
-		mFiltrPracownika.getDocument().addDocumentListener(ustawListenerFiltruPracownika());
-		cbCzyUsunieci.addActionListener(lvE -> {
-			odswiezTabele();
-			odswiezKontrolki();
-		});
-		btnZatrudnij.addActionListener(lvE -> mObsluga.zatrudnijPracownika());
-		tbPracownicy.getSelectionModel().addListSelectionListener(e -> odswiezKontrolki());
-		btnDodajMasowaAbsencje.addActionListener(lvE -> mObsluga.dodajMasowaAbsencje());
-		repaint();
-		odswiezKontrolki();
+		super(null);
 	}
 
 	private DocumentListener ustawListenerFiltruPracownika() {
@@ -144,5 +125,48 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 	@Override
 	public void odswiezTabele() {
 		ustawTabele(tbPracownicy);
+	}
+
+	@Override
+	protected void beforeClose() {
+
+	}
+
+	@Override
+	protected ParametryWyjscia budujWyjscie() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void onOpen() {
+
+	}
+
+	@Override
+	protected void przypiszMetody() {
+		addWindowListener(new Przekoder());
+		ustawTabele(tbPracownicy);
+		btnPokazPracownika.addActionListener(lvE -> mObsluga.pokazPracownika());
+		btnDodajPracownika.addActionListener(lvE -> mObsluga.dodajPracownika());
+		btnUsunPracownika.addActionListener(lvE -> mObsluga.usunPracownika());
+		btnPokazNieobecnych.addActionListener(lvE -> mObsluga.pokazNieobecnych());
+		btnDodajDzienWolny.addActionListener(lvE -> mObsluga.dodajDzienWolny());
+		btnPokazDniWolne.addActionListener(lvE -> mObsluga.pokazDniWolne());
+		btnSprawozdanie.addActionListener(lvE -> mObsluga.sprawozdanie());
+		btnZwolnij.addActionListener(lvE -> mObsluga.zwolnijPracownika());
+		mFiltrPracownika.getDocument().addDocumentListener(ustawListenerFiltruPracownika());
+		cbCzyUsunieci.addActionListener(lvE -> {
+			odswiezTabele();
+			odswiezKontrolki();
+		});
+		btnZatrudnij.addActionListener(lvE -> mObsluga.zatrudnijPracownika());
+		tbPracownicy.getSelectionModel().addListSelectionListener(e -> odswiezKontrolki());
+		btnDodajMasowaAbsencje.addActionListener(lvE -> mObsluga.dodajMasowaAbsencje());
+	}
+
+	@Override
+	protected void readParams() {
+		mObsluga = new ObslugaOknaGlownego(this);
 	}
 }

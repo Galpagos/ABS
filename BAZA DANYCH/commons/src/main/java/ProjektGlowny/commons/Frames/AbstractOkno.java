@@ -84,6 +84,8 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 
 	public T2 get() {
 		T2 lvWyjscie = budujWyjscie();
+		if (lvWyjscie == null)
+			return null;
 		lvWyjscie.setAccepted(mAccepted);
 		return lvWyjscie;
 	}
