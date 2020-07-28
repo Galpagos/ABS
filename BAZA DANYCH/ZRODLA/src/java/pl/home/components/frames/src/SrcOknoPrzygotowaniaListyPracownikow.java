@@ -1,5 +1,7 @@
 package pl.home.components.frames.src;
 
+import ProjektGlowny.commons.Frames.AbstractOkno;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +16,13 @@ import javax.swing.border.EmptyBorder;
 
 import Frames.dbAccess.Components.OknoPrzygotowniaLustyPracownikow.InterfejsPrzygotowaniaListyPracownikow;
 import Grupy.GrupaDTO;
-import ProjektGlowny.commons.Frames.AbstractOkno;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
 import pl.home.components.frames.parameters.OPrzygListyPracWyjscie;
 
-public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
-		AbstractOkno<OPrzygListyPracWejscie, OPrzygListyPracWyjscie> implements InterfejsPrzygotowaniaListyPracownikow {
+public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno<OPrzygListyPracWejscie, OPrzygListyPracWyjscie>
+		implements
+			InterfejsPrzygotowaniaListyPracownikow {
 
 	private static final long serialVersionUID = 4904737240355272360L;
 	JList<PracownikDTO> mTabLewa;
@@ -43,10 +45,6 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
 
 	}
 
-	@Override
-	protected void beforeClose() {
-	}
-
 	public void dSrcOknoPrzygotowaniaListyPracownikow() {
 
 	}
@@ -61,7 +59,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
+	@SuppressWarnings({"unchecked", "rawtypes", "serial"})
 	public void odswiezTabLewa() {
 		mTabLewa.setModel(new javax.swing.AbstractListModel() {
 			PracownikDTO[] strings = mListaLewa.toArray(new PracownikDTO[mListaLewa.size()]);
@@ -94,7 +92,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
 		mListaLewa = pmLista;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
+	@SuppressWarnings({"unchecked", "rawtypes", "serial"})
 	public void odswiezTabPrawa() {
 		mTabPrawa.setModel(new javax.swing.AbstractListModel() {
 			PracownikDTO[] strings = mListaPrawa.toArray(new PracownikDTO[mListaPrawa.size()]);
@@ -128,7 +126,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
 	@Override
 	protected void readParams() {
 		mListaPrawa = new ArrayList<PracownikDTO>();
-		mListaPrawa.addAll(mParams.getLista());
+		mListaPrawa.addAll(mParamsIn.getLista());
 	}
 
 	@Override
@@ -166,7 +164,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
 
 		mListaLewa = new ArrayList<PracownikDTO>();
 
-		setTitle(mParams.getNazwa());
+		setTitle(mParamsIn.getNazwa());
 		contentPanel = new JPanel();
 		setBounds(100, 100, 681, 525);
 		getContentPane().setLayout(null);
@@ -200,8 +198,7 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends
 		btnPuste.setBounds(12, 275, 165, 25);
 		mArrowPanel.add(btnPuste);
 
-		lblAbyZaznaczyKilka = new JLabel(
-				"<html>Aby zaznaczyć kilka osób \r\nwybierz <b>Ctrl</b> lub <b>Ctrl<b/>+<b>Shitft</b></html>");
+		lblAbyZaznaczyKilka = new JLabel("<html>Aby zaznaczyć kilka osób \r\nwybierz <b>Ctrl</b> lub <b>Ctrl<b/>+<b>Shitft</b></html>");
 		lblAbyZaznaczyKilka.setBounds(12, 13, 165, 97);
 		mArrowPanel.add(lblAbyZaznaczyKilka);
 

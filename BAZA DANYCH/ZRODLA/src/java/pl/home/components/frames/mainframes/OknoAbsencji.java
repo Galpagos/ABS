@@ -1,17 +1,18 @@
 package pl.home.components.frames.mainframes;
 
-import java.time.LocalDate;
+import ProjektGlowny.commons.utils.Data;
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import java.time.LocalDate;
 
 import javax.swing.JOptionPane;
 
 import Absencja.ObslugaAbsencji;
 import Absencja.WalidatorAbsenci;
-
-import ProjektGlowny.commons.utils.Data;
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import enums.SLRodzajeAbsencji;
@@ -34,8 +35,8 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 
 	@Override
 	protected void readParams() {
-		mAbsencja = mParams.getAbsencja();
-		mListaPracownikow = mParams.getListaPracownikow();
+		mAbsencja = mParamsIn.getAbsencja();
+		mListaPracownikow = mParamsIn.getListaPracownikow();
 	}
 
 	@Override
@@ -93,8 +94,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 			lvAbsencja.setId(mAbsencja.getId()).setIdPracownika(mAbsencja.getIdPracownika());
 			lvLista.add(lvAbsencja);
 		} else {
-			mListaPracownikow
-					.forEach(lvPrac -> lvLista.add(new AbsencjaDTO(lvAbsencja).setIdPracownika(lvPrac.getId())));
+			mListaPracownikow.forEach(lvPrac -> lvLista.add(new AbsencjaDTO(lvAbsencja).setIdPracownika(lvPrac.getId())));
 		}
 		return lvLista;
 	}

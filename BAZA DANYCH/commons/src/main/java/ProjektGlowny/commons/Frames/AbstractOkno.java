@@ -1,8 +1,15 @@
 package ProjektGlowny.commons.Frames;
 
-import ProjektGlowny.commons.Components.DatePicker;
+import static ProjektGlowny.commons.utils.KomunikatUtils.KOMUNIKAT;
+import static ProjektGlowny.commons.utils.KomunikatUtils.TYTUL;
+import static ProjektGlowny.commons.utils.KomunikatUtils.przygotujKomunikat;
+import static ProjektGlowny.commons.utils.KomunikatUtils.przygotujMapeZKomunikatu;
 
-import java.util.HashMap;
+import ProjektGlowny.commons.Components.DatePicker;
+import ProjektGlowny.commons.Frames.universal.ZapytyniaUzytkownika;
+import ProjektGlowny.commons.Frames.universal.ZapytywatorUzytkownika;
+import ProjektGlowny.commons.Frames.universal.ZapytywatorUzytkownikaIn;
+
 import java.util.Map;
 
 import java.awt.Component;
@@ -15,17 +22,16 @@ import javax.swing.SwingConstants;
 
 public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends ParametryWyjscia> extends JDialog implements InterfejsAbstractOkno {
 
-	private static final String TYTUL = "Tytul";
-	private static final String KOMUNIKAT = "Komunikat";
 	private static final long serialVersionUID = 1L;
-	protected T1 mParams;
+	protected T1 mParamsIn;
+	protected T2 mParamsOut;
 	protected boolean mAccepted;
 
 	protected JButton mokButton;
 	protected JButton mcancelButton;
 
 	public AbstractOkno(T1 pmParams) {
-		mParams = pmParams;
+		mParamsIn = pmParams;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 927, 473);
@@ -43,8 +49,8 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 
 	private void createCancelButton() {
 		mcancelButton = new JButton("Wyjście");
-		mcancelButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-		mcancelButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		mcancelButton.setVerticalTextPosition(SwingConstants.CENTER);
+		mcancelButton.setVerticalAlignment(SwingConstants.CENTER);
 		mcancelButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		mcancelButton.setActionCommand("Cancel");
 		mcancelButton.addActionListener(e -> {
@@ -57,6 +63,9 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 	private void createOkButton() {
 		mokButton = new JButton("OK");
 		mokButton.setActionCommand("OK");
+		mokButton.setVerticalTextPosition(SwingConstants.CENTER);
+		mokButton.setVerticalAlignment(SwingConstants.CENTER);
+		mokButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		mokButton.addActionListener(e -> {
 			if (validateForm()) {
 				mAccepted = true;
@@ -70,7 +79,9 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 		return true;
 	}
 
-	protected abstract void beforeClose();
+	protected void beforeClose() {
+		mParamsOut = budujWyjscie();
+	}
 
 	protected abstract void onOpen();
 
@@ -83,11 +94,10 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 	protected abstract T2 budujWyjscie();
 
 	public T2 get() {
-		T2 lvWyjscie = budujWyjscie();
-		if (lvWyjscie == null)
+		if (mParamsOut == null)
 			return null;
-		lvWyjscie.setAccepted(mAccepted);
-		return lvWyjscie;
+		mParamsOut.setAccepted(mAccepted);
+		return mParamsOut;
 	}
 
 	protected void readParams() {
@@ -95,13 +105,13 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 
 	@Override
 	public void info(Komunikat pmKomunikat, String... pmArgs) {
-		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		Map<String, String> lvMapa = przygotujMapeZKomunikatu(pmKomunikat, pmArgs);
 		JOptionPane.showMessageDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL), JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override
 	public boolean ask(Komunikat pmKomunikat, String... pmArgs) {
-		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		Map<String, String> lvMapa = przygotujMapeZKomunikatu(pmKomunikat, pmArgs);
 		int reply = JOptionPane.showConfirmDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL), JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
 			return true;
@@ -112,27 +122,24 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 
 	@Override
 	public void err(Komunikat pmKomunikat, String... pmArgs) {
-		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		Map<String, String> lvMapa = przygotujMapeZKomunikatu(pmKomunikat, pmArgs);
 		JOptionPane.showMessageDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL), JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
 	public String askString(Komunikat pmKomunikat, String... pmArgs) {
-		Map<String, String> lvMapa = przygotujKomunikat(pmKomunikat, pmArgs);
+		Map<String, String> lvMapa = przygotujMapeZKomunikatu(pmKomunikat, pmArgs);
 		return JOptionPane.showInputDialog(null, lvMapa.get(KOMUNIKAT), lvMapa.get(TYTUL));
 	}
 
-	private Map<String, String> przygotujKomunikat(Komunikat pmKomunikat, String... pmArgs) {
-		Map<String, String> lvMap = new HashMap<>();
-		String lvKomunikat = pmKomunikat.getKomunikat();
-		String lvTytul = pmKomunikat.getTytul();
-		for (int i = 0; i < pmArgs.length; i++) {
-			lvKomunikat = lvKomunikat.replaceFirst(Komunikat.ARG, pmArgs[i]);
-			lvTytul = lvTytul.replaceFirst(Komunikat.ARG, pmArgs[i]);
-		}
-		lvMap.put(KOMUNIKAT, lvKomunikat);
-		lvMap.put(TYTUL, lvTytul);
-		return lvMap;
+	@Override
+	public Integer askInt(AskIntParams pmDefault, Komunikat pmKomunikat, String... pmArgs) {
+		Komunikat lvKomunikat = przygotujKomunikat(pmKomunikat, pmArgs);
+		ZapytywatorUzytkownikaIn lv = new ZapytywatorUzytkownikaIn();
+		lv.setKontekst(ZapytyniaUzytkownika.INTEGER);
+		lv.setKomunikat(lvKomunikat);
+		lv.setIntParams(pmDefault);
+		return new ZapytywatorUzytkownika(lv).get().getWartoscInt();
 	}
 
 	@Override

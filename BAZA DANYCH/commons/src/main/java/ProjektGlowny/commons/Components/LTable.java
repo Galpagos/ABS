@@ -1,5 +1,8 @@
 package ProjektGlowny.commons.Components;
 
+import ProjektGlowny.commons.DbBuilder.LRecordSet;
+import ProjektGlowny.commons.DbBuilder.SystemTables;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +11,6 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-
-import ProjektGlowny.commons.DbBuilder.LRecordSet;
-import ProjektGlowny.commons.DbBuilder.SystemTables;
 
 public class LTable extends JTable {
 
@@ -25,8 +25,9 @@ public class LTable extends JTable {
 		setModel(lvDTM);
 
 		setAutoCreateRowSorter(true);
-//		TableRowSorter<TableModel> lvSorter = new TableRowSorter<TableModel>(getModel());
-//		setRowSorter(lvSorter);
+		// TableRowSorter<TableModel> lvSorter = new
+		// TableRowSorter<TableModel>(getModel());
+		// setRowSorter(lvSorter);
 		if (lvDTM.getRowCount() > 0)
 			setRowSelectionInterval(0, 0);
 
@@ -54,8 +55,10 @@ public class LTable extends JTable {
 
 	public void reload(LRecordSet pmRecords) {
 		TableModel lvDTM = new LTableModel(pmRecords);
+		int lvIndex = getSelectionModel().getLeadSelectionIndex();
 		setModel(lvDTM);
 		odswiez();
+		getSelectionModel().setSelectionInterval(lvIndex, lvIndex);
 	}
 
 }

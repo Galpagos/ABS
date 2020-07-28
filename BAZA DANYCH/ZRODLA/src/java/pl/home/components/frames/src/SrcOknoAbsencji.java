@@ -53,6 +53,7 @@ public abstract class SrcOknoAbsencji extends AbstractOkno<OAbsencjiWejscie, OAb
 	protected void beforeClose() {
 		if (mAccepted)
 			zapiszAbsencje();
+		super.beforeClose();
 	}
 
 	public abstract void zapiszAbsencje();

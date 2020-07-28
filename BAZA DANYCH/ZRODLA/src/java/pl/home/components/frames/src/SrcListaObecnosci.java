@@ -1,11 +1,15 @@
 package pl.home.components.frames.src;
 
+import ProjektGlowny.commons.Components.DatePicker;
+import ProjektGlowny.commons.Frames.AbstractOkno;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JButton;
@@ -17,8 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
-import ProjektGlowny.commons.Components.DatePicker;
-import ProjektGlowny.commons.Frames.AbstractOkno;
 import Wydruki.ListaObecnosci.DaneDoListyObecnosci;
 import Wydruki.ListaObecnosci.ListaObecnosciConst;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -46,10 +48,6 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 
 	public SrcListaObecnosci(ListaObecnosciWejscie pmParams) {
 		super(pmParams);
-	}
-
-	@Override
-	protected void beforeClose() {
 	}
 
 	@Override

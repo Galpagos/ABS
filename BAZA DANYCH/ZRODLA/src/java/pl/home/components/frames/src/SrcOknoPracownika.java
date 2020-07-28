@@ -1,5 +1,10 @@
 package pl.home.components.frames.src;
 
+import ProjektGlowny.commons.Components.LTable;
+import ProjektGlowny.commons.DbBuilder.LRecordSet;
+import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.Frames.AbstractOkno;
+
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -12,10 +17,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
-import ProjektGlowny.commons.Components.LTable;
-import ProjektGlowny.commons.DbBuilder.LRecordSet;
-import ProjektGlowny.commons.DbBuilder.QueryBuilder;
-import ProjektGlowny.commons.Frames.AbstractOkno;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import pl.home.components.frames.parameters.OPracWejscie;
@@ -187,8 +188,7 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 
 	protected LRecordSet getZapytanieDoTabeli() {
 		return QueryBuilder.SELECT()//
-				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy,
-						AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
+				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
 				.andWarunek(AbsencjeColumns.ID_pracownika, mPracownik.getId())//
 				.andAfterOrEqual(AbsencjeColumns.Od_kiedy, LocalDate.of((int) spnRok.getValue(), 1, 1))//
 				.andBeforeOrEqual(AbsencjeColumns.Do_kiedy, YearMonth.of((int) spnRok.getValue(), 12).atEndOfMonth())//
@@ -199,10 +199,6 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 	@Override
 	protected void readParams() {
 
-	}
-
-	@Override
-	protected void beforeClose() {
 	}
 
 	@Override

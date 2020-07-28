@@ -1,17 +1,19 @@
 package Absencja;
 
-import java.time.LocalDate;
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import java.time.LocalDate;
+
 import javax.swing.JOptionPane;
 
 import Datownik.LicznikDaty;
-
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
@@ -72,7 +74,7 @@ public class ObslugaAbsencji {
 
 	public void modyfikujAbsencje(AbsencjaDTO pmAbs) {
 		if (pmAbs != null) {
-			OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(pmAbs).build();
+			OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(pmAbs).withListaPracownikow(Collections.emptyList()).build();
 			new OknoAbsencji(lvParams);
 		}
 	}
@@ -89,8 +91,7 @@ public class ObslugaAbsencji {
 			mRepo.usunAbsencje(pmID);
 	}
 
-	int ileDniKalendarzowychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj,
-			Interval pmOkres) {
+	int ileDniKalendarzowychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj, Interval pmOkres) {
 		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmIdPracownika).stream()//
 				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
 				.collect(Collectors.toList());
@@ -106,8 +107,7 @@ public class ObslugaAbsencji {
 	private Map<SLRodzajeAbsencji, Integer> zliczDniKalendarzoweWAbsencjach(List<AbsencjaDTO> pmLista) {
 		return pmLista //
 				.stream() //
-				.collect(Collectors.groupingBy(AbsencjaDTO::getRodzaj,
-						Collectors.summingInt(this::ileDniKalendarzowych)));
+				.collect(Collectors.groupingBy(AbsencjaDTO::getRodzaj, Collectors.summingInt(this::ileDniKalendarzowych)));
 	}
 
 	int ileDniKalendarzowych(AbsencjaDTO pmAbsencja) {
@@ -124,12 +124,12 @@ public class ObslugaAbsencji {
 		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
 		lvLista.add(pmAbsencja);
 		lvLista = lvLista.stream()//
-				.filter(lvAbs -> lvAbs.getRodzaj() == SLRodzajeAbsencji.szpital
-						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4 || lvAbs.getRodzaj() == SLRodzajeAbsencji.ciaza)//
+				.filter(lvAbs -> lvAbs.getRodzaj() == SLRodzajeAbsencji.szpital || lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4
+						|| lvAbs.getRodzaj() == SLRodzajeAbsencji.ciaza)//
 				.sorted(Comparator.comparing(AbsencjaDTO::getStart)).collect(Collectors.toList());
 
-		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres()
-				.overlap(SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear())).orElse(null)));
+		lvLista.stream().forEach(
+				lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(SLMiesiace.N00_ROK.getOkres(pmAbsencja.getOkres().getStart().getYear())).orElse(null)));
 
 		lvLista.stream().forEach(lvAbs -> {
 			licznik = licznik - ileDniKalendarzowych(lvAbs);

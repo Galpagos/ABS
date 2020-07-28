@@ -9,5 +9,6 @@ public interface InterfejsAbstractOkno {
 	String askString(Komunikat pmKomunikat, String... pmArgs);
 	void err(Komunikat pmKomunikat, String... pmArgs);
 	LocalDate askLocalDate();
+	Integer askInt(AskIntParams pmDefault, Komunikat pmKomunikat, String... pmArgs);
 
 }

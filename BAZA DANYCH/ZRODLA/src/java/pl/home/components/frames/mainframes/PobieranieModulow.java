@@ -46,7 +46,7 @@ public class PobieranieModulow extends SrcPobieranieModulow {
 			}
 		else
 			mListaAbsencji = new ArrayList<SLRodzajeAbsencji>();
-
+		super.beforeClose();
 	}
 
 	@Override

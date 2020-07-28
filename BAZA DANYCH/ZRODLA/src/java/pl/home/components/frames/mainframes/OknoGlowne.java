@@ -82,7 +82,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	@Override
 	public int getZaznaczenieTabeli() {
-		return tbPracownicy.getSelectedRow();
+		return tbPracownicy.getSelectedRowCount();
 	}
 
 	@Override
@@ -107,14 +107,18 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	@Override
 	public void odswiezKontrolki() {
-		btnZwolnij.setVisible(getZaznaczenieTabeli() >= 0 && !czyZwolniony(getPracownikZTabeli()));
+		btnZwolnij.setVisible(czyJedenRekord() && !czyZwolniony(getPracownikZTabeli()));
 		btnZatrudnij.setVisible(!btnZwolnij.isVisible());
-		btnPokazPracownika.setEnabled(getZaznaczenieTabeli() >= 0);
-		btnUsunPracownika.setEnabled(getZaznaczenieTabeli() >= 0);
-		btnZwolnij.setEnabled(getZaznaczenieTabeli() >= 0);
-		btnZatrudnij.setEnabled(getZaznaczenieTabeli() >= 0);
+		btnPokazPracownika.setEnabled(czyJedenRekord());
+		btnUsunPracownika.setEnabled(czyJedenRekord());
+		btnZwolnij.setEnabled(czyJedenRekord());
+		btnZatrudnij.setEnabled(czyJedenRekord());
 		btnDodajMasowaAbsencje.setVisible(tbPracownicy.getSelectedRows().length > 1);
 		repaint();
+	}
+
+	private boolean czyJedenRekord() {
+		return tbPracownicy.getSelectedRowCount() == 1;
 	}
 
 	private boolean czyZwolniony(PracownikDTO pmPracownik) {

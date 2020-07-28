@@ -1,8 +1,10 @@
 package Frames.dbAccess.Frames.OknoPracownika;
 
 import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.Frames.AskIntParams;
 import ProjektGlowny.commons.utils.Interval;
 
+import java.util.Collections;
 import java.util.Date;
 
 import java.text.ParseException;
@@ -48,7 +50,7 @@ public class ObslugaOknaPracownika {
 	}
 
 	public void ModyfikujAbsencje() {
-		OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mOkno.getAbsencjeZTabeli()).build();
+		OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mOkno.getAbsencjeZTabeli()).withListaPracownikow(Collections.emptyList()).build();
 		new OknoAbsencji(lvParams);
 	}
 
@@ -112,16 +114,14 @@ public class ObslugaOknaPracownika {
 	}
 
 	public void ustawUrlopNalezny() {
-		new JOptionPane();
-		String lvUrlop = mOkno.askString(PytanieOWartosc.PODAJ_LICZBE);
-		int lvWartosc;
-		try {
-			lvWartosc = Integer.parseInt(lvUrlop);
-			mObslugaPracownika.ustawUrlopNalezny(mOkno.getPracownika().getId(), lvWartosc);
+		AskIntParams lvParams = AskIntParams//
+				.builder()//
+				.defaultValue(mObslugaPracownika.getUrlopNal(mOkno.getPracownika().getId()))//
+				.maxValue(99)//
+				.build();
 
-		} catch (NumberFormatException e) {
-			mOkno.err(WalidacjeTwarde.NiewlasciwyFormatLiczby);
-		}
-
+		Integer lvUrlop = mOkno.askInt(lvParams, PytanieOWartosc.PODAJ_LICZBE);
+		if (lvUrlop != null)
+			mObslugaPracownika.ustawUrlopNalezny(mOkno.getPracownika().getId(), lvUrlop);
 	}
 }

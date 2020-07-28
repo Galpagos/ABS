@@ -31,9 +31,6 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 	public SrcOknoGlowne(ParametryWejscia pmParams) {
 		super(pmParams);
 	}
-
-	private static final String TYTUL = "Tytul";
-	private static final String KOMUNIKAT = "Komunikat";
 	protected LTable tbPracownicy;
 	protected JButton btnDodajPracownika;
 	protected JButton btnPokazPracownika;

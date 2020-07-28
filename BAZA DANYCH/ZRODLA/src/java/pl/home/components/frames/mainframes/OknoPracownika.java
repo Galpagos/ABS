@@ -1,11 +1,13 @@
 package pl.home.components.frames.mainframes;
 
-import java.sql.Timestamp;
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.Date;
+
+import java.sql.Timestamp;
 
 import Frames.dbAccess.Frames.OknoPracownika.InterfejsOknaPracownika;
 import Frames.dbAccess.Frames.OknoPracownika.ObslugaOknaPracownika;
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import enums.SLRodzajeAbsencji;
@@ -26,7 +28,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	@Override
 	protected void readParams() {
 		super.readParams();
-		mPracownik = mParams.getPracownik();
+		mPracownik = mParamsIn.getPracownik();
 		mObsluga = new ObslugaOknaPracownika(this);
 	}
 
@@ -111,8 +113,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 		Date lvDo = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3);
 		lvAbsencja.setOkres(new Interval(lvOd, lvDo));
 		lvAbsencja.setIdPracownika(mPracownik.getId());
-		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji
-				.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
+		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
 		lvAbsencja.setProcent(SLEkwiwalentZaUrlop.getByKod(getProcentZTabeli(lvRow)));
 		lvAbsencja.setIdPracownika(mPracownik.getId());
@@ -120,8 +121,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	}
 
 	private String getProcentZTabeli(int lvRow) {
-		return tbAbsencje.getModel().getValueAt(lvRow, 4) == null ? "0"
-				: tbAbsencje.getModel().getValueAt(lvRow, 4).toString();
+		return tbAbsencje.getModel().getValueAt(lvRow, 4) == null ? "0" : tbAbsencje.getModel().getValueAt(lvRow, 4).toString();
 	}
 
 	@Override

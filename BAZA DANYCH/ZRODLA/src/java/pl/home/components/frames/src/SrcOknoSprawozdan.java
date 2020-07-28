@@ -1,5 +1,7 @@
 package pl.home.components.frames.src;
 
+import ProjektGlowny.commons.Frames.AbstractOkno;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -8,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ProjektGlowny.commons.Frames.AbstractOkno;
 import pl.home.components.frames.parameters.OSprawozdanWejscie;
 import pl.home.components.frames.parameters.OSprawozdanWyjscie;
 
@@ -102,10 +103,6 @@ public abstract class SrcOknoSprawozdan extends AbstractOkno<OSprawozdanWejscie,
 
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		buttonPane.add(mcancelButton);
-	}
-
-	@Override
-	protected void beforeClose() {
 	}
 
 	@Override
