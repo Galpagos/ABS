@@ -1,9 +1,12 @@
 package Wydruki.PrzygotowanieDanych;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
-public class PracownikDTO {
+import java.text.Collator;
+import java.time.LocalDate;
+
+public class PracownikDTO implements Comparable<PracownikDTO> {
 	private int mId;
 	private String mNazwa;
 	private List<AbsencjaDTO> mListaAbsencji;
@@ -57,5 +60,10 @@ public class PracownikDTO {
 	public PracownikDTO setDataZwolnienia(LocalDate pmDataZwolnienia) {
 		mDataZwolnienia = pmDataZwolnienia;
 		return this;
+	}
+
+	@Override
+	public int compareTo(PracownikDTO pmO) {
+		return Collator.getInstance(new Locale("pl", "PL")).compare(mNazwa, pmO.mNazwa);
 	}
 }

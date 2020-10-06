@@ -4,17 +4,19 @@ import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_t
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Urlop_Nalezny;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import ProjektGlowny.commons.DbBuilder.AccessDB;
 import ProjektGlowny.commons.DbBuilder.LRecord;
 import ProjektGlowny.commons.DbBuilder.LRecordSet;
 import ProjektGlowny.commons.DbBuilder.QueryBuilder;
 import ProjektGlowny.commons.utils.Interval;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import java.time.LocalDate;
+
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
@@ -71,6 +73,7 @@ public class PracownikRepository extends AccessDB {
 		return lvWynik//
 				.stream()//
 				.map(lvRecord -> parsujPracownika(lvRecord))//
+				.sorted()//
 				.collect(Collectors.toList());
 
 	}
@@ -83,8 +86,7 @@ public class PracownikRepository extends AccessDB {
 		if (pmRecord.containsKey(AbsencjeColumns.RODZAJ)) {
 			AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 			lvAbsencja.setRodzaj(SLRodzajeAbsencji.getByKod(pmRecord.getAsString(AbsencjeColumns.RODZAJ)));
-			lvAbsencja.setOkres(new Interval(pmRecord.getAsLocalDate(AbsencjeColumns.Od_kiedy),
-					pmRecord.getAsLocalDate(AbsencjeColumns.Do_kiedy)));
+			lvAbsencja.setOkres(new Interval(pmRecord.getAsLocalDate(AbsencjeColumns.Od_kiedy), pmRecord.getAsLocalDate(AbsencjeColumns.Do_kiedy)));
 			lvPracownik.setListaAbsencji(Arrays.asList(lvAbsencja));
 		}
 		return lvPracownik;
@@ -142,10 +144,8 @@ public class PracownikRepository extends AccessDB {
 	public List<PracownikDTO> pobierzNieobecnych(LocalDate pmDataObecnosci) {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_tabeli, Pracownik, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy,
-						AbsencjeColumns.RODZAJ)//
-				.joinOn(AbsencjeColumns.ID_pracownika, ID_tabeli)
-				.andBeforeOrEqual(AbsencjeColumns.Od_kiedy, pmDataObecnosci)//
+				.select(ID_tabeli, Pracownik, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy, AbsencjeColumns.RODZAJ)//
+				.joinOn(AbsencjeColumns.ID_pracownika, ID_tabeli).andBeforeOrEqual(AbsencjeColumns.Od_kiedy, pmDataObecnosci)//
 				.andAfterOrEqual(AbsencjeColumns.Do_kiedy, pmDataObecnosci)//
 				.execute();
 
@@ -155,9 +155,8 @@ public class PracownikRepository extends AccessDB {
 	public PracownikDTO getPracownik(Integer pmIdPracownika) {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_tabeli, ZestawienieColumns.Pracownik, ZestawienieColumns.Urlop_Nalezny,
-						ZestawienieColumns.Data_Urodzenia, ZestawienieColumns.Data_Zatrudnienia,
-						ZestawienieColumns.Data_Zwolnienia)//
+				.select(ID_tabeli, ZestawienieColumns.Pracownik, ZestawienieColumns.Urlop_Nalezny, ZestawienieColumns.Data_Urodzenia,
+						ZestawienieColumns.Data_Zatrudnienia, ZestawienieColumns.Data_Zwolnienia)//
 				.andWarunek(ID_tabeli, pmIdPracownika)//
 				.execute();
 
