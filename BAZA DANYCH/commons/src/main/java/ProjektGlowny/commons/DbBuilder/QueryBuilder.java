@@ -1,12 +1,13 @@
 package ProjektGlowny.commons.DbBuilder;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import ProjektGlowny.commons.parsers.ParseryDB;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import ProjektGlowny.commons.parsers.ParseryDB;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDelete, DbInsert, DbCount {
 	private QueryBuilder(TypZapytania pmTyp) {
@@ -111,6 +112,15 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 		return this;
 	}
 
+	@Override
+	public QueryBuilder andEqual(SystemTables pmPole, LocalDate pmWartosc) {
+
+		String lvWartosc = valueToString(pmPole, pmWartosc);
+
+		mWarunek.append(" AND " + pmPole.getTableName() + "." + pmPole.toString() + " =" + lvWartosc);
+		return this;
+	}
+
 	private String valueToString(SystemTables pmSystemTables, Object pmWartosc) {
 		String lvWartosc = "NULL";
 		if (mTabela == null)
@@ -119,25 +129,20 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 			lvWartosc = String.valueOf(((Integer) pmWartosc).intValue());
 		if (String.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof String)
 			lvWartosc = "'" + (String) pmWartosc + "'";
-		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof LocalDate
-				&& TypZapytania.SELECT.equals(mTyp))
+		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof LocalDate && TypZapytania.SELECT.equals(mTyp))
 			lvWartosc = ParseryDB.DateParserToSQL_SELECT((LocalDate) pmWartosc);
-		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Date
-				&& TypZapytania.SELECT.equals(mTyp))
+		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Date && TypZapytania.SELECT.equals(mTyp))
 			lvWartosc = ParseryDB.DateParserToSQL_SELECT((Date) pmWartosc);
-		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof LocalDate
-				&& !TypZapytania.SELECT.equals(mTyp))
+		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof LocalDate && !TypZapytania.SELECT.equals(mTyp))
 			lvWartosc = ParseryDB.DateParserToSQL_INSERT((LocalDate) pmWartosc);
-		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Date
-				&& !TypZapytania.SELECT.equals(mTyp))
+		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Date && !TypZapytania.SELECT.equals(mTyp))
 			lvWartosc = ParseryDB.DateParserToSQL_INSERT((Date) pmWartosc);
 		return lvWartosc;
 	}
 
 	@Override
 	public int count() {
-		return executeQuery("SELECT Count(1) as TOTAL FROM " + mTabela + mWarunek.toString())
-				.getAsInteger(new AliasDB("TOTAL", Integer.class));// count(*)
+		return executeQuery("SELECT Count(1) as TOTAL FROM " + mTabela + mWarunek.toString()).getAsInteger(new AliasDB("TOTAL", Integer.class));// count(*)
 	}
 
 	@Override
@@ -149,8 +154,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	@Override
 	public QueryBuilder orderBy(SystemTables pmPole, boolean czyRosnaco) {
 
-		mWarunek.append(
-				" ORDER BY " + pmPole.getTableName() + "." + pmPole.toString() + (czyRosnaco ? " ASC" : " DESC"));
+		mWarunek.append(" ORDER BY " + pmPole.getTableName() + "." + pmPole.toString() + (czyRosnaco ? " ASC" : " DESC"));
 		return this;
 	}
 
@@ -159,8 +163,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 		if (TypZapytania.SELECT.equals(mTyp))
 			return executeQuery("SELECT " + withTop() + mQuery.toString() + mWarunek.toString() + mOrderBy.toString());
 		if (TypZapytania.UPDATE.equals(mTyp))
-			executeUpdate("UPDATE " + mTabela + " SET " + mQuery.deleteCharAt(mQuery.length() - 1).toString()
-					+ mWarunek.toString());
+			executeUpdate("UPDATE " + mTabela + " SET " + mQuery.deleteCharAt(mQuery.length() - 1).toString() + mWarunek.toString());
 		if (TypZapytania.DELETE.equals(mTyp))
 			executeUpdate("DELETE FROM " + mTabela + mWarunek.toString());
 		if (TypZapytania.INSERT.equals(mTyp))
@@ -199,15 +202,13 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 
 	@Override
 	public QueryBuilder joinOn(SystemTables pmWith, SystemTables pmOn) {
-		mQuery.append(" INNER JOIN " + pmWith.getTableName() + " ON " + pmWith.getTableName() + "." + pmWith + "="
-				+ pmOn.getTableName() + "." + pmOn);
+		mQuery.append(" INNER JOIN " + pmWith.getTableName() + " ON " + pmWith.getTableName() + "." + pmWith + "=" + pmOn.getTableName() + "." + pmOn);
 		return this;
 	}
 
 	public static int getNextId(SystemTables pmPole) {
-		Integer lvActalId = executeQuery(
-				"SELECT TOP 1 " + pmPole + " FROM " + pmPole.getTableName() + " ORDER BY ID_tabeli DESC")
-						.getAsInteger(pmPole);
+		Integer lvActalId = executeQuery("SELECT TOP 1 " + pmPole + " FROM " + pmPole.getTableName() + " ORDER BY " + pmPole.getColumnName() + " DESC")
+				.getAsInteger(pmPole);
 		return (lvActalId == null ? 0 : lvActalId.intValue()) + 1;
 	}
 

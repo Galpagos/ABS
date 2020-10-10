@@ -1,7 +1,7 @@
 package pl.home.components.frames.mainframes;
 
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data_Zwolnienia;
-import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_PRAC;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
 import ProjektGlowny.commons.Components.LTable;
@@ -70,7 +70,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 		DbSelect lvZapytanieLS = QueryBuilder//
 				.SELECT()//
-				.select(ID_tabeli, Pracownik)//
+				.select(ID_PRAC, Pracownik)//
 				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"");
 
 		if (!cbCzyUsunieci.isSelected())
@@ -82,7 +82,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	@Override
 	public int getZaznaczenieTabeli() {
-		return tbPracownicy.getSelectedRowCount();
+		return tbPracownicy.getSelectedRow();
 	}
 
 	@Override
@@ -167,6 +167,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		btnZatrudnij.addActionListener(lvE -> mObsluga.zatrudnijPracownika());
 		tbPracownicy.getSelectionModel().addListSelectionListener(e -> odswiezKontrolki());
 		btnDodajMasowaAbsencje.addActionListener(lvE -> mObsluga.dodajMasowaAbsencje());
+		btnOneDayView.addActionListener(lvE -> mObsluga.showOneDayView());
 	}
 
 	@Override

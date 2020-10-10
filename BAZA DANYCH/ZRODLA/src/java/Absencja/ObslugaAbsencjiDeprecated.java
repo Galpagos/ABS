@@ -21,7 +21,8 @@ import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
-public class ObslugaAbsencji {
+@Deprecated
+public class ObslugaAbsencjiDeprecated {
 	private AbsencjaRepositor mRepo = new AbsencjaRepository();
 
 	public List<AbsencjaDTO> pobierzAbsencjePracownika(int pmId) {

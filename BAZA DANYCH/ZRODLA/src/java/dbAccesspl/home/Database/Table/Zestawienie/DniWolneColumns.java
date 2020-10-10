@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import ProjektGlowny.commons.DbBuilder.SystemTables;
 
 public enum DniWolneColumns implements SystemTables {
-	ID_tabeli(Integer.class, "Identyfikator"), //
+	ID_DN_WN(Integer.class, "Identyfikator"), //
 	Data(Timestamp.class, "Data"), //
 	Opis(String.class, "Opis");
 

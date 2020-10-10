@@ -91,7 +91,7 @@ public class ObslugaPracownka {
 		if (lvData == null)
 			return;
 		AbsencjaDTO lvAbs = new AbsencjaDTO()//
-				.setId(QueryBuilder.getNextId(AbsencjeColumns.ID_tabeli))//
+				.setId(QueryBuilder.getNextId(AbsencjeColumns.ID_ABS))//
 				.setIdPracownika(pmId)//
 				.setOkres(new Interval(mRepo.getDataZwolnienia(pmId), lvData))//
 				.setProcent(SLEkwiwalentZaUrlop.PROCENT_0)//

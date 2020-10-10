@@ -8,4 +8,6 @@ public interface ISystemTableNames {
 	public EnumSet<? extends SystemTables> getTabela();
 
 	public String getNazwa();
+
+	public String getPrimaryKey();
 }

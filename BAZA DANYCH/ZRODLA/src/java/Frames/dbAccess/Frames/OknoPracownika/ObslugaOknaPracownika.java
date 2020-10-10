@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 
-import Absencja.ObslugaAbsencji;
+import Absencja.ObslugaAbsencjiDeprecated;
 import Frames.dbAccess.Components.ComboPicker;
 import Grupy.GrupaDTO;
 import Grupy.ObslugaGrup;
@@ -31,7 +31,7 @@ public class ObslugaOknaPracownika {
 	private InterfejsOknaPracownika mOkno;
 
 	private ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
-	private ObslugaAbsencji mObslugaAbsencji = new ObslugaAbsencji();
+	private ObslugaAbsencjiDeprecated mObslugaAbsencji = new ObslugaAbsencjiDeprecated();
 	private ObslugaGrup mObslugaGrup = new ObslugaGrup();
 
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika) {
@@ -41,7 +41,7 @@ public class ObslugaOknaPracownika {
 	public void DodajAbsencje() {
 		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.urlop_wypoczynkowy;
-		lvAbsencja.setId(QueryBuilder.getNextID(AbsencjeColumns.ID_tabeli));
+		lvAbsencja.setId(QueryBuilder.getNextID(AbsencjeColumns.ID_ABS));
 		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
 		lvAbsencja.setOkres(new Interval(new Date(), new Date()));
 		lvAbsencja.setRodzaj(lvRodzajAbs);

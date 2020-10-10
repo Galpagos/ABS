@@ -25,7 +25,7 @@ public class ObslugaAbsencjiTest {
 	Object[][] mObj2;
 
 	@InjectMocks
-	ObslugaAbsencji mObsluga = new ObslugaAbsencji();
+	ObslugaAbsencjiDeprecated mObsluga = new ObslugaAbsencjiDeprecated();
 
 	@BeforeEach
 	void setUp() {

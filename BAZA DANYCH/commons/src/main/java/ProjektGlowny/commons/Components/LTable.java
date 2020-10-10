@@ -60,5 +60,4 @@ public class LTable extends JTable {
 		odswiez();
 		getSelectionModel().setSelectionInterval(lvIndex, lvIndex);
 	}
-
 }

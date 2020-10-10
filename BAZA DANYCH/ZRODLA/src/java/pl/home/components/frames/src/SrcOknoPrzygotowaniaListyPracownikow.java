@@ -126,7 +126,8 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno<
 	@Override
 	protected void readParams() {
 		mListaPrawa = new ArrayList<PracownikDTO>();
-		mListaPrawa.addAll(mParamsIn.getLista());
+		if (mParamsIn.getLista() != null)
+			mListaPrawa.addAll(mParamsIn.getLista());
 	}
 
 	@Override

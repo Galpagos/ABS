@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import Absencja.ObslugaAbsencji;
+import Absencja.ObslugaAbsencjiDeprecated;
 import Frames.dbAccess.Components.ResultTableWindow;
 import Pracownik.ObslugaPracownka;
 import ProjektGlowny.commons.utils.Interval;
@@ -51,7 +51,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 
 	@Override
 	public Object[] przeliczWierszTabeli(PracownikDTO lvPrac) {
-		ObslugaAbsencji lvObsluga = new ObslugaAbsencji();
+		ObslugaAbsencjiDeprecated lvObsluga = new ObslugaAbsencjiDeprecated();
 		lvPrac.setListaAbsencji(lvObsluga.pobierzAbsencjePracownika(lvPrac.getId()));
 		if (lvPrac.getListaAbsencji() != null) {
 			for (AbsencjaDTO lvAbs : lvPrac.getListaAbsencji()) {

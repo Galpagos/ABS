@@ -8,7 +8,7 @@ class RepositoryOknaGlownego {
 
 	void zapiszNowyDzienWolny(DzienWolnyDTO pmDzien) {
 		QueryBuilder.INSERT()//
-				.set(DniWolneColumns.ID_tabeli, QueryBuilder.getNextId(DniWolneColumns.ID_tabeli))//
+				.set(DniWolneColumns.ID_DN_WN, QueryBuilder.getNextId(DniWolneColumns.ID_DN_WN))//
 				.set(DniWolneColumns.Data, pmDzien.getData())//
 				.execute();
 

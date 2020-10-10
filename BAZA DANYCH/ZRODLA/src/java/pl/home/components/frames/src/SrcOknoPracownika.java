@@ -179,7 +179,7 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 	private LTable utworzTabele() {
 
 		LTable lvTabela = new LTable(getZapytanieDoTabeli());
-		lvTabela.hideColumn(AbsencjeColumns.ID_tabeli);
+		lvTabela.hideColumn(AbsencjeColumns.ID_ABS);
 		lvTabela.odswiez();
 
 		return lvTabela;
@@ -188,7 +188,7 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 
 	protected LRecordSet getZapytanieDoTabeli() {
 		return QueryBuilder.SELECT()//
-				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
+				.select(AbsencjeColumns.ID_ABS, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy, AbsencjeColumns.EKWIWALENT)//
 				.andWarunek(AbsencjeColumns.ID_pracownika, mPracownik.getId())//
 				.andAfterOrEqual(AbsencjeColumns.Od_kiedy, LocalDate.of((int) spnRok.getValue(), 1, 1))//
 				.andBeforeOrEqual(AbsencjeColumns.Do_kiedy, YearMonth.of((int) spnRok.getValue(), 12).atEndOfMonth())//

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import Absencja.ObslugaAbsencji;
+import Absencja.ObslugaAbsencjiDeprecated;
 import Datownik.LicznikDaty;
 
 import ProjektGlowny.commons.utils.Interval;
@@ -89,7 +89,7 @@ public class ListaPlac {
 
 	private MiesiecznaPlacaPracownika przygotujDaneDoWyliczeniaWyplaty(PracownikDTO pmPracownik) {
 		if (pmPracownik.getListaAbsencji() == null)
-			pmPracownik.setListaAbsencji(new ObslugaAbsencji().pobierzAbsencjePracownika(pmPracownik.getId()));
+			pmPracownik.setListaAbsencji(new ObslugaAbsencjiDeprecated().pobierzAbsencjePracownika(pmPracownik.getId()));
 
 		LicznikDaty.filtrujAbsencjePoOkresie(pmPracownik.getListaAbsencji(), new Interval(mRokMiesiac));
 		return new MiesiecznaPlacaPracownika().setPracownik(pmPracownik);

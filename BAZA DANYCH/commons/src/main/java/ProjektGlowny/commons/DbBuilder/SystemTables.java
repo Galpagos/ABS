@@ -1,8 +1,8 @@
 package ProjektGlowny.commons.DbBuilder;
 
-import java.util.function.Function;
-
 import ProjektGlowny.commons.enums.InterfejsSlownika;
+
+import java.util.function.Function;
 
 public interface SystemTables {
 	public Class<?> getKlasa();
@@ -14,5 +14,4 @@ public interface SystemTables {
 	public default Function<String, InterfejsSlownika> getOpisFunkcja() {
 		return null;
 	}
-
 }

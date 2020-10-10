@@ -14,4 +14,6 @@ abstract interface DbWhere {
 	public QueryBuilder andBeforeOrEqual(SystemTables pmIdPole, LocalDate pmWartosc);
 
 	public QueryBuilder andAfterOrEqual(SystemTables pmPole, LocalDate pmWartosc);
+
+	public QueryBuilder andEqual(SystemTables pmPole, LocalDate pmWartosc);
 }

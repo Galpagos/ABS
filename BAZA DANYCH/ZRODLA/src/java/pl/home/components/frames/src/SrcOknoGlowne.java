@@ -1,7 +1,7 @@
 package pl.home.components.frames.src;
 
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data_Zwolnienia;
-import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_PRAC;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
 import ProjektGlowny.commons.Components.LTable;
@@ -49,6 +49,7 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 	protected JButton btnSprawozdanie;
 	protected JButton btnZwolnij;
 	protected JButton btnDodajMasowaAbsencje;
+	protected JButton btnOneDayView;
 
 	@Override
 	protected void budujOkno() {
@@ -96,8 +97,12 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 		mButtonPanel.add(btnPokazDniWolne);
 
 		btnSprawozdanie = new JButton("Sprawozdanie");
-		btnSprawozdanie.setBounds(282, 151, 140, 25);
+		btnSprawozdanie.setBounds(282, 151, 179, 39);
 		mButtonPanel.add(btnSprawozdanie);
+
+		btnOneDayView = new JButton("Weryfikuj obecności");
+		btnOneDayView.setBounds(282, 210, 179, 39);
+		mButtonPanel.add(btnOneDayView);
 
 		btnZwolnij = new JButton("Zwolnij Pracownika");
 		btnZwolnij.setBounds(46, 198, 191, 39);
@@ -136,14 +141,14 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 
 		DbSelect lvZapytanieLS = QueryBuilder//
 				.SELECT()//
-				.select(ID_tabeli, Pracownik)//
+				.select(ID_PRAC, Pracownik)//
 				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"");
 
 		if (!cbCzyUsunieci.isSelected())
 			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
 
 		LTable lvTabela = new LTable(lvZapytanieLS.execute());
-		lvTabela.hideColumn(ZestawienieColumns.ID_tabeli);
+		lvTabela.hideColumn(ZestawienieColumns.ID_PRAC);
 		lvTabela.addSorter(Pracownik, SortOrder.ASCENDING);
 		lvTabela.odswiez();
 		lvTabela.repaint();

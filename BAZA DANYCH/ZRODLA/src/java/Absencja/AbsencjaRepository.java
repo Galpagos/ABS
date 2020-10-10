@@ -1,20 +1,22 @@
 package Absencja;
 
-import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.ID_tabeli;
+import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.ID_ABS;
+
+import ProjektGlowny.commons.DbBuilder.AccessDB;
+import ProjektGlowny.commons.DbBuilder.AliasDB;
+import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.parsers.ParseryDB;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
-import ProjektGlowny.commons.DbBuilder.AccessDB;
-import ProjektGlowny.commons.DbBuilder.AliasDB;
-import ProjektGlowny.commons.DbBuilder.QueryBuilder;
-import ProjektGlowny.commons.parsers.ParseryDB;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 
@@ -65,30 +67,25 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 
 	@Override
 	public Object[][] getAbsencjePracownika(int pmId) {
-		return getRecordSets(
-				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ,EKWIWALENT from Absencje where id_pracownika="
-						+ pmId);
+		return getRecordSets("Select ID_ABS, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ,EKWIWALENT from Absencje where id_pracownika=" + pmId);
 	}
 
 	@Override
 	public Object[][] getAbsencjePoId(int pmId) {
-		return getRecordSets(
-				"Select Id_tabeli, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ,EKWIWALENT from Absencje where id_tabeli="
-						+ pmId);
+		return getRecordSets("Select ID_ABS, Id_pracownika,Od_kiedy,Do_kiedy,RODZAJ,EKWIWALENT from Absencje where ID_ABS=" + pmId);
 	}
 
 	@Override
 	public int ileDniWolnych(LocalDate pmDataOd, LocalDate pmDataDo) {
 		return GetCount("DniWolne"//
-				+ " where DATA BEtween " + ParseryDB.DateParserToSQL_SELECT(pmDataOd) + " and "
-				+ ParseryDB.DateParserToSQL_SELECT(pmDataDo));
+				+ " where DATA BEtween " + ParseryDB.DateParserToSQL_SELECT(pmDataOd) + " and " + ParseryDB.DateParserToSQL_SELECT(pmDataDo));
 	}
 
 	@Override
 	public void dodajAbsencje(AbsencjaDTO pmAbs) {
-		int lvId = pmAbs.getId() == 0 ? QueryBuilder.getNextID(AbsencjeColumns.ID_tabeli) : pmAbs.getId();
+		int lvId = pmAbs.getId() == 0 ? QueryBuilder.getNextID(AbsencjeColumns.ID_ABS) : pmAbs.getId();
 		QueryBuilder.INSERT()//
-				.set(ID_tabeli, lvId)//
+				.set(ID_ABS, lvId)//
 				.set(AbsencjeColumns.ID_pracownika, pmAbs.getIdPracownika())//
 				.set(AbsencjeColumns.Od_kiedy, pmAbs.getOkres().getStart())//
 				.set(AbsencjeColumns.Do_kiedy, pmAbs.getOkres().getEnd())//
@@ -101,14 +98,13 @@ public class AbsencjaRepository extends AccessDB implements AbsencjaRepositor {
 	@Override
 	public void usunAbsencje(int pmID) {
 		QueryBuilder.DELETE()//
-				.andWarunek(ID_tabeli, pmID)//
+				.andWarunek(ID_ABS, pmID)//
 				.execute();
 	}
 
 	@Override
 	public int zliczAbsencjePracownikaWOkresie(AbsencjaDTO pmAbsencja) {
-		return GetCount("Absencje where id_tabeli != " + pmAbsencja.getId() + " and id_pracownika="
-				+ pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
+		return GetCount("Absencje where ID_ABS != " + pmAbsencja.getId() + " and id_pracownika=" + pmAbsencja.getIdPracownika() + " and Od_kiedy <= "
 				+ ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getEnd()) //
 				+ " and Do_Kiedy>=" + ParseryDB.DateParserToSQL_SELECT(pmAbsencja.getOkres().getStart()));
 	}

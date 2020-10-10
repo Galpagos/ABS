@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 import javax.swing.JOptionPane;
 
-import Absencja.ObslugaAbsencji;
+import Absencja.ObslugaAbsencjiDeprecated;
 import Absencja.WalidatorAbsenci;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -25,7 +25,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 
 	private static final long serialVersionUID = 1L;
 	private AbsencjaDTO mAbsencja;
-	private ObslugaAbsencji mObslugaAbsencji;
+	private ObslugaAbsencjiDeprecated mObslugaAbsencji;
 	private WalidatorAbsenci mWalidator;
 	private List<PracownikDTO> mListaPracownikow;
 
@@ -42,7 +42,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	@Override
 	protected void budujOkno() {
 		super.budujOkno();
-		mObslugaAbsencji = new ObslugaAbsencji();
+		mObslugaAbsencji = new ObslugaAbsencjiDeprecated();
 		mWalidator = new WalidatorAbsenci();
 	}
 
@@ -90,7 +90,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 
 		List<AbsencjaDTO> lvLista = new ArrayList<>();
 		AbsencjaDTO lvAbsencja = budujNiepelnaAbsencje();
-		if (mListaPracownikow.isEmpty()) {
+		if (mListaPracownikow == null || mListaPracownikow.isEmpty()) {
 			lvAbsencja.setId(mAbsencja.getId()).setIdPracownika(mAbsencja.getIdPracownika());
 			lvLista.add(lvAbsencja);
 		} else {

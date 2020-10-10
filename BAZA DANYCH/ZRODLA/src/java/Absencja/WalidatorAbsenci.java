@@ -21,7 +21,7 @@ import enums.WalidacjeTwarde;
 
 public class WalidatorAbsenci {
 	private AbsencjaRepositor mRepo = new AbsencjaRepository();
-	private ObslugaAbsencji mObsluga = new ObslugaAbsencji();
+	private ObslugaAbsencjiDeprecated mObsluga = new ObslugaAbsencjiDeprecated();
 	private ObslugaPracownka mObsPrac = new ObslugaPracownka();
 	private PracownikRepository mRepoPracownika = new PracownikRepository();
 

@@ -20,6 +20,7 @@ import pl.home.DniWolne.DniWolneRepository;
 import pl.home.DniWolne.DzienWolnyDTO;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.mainframes.OknoSprawozdan;
+import pl.home.components.frames.mainframes.OneDayView;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 import pl.home.components.frames.parameters.OSprawozdanWejscie;
 
@@ -137,5 +138,9 @@ public class ObslugaOknaGlownego {
 
 		OAbsencjiWejscie lvWejscie = OAbsencjiWejscie.builder().withAbsencja(lvAbsencja).withListaPracownikow(mOkno.getPracownicyZTabeli()).build();
 		new OknoAbsencji(lvWejscie).get();
+	}
+
+	public void showOneDayView() {
+		new OneDayView(null);
 	}
 }
