@@ -9,5 +9,5 @@ public interface ISystemTableNames {
 
 	public String getNazwa();
 
-	public String getPrimaryKey();
+	public SystemTables getPrimaryKey();
 }

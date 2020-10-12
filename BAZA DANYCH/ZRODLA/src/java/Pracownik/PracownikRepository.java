@@ -1,6 +1,6 @@
 package Pracownik;
 
-import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_PRAC;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Urlop_Nalezny;
 
@@ -28,7 +28,7 @@ import enums.SLRodzajeAbsencji;
 public class PracownikRepository extends AccessDB {
 	public void dodajPracownika(String pmNazwa) {
 		QueryBuilder.INSERT()//
-				.setFromGenerator(ID_PRAC)//
+				.setFromGenerator(ID_tabeli)//
 				.set(Pracownik, pmNazwa)//
 				.set(Urlop_Nalezny, 26)//
 				.execute();
@@ -43,7 +43,7 @@ public class PracownikRepository extends AccessDB {
 
 		QueryBuilder.DELETE()//
 				.delete(SystemTablesNames.ZESTAWIENIE)//
-				.andWarunek(ZestawienieColumns.ID_PRAC, pmId)//
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId)//
 				.execute();
 	}
 
@@ -51,21 +51,21 @@ public class PracownikRepository extends AccessDB {
 
 		QueryBuilder.UPDATE()//
 				.set(ZestawienieColumns.Data_Zwolnienia, pmData)//
-				.andWarunek(ZestawienieColumns.ID_PRAC, pmId)//
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId)//
 				.execute();
 	}
 
 	public String getPracownikNazwa(int pmId) {
 		return QueryBuilder.SELECT()//
 				.select(Pracownik)//
-				.andWarunek(ID_PRAC, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute().getAsString(Pracownik);
 	}
 
 	public List<PracownikDTO> getListaWszystkichPracownikow() {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_PRAC, Pracownik)//
+				.select(ID_tabeli, Pracownik)//
 				.andWarunek(ZestawienieColumns.Data_Zwolnienia, null)//
 				.orderBy(Pracownik, true)//
 				.execute();
@@ -80,7 +80,7 @@ public class PracownikRepository extends AccessDB {
 
 	private PracownikDTO parsujPracownika(LRecord pmRecord) {
 		PracownikDTO lvPracownik = new PracownikDTO();
-		lvPracownik.setId(pmRecord.getAsInteger(ID_PRAC));
+		lvPracownik.setId(pmRecord.getAsInteger(ID_tabeli));
 		lvPracownik.setNazwa(pmRecord.getAsString(Pracownik));
 		lvPracownik.setDataZwolnienia(pmRecord.getAsLocalDate(ZestawienieColumns.Data_Zwolnienia));
 		if (pmRecord.containsKey(AbsencjeColumns.RODZAJ)) {
@@ -96,8 +96,8 @@ public class PracownikRepository extends AccessDB {
 
 		LRecordSet lvWynik = //
 				QueryBuilder.SELECT()//
-						.select(ID_PRAC, Pracownik)//
-						.joinOn(GrupyPowiazaniaColumns.ID_PRACOWNIKA, ID_PRAC)//
+						.select(ID_tabeli, Pracownik)//
+						.joinOn(GrupyPowiazaniaColumns.ID_PRACOWNIKA, ID_tabeli)//
 						.andWarunek(ZestawienieColumns.Data_Zwolnienia, null)//
 						.andWarunek(GrupyPowiazaniaColumns.ID_GRUPY, pmGrupaId)//
 						.orderBy(Pracownik, true)//
@@ -112,14 +112,14 @@ public class PracownikRepository extends AccessDB {
 	public void ustawDateUrodzenia(int pmId, Date pmDataUrodzenia) {
 		QueryBuilder.UPDATE()//
 				.set(ZestawienieColumns.Data_Urodzenia, pmDataUrodzenia)//
-				.andWarunek(ID_PRAC, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute();
 	}
 
 	public Date getDataUrodzenia(int pmId) {
 		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
 				.select(ZestawienieColumns.Data_Urodzenia)//
-				.andWarunek(ID_PRAC, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute();
 
 		return lvRecordSet.getAsDate(ZestawienieColumns.Data_Urodzenia);
@@ -128,14 +128,14 @@ public class PracownikRepository extends AccessDB {
 	public void ustawUrlopNalezny(int pmId, int pmUrlop) {
 		QueryBuilder.UPDATE()//
 				.set(ZestawienieColumns.Urlop_Nalezny, pmUrlop)//
-				.andWarunek(ID_PRAC, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute();
 	}
 
 	public Integer getUrlopNalezny(int pmId) {
 		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
 				.select(ZestawienieColumns.Urlop_Nalezny)//
-				.andWarunek(ID_PRAC, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute();
 
 		return lvRecordSet.getAsInteger(ZestawienieColumns.Urlop_Nalezny);
@@ -144,8 +144,8 @@ public class PracownikRepository extends AccessDB {
 	public List<PracownikDTO> pobierzNieobecnych(LocalDate pmDataObecnosci) {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_PRAC, Pracownik, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy, AbsencjeColumns.RODZAJ)//
-				.joinOn(AbsencjeColumns.ID_pracownika, ID_PRAC).andBeforeOrEqual(AbsencjeColumns.Od_kiedy, pmDataObecnosci)//
+				.select(ID_tabeli, Pracownik, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy, AbsencjeColumns.RODZAJ)//
+				.joinOn(AbsencjeColumns.ID_pracownika, ID_tabeli).andBeforeOrEqual(AbsencjeColumns.Od_kiedy, pmDataObecnosci)//
 				.andAfterOrEqual(AbsencjeColumns.Do_kiedy, pmDataObecnosci)//
 				.execute();
 
@@ -155,9 +155,9 @@ public class PracownikRepository extends AccessDB {
 	public PracownikDTO getPracownik(Integer pmIdPracownika) {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_PRAC, ZestawienieColumns.Pracownik, ZestawienieColumns.Urlop_Nalezny, ZestawienieColumns.Data_Urodzenia,
+				.select(ID_tabeli, ZestawienieColumns.Pracownik, ZestawienieColumns.Urlop_Nalezny, ZestawienieColumns.Data_Urodzenia,
 						ZestawienieColumns.Data_Zatrudnienia, ZestawienieColumns.Data_Zwolnienia)//
-				.andWarunek(ID_PRAC, pmIdPracownika)//
+				.andWarunek(ID_tabeli, pmIdPracownika)//
 				.execute();
 
 		return parsujPracownika(lvWynik.get(0));
@@ -167,7 +167,7 @@ public class PracownikRepository extends AccessDB {
 
 		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
 				.select(ZestawienieColumns.Data_Zwolnienia)//
-				.andWarunek(ID_PRAC, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute();
 		return lvRecordSet.getAsLocalDate(ZestawienieColumns.Data_Zwolnienia);
 	}

@@ -12,7 +12,7 @@ import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 
 public enum AbsencjeColumns implements SystemTables {
 
-	ID_ABS(Integer.class, "Identyfikator"), //
+	ID_tabeli(Integer.class, "Identyfikator"), //
 	ID_pracownika(Integer.class, "Identyfikator pracownika"), //
 	Od_kiedy(Timestamp.class, "Data początku okresu"), //
 	Do_kiedy(Timestamp.class, "Data końca okresu"), //

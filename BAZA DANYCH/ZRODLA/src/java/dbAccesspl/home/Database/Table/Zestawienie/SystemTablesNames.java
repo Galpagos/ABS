@@ -4,17 +4,16 @@ import ProjektGlowny.commons.DbBuilder.ISystemTableNames;
 import ProjektGlowny.commons.DbBuilder.SystemTables;
 
 import java.util.EnumSet;
-
 public enum SystemTablesNames implements ISystemTableNames {
 
-	ZESTAWIENIE("Zestawienie", EnumSet.allOf(ZestawienieColumns.class), "ID_PRAC"), //
-	DNI_WOLNE("DniWolne", EnumSet.allOf(DniWolneColumns.class), "ID_DN_WN"), //
+	ZESTAWIENIE("Zestawienie", EnumSet.allOf(ZestawienieColumns.class), ZestawienieColumns.ID_tabeli), //
+	DNI_WOLNE("DniWolne", EnumSet.allOf(DniWolneColumns.class), DniWolneColumns.ID_tabeli), //
 	AD_SYS_INFO("AD_SYS_INFO", EnumSet.allOf(SysInfoColumns.class), null), //
 	AD_GRUPY_POWIAZANIA("AD_GRUPY_POWIAZANIA", EnumSet.allOf(GrupyPowiazaniaColumns.class), null), //
-	AD_GRUPY("AD_GRUPY", EnumSet.allOf(GrupyColumns.class), "ID_GRP"), //
-	ABSENCJE("Absencje", EnumSet.allOf(AbsencjeColumns.class), "ID_ABS");
+	AD_GRUPY("AD_GRUPY", EnumSet.allOf(GrupyColumns.class), GrupyColumns.ID_tabeli), //
+	ABSENCJE("Absencje", EnumSet.allOf(AbsencjeColumns.class), AbsencjeColumns.ID_tabeli);
 
-	SystemTablesNames(String pmTableName, EnumSet<? extends SystemTables> pmTabela, String pmPrimaryKey) {
+	SystemTablesNames(String pmTableName, EnumSet<? extends SystemTables> pmTabela, SystemTables pmPrimaryKey) {
 		mTabela = pmTabela;
 		mNazwa = pmTableName;
 		mPrimaryKey = pmPrimaryKey;
@@ -32,7 +31,7 @@ public enum SystemTablesNames implements ISystemTableNames {
 
 	private EnumSet<? extends SystemTables> mTabela;
 	private String mNazwa;
-	private String mPrimaryKey;
+	private SystemTables mPrimaryKey;
 
 	@Override
 	public SystemTablesNames getByName(String pmName) {
@@ -45,7 +44,7 @@ public enum SystemTablesNames implements ISystemTableNames {
 	}
 
 	@Override
-	public String getPrimaryKey() {
+	public SystemTables getPrimaryKey() {
 		return mPrimaryKey;
 	}
 }

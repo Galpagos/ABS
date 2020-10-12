@@ -2,8 +2,6 @@ package Absencja;
 
 import ProjektGlowny.commons.utils.Interval;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -11,48 +9,15 @@ import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 
-import javax.swing.JOptionPane;
-
 import Datownik.LicznikDaty;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
-import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
-import pl.home.components.frames.mainframes.OknoAbsencji;
-import pl.home.components.frames.parameters.OAbsencjiWejscie;
+import pl.home.absencje.AbsencjeRepositoryDB;
 
 @Deprecated
 public class ObslugaAbsencjiDeprecated {
-	private AbsencjaRepositor mRepo = new AbsencjaRepository();
-
-	public List<AbsencjaDTO> pobierzAbsencjePracownika(int pmId) {
-		List<AbsencjaDTO> lvLista = new ArrayList<>();
-		Object[][] lvDane = mRepo.getAbsencjePracownika(pmId);
-		for (int i = 0; i < lvDane.length; i++) {
-			AbsencjaDTO lvAbs = AbsencjaDTO.builder()//
-					.setId((int) lvDane[i][0])//
-					.setIdPracownika((int) lvDane[i][1])//
-					.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[i][4]))//
-					.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[i][5] == null ? null : lvDane[i][5].toString()))
-					.setOkres(Interval.OkreszBazy(lvDane[i][2], lvDane[i][3]));
-
-			lvLista.add(lvAbs);
-		}
-		return lvLista;
-	}
-
-	public AbsencjaDTO pobierzAbsencjePoId(int pmId) {
-		Object[][] lvDane = mRepo.getAbsencjePoId(pmId);
-		if (lvDane.length < 1)
-			return null;
-		return AbsencjaDTO.builder()//
-				.setId((int) lvDane[0][0])//
-				.setIdPracownika((int) lvDane[0][1])//
-				.setRodzaj(SLRodzajeAbsencji.getByKod((String) lvDane[0][4]))//
-				.setProcent(SLEkwiwalentZaUrlop.getByKod(lvDane[0][5] == null ? "0" : lvDane[0][5].toString()))
-				.setOkres(Interval.OkreszBazy(lvDane[0][2], lvDane[0][3]));
-	}
-
+	private AbsencjeRepositoryDB mRepoAbs = new AbsencjeRepositoryDB();
 	int ileDniRoboczych(AbsencjaDTO pmAbs) {
 		if (pmAbs.getOkres() == null)
 			return 0;
@@ -60,9 +25,7 @@ public class ObslugaAbsencjiDeprecated {
 	}
 
 	int ileDniRoboczychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj, Interval pmOkres) {
-		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmIdPracownika).stream()//
-				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
-				.collect(Collectors.toList());
+		List<AbsencjaDTO> lvLista = mRepoAbs.getAbsencjePracownika(pmIdPracownika);
 
 		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres).orElse(null)));
 
@@ -73,29 +36,8 @@ public class ObslugaAbsencjiDeprecated {
 		return lvWynik;
 	}
 
-	public void modyfikujAbsencje(AbsencjaDTO pmAbs) {
-		if (pmAbs != null) {
-			OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(pmAbs).withListaPracownikow(Collections.emptyList()).build();
-			new OknoAbsencji(lvParams);
-		}
-	}
-
-	public void dodajAbsencje(AbsencjaDTO pmAbs) {
-		if (pmAbs != null) {
-
-			mRepo.dodajAbsencje(pmAbs);
-		}
-	}
-
-	public void usunAbsencje(int pmID, boolean pmPotwierdzone) {
-		if (pmPotwierdzone || JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć?") == JOptionPane.YES_OPTION)
-			mRepo.usunAbsencje(pmID);
-	}
-
 	int ileDniKalendarzowychAbsencjiPracownikaWOkresie(int pmIdPracownika, SLRodzajeAbsencji pmRodzaj, Interval pmOkres) {
-		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmIdPracownika).stream()//
-				.filter(lvAbs -> lvAbs.getRodzaj() == pmRodzaj)//
-				.collect(Collectors.toList());
+		List<AbsencjaDTO> lvLista = mRepoAbs.getAbsencjePracownika(pmIdPracownika);
 
 		lvLista.stream().forEach(lvAbs2 -> lvAbs2.setOkres(lvAbs2.getOkres().overlap(pmOkres).orElse(null)));
 		int lvWynik = 0;
@@ -122,7 +64,7 @@ public class ObslugaAbsencjiDeprecated {
 
 	LocalDate dzienKoncaWynagrodzeniaChorobowego(AbsencjaDTO pmAbsencja, int pmLimit) {
 		licznik = pmLimit;
-		List<AbsencjaDTO> lvLista = pobierzAbsencjePracownika(pmAbsencja.getIdPracownika());
+		List<AbsencjaDTO> lvLista = mRepoAbs.getAbsencjePracownika(pmAbsencja.getIdPracownika());
 		lvLista.add(pmAbsencja);
 		lvLista = lvLista.stream()//
 				.filter(lvAbs -> lvAbs.getRodzaj() == SLRodzajeAbsencji.szpital || lvAbs.getRodzaj() == SLRodzajeAbsencji.L_4

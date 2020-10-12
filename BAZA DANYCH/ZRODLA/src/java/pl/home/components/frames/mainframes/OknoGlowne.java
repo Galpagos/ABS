@@ -1,7 +1,7 @@
 package pl.home.components.frames.mainframes;
 
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data_Zwolnienia;
-import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_PRAC;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
 import ProjektGlowny.commons.Components.LTable;
@@ -70,7 +70,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 		DbSelect lvZapytanieLS = QueryBuilder//
 				.SELECT()//
-				.select(ID_PRAC, Pracownik)//
+				.select(ID_tabeli, Pracownik)//
 				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"");
 
 		if (!cbCzyUsunieci.isSelected())

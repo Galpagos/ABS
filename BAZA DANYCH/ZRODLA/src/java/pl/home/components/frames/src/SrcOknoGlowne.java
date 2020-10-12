@@ -1,7 +1,7 @@
 package pl.home.components.frames.src;
 
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Data_Zwolnienia;
-import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_PRAC;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 
 import ProjektGlowny.commons.Components.LTable;
@@ -141,14 +141,14 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 
 		DbSelect lvZapytanieLS = QueryBuilder//
 				.SELECT()//
-				.select(ID_PRAC, Pracownik)//
+				.select(ID_tabeli, Pracownik)//
 				.andWarunek(Pracownik + " like \"%" + mFiltrPracownika.getText() + "%\"");
 
 		if (!cbCzyUsunieci.isSelected())
 			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
 
 		LTable lvTabela = new LTable(lvZapytanieLS.execute());
-		lvTabela.hideColumn(ZestawienieColumns.ID_PRAC);
+		lvTabela.hideColumn(ZestawienieColumns.ID_tabeli);
 		lvTabela.addSorter(Pracownik, SortOrder.ASCENDING);
 		lvTabela.odswiez();
 		lvTabela.repaint();

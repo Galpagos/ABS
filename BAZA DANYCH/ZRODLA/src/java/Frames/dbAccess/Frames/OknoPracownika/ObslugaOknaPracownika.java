@@ -24,6 +24,7 @@ import enums.InformacjeUniwersalne;
 import enums.PytanieOWartosc;
 import enums.SLRodzajeAbsencji;
 import enums.WalidacjeTwarde;
+import pl.home.absencje.ObslugaAbsencji;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 
@@ -33,6 +34,7 @@ public class ObslugaOknaPracownika {
 	private ObslugaPracownka mObslugaPracownika = new ObslugaPracownka();
 	private ObslugaAbsencjiDeprecated mObslugaAbsencji = new ObslugaAbsencjiDeprecated();
 	private ObslugaGrup mObslugaGrup = new ObslugaGrup();
+	private ObslugaAbsencji mObslugaAbs = new ObslugaAbsencji();
 
 	public ObslugaOknaPracownika(InterfejsOknaPracownika pmOknoPracownika) {
 		mOkno = pmOknoPracownika;
@@ -41,12 +43,13 @@ public class ObslugaOknaPracownika {
 	public void DodajAbsencje() {
 		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.urlop_wypoczynkowy;
-		lvAbsencja.setId(QueryBuilder.getNextID(AbsencjeColumns.ID_ABS));
+		lvAbsencja.setId(QueryBuilder.getNextID(AbsencjeColumns.ID_tabeli));
 		lvAbsencja.setIdPracownika(mOkno.getPracownika().getId());
 		lvAbsencja.setOkres(new Interval(new Date(), new Date()));
 		lvAbsencja.setRodzaj(lvRodzajAbs);
 
-		mObslugaAbsencji.modyfikujAbsencje(lvAbsencja);
+		OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(lvAbsencja).withListaPracownikow(Collections.emptyList()).build();
+		new OknoAbsencji(lvParams).get();
 	}
 
 	public void ModyfikujAbsencje() {
@@ -59,7 +62,7 @@ public class ObslugaOknaPracownika {
 			return;
 
 		int lvIdAbsencji = mOkno.getAbsencjeZTabeli().getId();
-		mObslugaAbsencji.usunAbsencje(lvIdAbsencji, true);
+		mObslugaAbs.deleteAbsence(lvIdAbsencji);
 
 	}
 

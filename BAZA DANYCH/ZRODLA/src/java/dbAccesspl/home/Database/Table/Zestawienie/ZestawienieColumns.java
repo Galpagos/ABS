@@ -3,7 +3,7 @@ package dbAccesspl.home.Database.Table.Zestawienie;
 import ProjektGlowny.commons.DbBuilder.SystemTables;
 
 public enum ZestawienieColumns implements SystemTables {
-	ID_PRAC(Integer.class, "Identyfikator"), //
+	ID_tabeli(Integer.class, "Identyfikator"), //
 	Pracownik(String.class, "Pracownik"), //
 	Data_Zwolnienia(java.sql.Timestamp.class, "Data zwolnienia"), //
 	Data_Zatrudnienia(java.sql.Timestamp.class, "Data zatrudnienia"), //

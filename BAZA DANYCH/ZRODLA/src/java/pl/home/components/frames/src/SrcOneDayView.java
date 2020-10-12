@@ -109,7 +109,7 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 		lvTabela.odswiez();
 		lvTabela.repaint();
 		lvTabela.reload(getTableQuery().execute());
-		lvTabela.hideColumn(AbsencjeColumns.ID_ABS);
+		lvTabela.hideColumn(AbsencjeColumns.ID_tabeli);
 
 		return lvTabela;
 	}
@@ -127,8 +127,8 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 	private QueryBuilder getTableQuery() {
 		return QueryBuilder//
 				.SELECT()//
-				.select(AbsencjeColumns.ID_ABS, ZestawienieColumns.Pracownik, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy)//
-				.joinOn(ZestawienieColumns.ID_PRAC, AbsencjeColumns.ID_pracownika)//
+				.select(AbsencjeColumns.ID_tabeli, ZestawienieColumns.Pracownik, AbsencjeColumns.RODZAJ, AbsencjeColumns.Od_kiedy, AbsencjeColumns.Do_kiedy)//
+				.joinOn(ZestawienieColumns.ID_tabeli, AbsencjeColumns.ID_pracownika)//
 				.andBeforeOrEqual(AbsencjeColumns.Od_kiedy, mData)//
 				.andAfterOrEqual(AbsencjeColumns.Do_kiedy, mData)//
 				.andWarunek(ZestawienieColumns.Data_Zwolnienia, null).orderBy(ZestawienieColumns.Pracownik, true);

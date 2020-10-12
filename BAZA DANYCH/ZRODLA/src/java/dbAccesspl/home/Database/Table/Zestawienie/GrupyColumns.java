@@ -4,7 +4,7 @@ import ProjektGlowny.commons.DbBuilder.SystemTables;
 
 public enum GrupyColumns implements SystemTables {
 
-	ID_GRP(Integer.class, "Identyfikator"), //
+	ID_tabeli(Integer.class, "Identyfikator"), //
 	Nazwa(String.class, "Grupa");
 	private Class<?> mKlasa;
 	private String mColumnName;

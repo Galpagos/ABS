@@ -1,6 +1,7 @@
 package pl.home.absencje;
 
 import java.util.List;
+import java.util.Optional;
 
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -17,6 +18,10 @@ public class ObslugaAbsencji {
 			return true;
 		}
 		return false;
+	}
+
+	public void deleteAbsence(Integer pmId) {
+		mRepo.deleteAbsence(pmId);
 	}
 
 	private boolean checkAbsence(AbsencjaDTO pmAbsencja) {
@@ -43,7 +48,11 @@ public class ObslugaAbsencji {
 	}
 
 	public void modifyAbsence(Integer pmId) {
-		OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mRepo.getAbsenceById(pmId)).build();
+		OAbsencjiWejscie lvParams = OAbsencjiWejscie.builder().withAbsencja(mRepo.getAbsenceById(pmId).get()).build();
 		new OknoAbsencji(lvParams).get();
+	}
+
+	public Optional<AbsencjaDTO> getAbsenceById(int pmId) {
+		return mRepo.getAbsenceById(pmId);
 	}
 }

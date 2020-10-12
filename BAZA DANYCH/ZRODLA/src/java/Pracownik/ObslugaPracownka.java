@@ -1,35 +1,36 @@
 package Pracownik;
 
-import java.time.LocalDate;
+import ProjektGlowny.commons.Components.DatePicker;
+import ProjektGlowny.commons.DbBuilder.QueryBuilder;
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.Date;
 import java.util.List;
+
+import java.time.LocalDate;
 
 import javax.swing.JOptionPane;
 
 import Absencja.AbsencjaRepository;
-
-import ProjektGlowny.commons.Components.DatePicker;
-import ProjektGlowny.commons.DbBuilder.QueryBuilder;
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import enums.SLRodzajeAbsencji;
 import enums.WalidacjeTwarde;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
+import pl.home.absencje.ObslugaAbsencji;
 import pl.home.components.frames.mainframes.OknoPracownika;
 import pl.home.components.frames.parameters.OPracWejscie;
 
 public class ObslugaPracownka {
 	PracownikRepository mRepo = new PracownikRepository();
 	AbsencjaRepository mRepoAbs = new AbsencjaRepository();
-
+	ObslugaAbsencji mObslugaAbs = new ObslugaAbsencji();
 	public void dodajNowegoPracownika() {
 		String lvNazwa = JOptionPane.showInputDialog("Podaj nazwę pracownika: ");
 		if (lvNazwa != null) {
 			mRepo.dodajPracownika(lvNazwa);
-			JOptionPane.showMessageDialog(null, "Dodano Pracownika " + lvNazwa, "Dodano Pracownika",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Dodano Pracownika " + lvNazwa, "Dodano Pracownika", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -38,8 +39,7 @@ public class ObslugaPracownka {
 			return;
 
 		String lvNazwa = mRepo.getPracownikNazwa(pmId);
-		JOptionPane.showMessageDialog(null, "Usunięto pracownika " + lvNazwa, "Usuwanie Pracownika",
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Usunięto pracownika " + lvNazwa, "Usuwanie Pracownika", JOptionPane.INFORMATION_MESSAGE);
 		mRepo.usunPracownika(pmId);
 	}
 
@@ -91,12 +91,12 @@ public class ObslugaPracownka {
 		if (lvData == null)
 			return;
 		AbsencjaDTO lvAbs = new AbsencjaDTO()//
-				.setId(QueryBuilder.getNextId(AbsencjeColumns.ID_ABS))//
+				.setId(QueryBuilder.getNextId(AbsencjeColumns.ID_tabeli))//
 				.setIdPracownika(pmId)//
 				.setOkres(new Interval(mRepo.getDataZwolnienia(pmId), lvData))//
 				.setProcent(SLEkwiwalentZaUrlop.PROCENT_0)//
 				.setRodzaj(SLRodzajeAbsencji.BRAK_STOSUNKU_PRACY);
-		mRepoAbs.dodajAbsencje(lvAbs);
+		mObslugaAbs.saveAbsence(lvAbs);
 		mRepo.zwolnijPracownika(pmId, null);
 	}
 }

@@ -1,22 +1,24 @@
 package Wydruki.SprawozdanieMiesieczne;
 
+import ProjektGlowny.commons.utils.Interval;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.DayOfWeek;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import Absencja.ObslugaAbsencjiDeprecated;
 import Frames.dbAccess.Components.ResultTableWindow;
 import Pracownik.ObslugaPracownka;
-import ProjektGlowny.commons.utils.Interval;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import pl.home.absencje.ObslugaAbsencji;
 
 public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	DefaultTableModel mModel = new DefaultTableModel();
@@ -25,9 +27,11 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	SprawozdaniaRepository mRepo;
 	List<DniWolneDTO> mListaDniWolnych;
 	int mLiczbaDniWMiesiacu;
+	private ObslugaAbsencji mObslugaAbs;
 
 	public SprawozdanieMiesieczne(DaneDoSprawozdaniaMiesiecznego pmDane) {
 		mRepo = new SprawozdaniaRepository();
+		mObslugaAbs = new ObslugaAbsencji();
 		mListaDniWolnych = new ArrayList<DniWolneDTO>();
 		mDane = pmDane;
 		przygotujNaglowekMiesieczny();
@@ -51,8 +55,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 
 	@Override
 	public Object[] przeliczWierszTabeli(PracownikDTO lvPrac) {
-		ObslugaAbsencjiDeprecated lvObsluga = new ObslugaAbsencjiDeprecated();
-		lvPrac.setListaAbsencji(lvObsluga.pobierzAbsencjePracownika(lvPrac.getId()));
+		lvPrac.setListaAbsencji(mObslugaAbs.getAbsencjePracownika(lvPrac.getId()));
 		if (lvPrac.getListaAbsencji() != null) {
 			for (AbsencjaDTO lvAbs : lvPrac.getListaAbsencji()) {
 				Interval lvNowyOkres = lvAbs.getOkres().overlap(mDane.getOkresSprawozdawczy()).orElse(null);
@@ -114,8 +117,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 
 		for (AbsencjaDTO lvAbs : pmPrac.getListaAbsencji()) {
 			if (lvAbs.getOkres() != null) {
-				for (int i = lvAbs.getOkres().getStart().getDayOfMonth(); i <= lvAbs.getOkres().getEnd()
-						.getDayOfMonth(); i++)
+				for (int i = lvAbs.getOkres().getStart().getDayOfMonth(); i <= lvAbs.getOkres().getEnd().getDayOfMonth(); i++)
 					pmRekord[i] = lvAbs;// .getRodzaj().toString();
 
 			}
@@ -145,8 +147,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	private void przygotujNaglowekMiesieczny() {
 		mModel.addColumn("Pracownik");
 
-		YearMonth yearMonthObject = YearMonth.of(mDane.getOkresSprawozdawczy().getStart().getYear(),
-				mDane.getOkresSprawozdawczy().getStart().getMonth());
+		YearMonth yearMonthObject = YearMonth.of(mDane.getOkresSprawozdawczy().getStart().getYear(), mDane.getOkresSprawozdawczy().getStart().getMonth());
 		mLiczbaDniWMiesiacu = yearMonthObject.lengthOfMonth();
 
 		for (int i = 1; i <= mLiczbaDniWMiesiacu; i++)
@@ -165,8 +166,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 				int row = target.getSelectedRow();
 				int column = target.getSelectedColumn();
 
-				if ((target.getValueAt(row, column) != null)
-						&& target.getValueAt(row, column).getClass() == PracownikDTO.class) {
+				if ((target.getValueAt(row, column) != null) && target.getValueAt(row, column).getClass() == PracownikDTO.class) {
 					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, column);
 					new ObslugaPracownka().pokazPracownika(lvPracownik);
 					int k = target.getModel().getColumnCount();
@@ -175,8 +175,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
 					}
 				}
-				if ((target.getValueAt(row, column) != null)
-						&& target.getValueAt(row, column).getClass() == AbsencjaDTO.class) {
+				if ((target.getValueAt(row, column) != null) && target.getValueAt(row, column).getClass() == AbsencjaDTO.class) {
 					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, 0);
 					new ObslugaPracownka().pokazPracownika(lvPracownik);
 					int k = target.getModel().getColumnCount();
@@ -188,8 +187,7 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 				}
 			}
 		});
-		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do "
-				+ mDane.getOkresSprawozdawczy().getEnd());
+		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do " + mDane.getOkresSprawozdawczy().getEnd());
 		mOknoWyniku.pokazWynik();
 
 	}

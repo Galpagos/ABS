@@ -1,6 +1,6 @@
 package Grupy;
 
-import static dbAccesspl.home.Database.Table.Zestawienie.GrupyColumns.ID_GRP;
+import static dbAccesspl.home.Database.Table.Zestawienie.GrupyColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.GrupyColumns.Nazwa;
 
 import java.util.List;
@@ -16,7 +16,7 @@ class GrupyRepository extends AccessDB {
 
 	List<GrupaDTO> pobierzGrupy() {
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_GRP, Nazwa)//
+				.select(ID_tabeli, Nazwa)//
 				.execute();
 
 		return parsujGrupy(lvWynik);
@@ -24,8 +24,8 @@ class GrupyRepository extends AccessDB {
 
 	List<GrupaDTO> pobierzGrupyPracownika(int pmId) {
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_GRP, Nazwa)//
-				.joinOn(GrupyPowiazaniaColumns.ID_GRUPY, ID_GRP)//
+				.select(ID_tabeli, Nazwa)//
+				.joinOn(GrupyPowiazaniaColumns.ID_GRUPY, ID_tabeli)//
 				.andWarunek(GrupyPowiazaniaColumns.ID_PRACOWNIKA, pmId)//
 				.execute();
 
@@ -34,7 +34,7 @@ class GrupyRepository extends AccessDB {
 
 	void dodajGrupe(String pmNazwa) {
 		QueryBuilder.INSERT()//
-				.set(ID_GRP, QueryBuilder.getNextId(ID_GRP))//
+				.set(ID_tabeli, QueryBuilder.getNextId(ID_tabeli))//
 				.set(Nazwa, pmNazwa)//
 				.execute();
 	}
@@ -44,7 +44,7 @@ class GrupyRepository extends AccessDB {
 				.andWarunek(GrupyPowiazaniaColumns.ID_GRUPY, pmId)//
 				.execute();
 		QueryBuilder.DELETE()//
-				.andWarunek(ID_GRP, pmId)//
+				.andWarunek(ID_tabeli, pmId)//
 				.execute();
 	}
 
@@ -69,7 +69,7 @@ class GrupyRepository extends AccessDB {
 	}
 
 	private GrupaDTO parsujGrupe(LRecord pmRecord) {
-		return new GrupaDTO().setID(pmRecord.getAsInteger(ID_GRP)).setNazwa(pmRecord.getAsString(Nazwa));
+		return new GrupaDTO().setID(pmRecord.getAsInteger(ID_tabeli)).setNazwa(pmRecord.getAsString(Nazwa));
 	}
 
 }

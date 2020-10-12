@@ -3,7 +3,7 @@ package Wydruki.PrzygotowanieDanych;
 import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.Do_kiedy;
 import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.EKWIWALENT;
 import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.ID_pracownika;
-import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.ID_ABS;
+import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.Od_kiedy;
 import static dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns.RODZAJ;
 
@@ -108,7 +108,7 @@ public class AbsencjaDTO {
 
 	public static AbsencjaDTO parsuj(LRecord pmRecord) {
 		return new AbsencjaDTO()//
-				.setId(pmRecord.getAsInteger(ID_ABS))//
+				.setId(pmRecord.getAsInteger(ID_tabeli))//
 				.setIdPracownika(pmRecord.getAsInteger(ID_pracownika))//
 				.setNazwaPracownika(pmRecord.getAsString(ZestawienieColumns.Pracownik))//
 				.setOkres(new Interval(pmRecord.getAsLocalDate(Od_kiedy), pmRecord.getAsLocalDate(Do_kiedy)))//

@@ -18,6 +18,7 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import enums.SLRodzajeAbsencji;
 import enums.WalidacjeTwarde;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
+import pl.home.absencje.ObslugaAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 import pl.home.components.frames.src.SrcOknoAbsencji;
 
@@ -26,6 +27,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	private static final long serialVersionUID = 1L;
 	private AbsencjaDTO mAbsencja;
 	private ObslugaAbsencjiDeprecated mObslugaAbsencji;
+	private ObslugaAbsencji mObsAbs;
 	private WalidatorAbsenci mWalidator;
 	private List<PracownikDTO> mListaPracownikow;
 
@@ -42,6 +44,7 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	@Override
 	protected void budujOkno() {
 		super.budujOkno();
+		mObsAbs = new ObslugaAbsencji();
 		mObslugaAbsencji = new ObslugaAbsencjiDeprecated();
 		mWalidator = new WalidatorAbsenci();
 	}
@@ -74,13 +77,14 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 				continue;
 			}
 
-			AbsencjaDTO lvUsuwana = mObslugaAbsencji.pobierzAbsencjePoId(mAbsencja.getId());
-			mObslugaAbsencji.usunAbsencje(mAbsencja.getId(), true);
-			if (mWalidator.czyPrzekraczaLimity(lvAbsencja)) {
-				mObslugaAbsencji.dodajAbsencje(lvUsuwana);
+			Optional<AbsencjaDTO> lvUsuwana = mObsAbs.getAbsenceById(mAbsencja.getId());
+
+			mObsAbs.deleteAbsence(mAbsencja.getId());
+			if (mWalidator.czyPrzekraczaLimity(lvAbsencja) && lvUsuwana.isPresent()) {
+				mObsAbs.saveAbsence(lvUsuwana.get());
 			} else {
 				mWalidator.czyDniL4Ciagiem(lvAbsencja);
-				mObslugaAbsencji.dodajAbsencje(lvAbsencja);
+				mObsAbs.saveAbsence(lvAbsencja);
 				dispose();
 			}
 		}

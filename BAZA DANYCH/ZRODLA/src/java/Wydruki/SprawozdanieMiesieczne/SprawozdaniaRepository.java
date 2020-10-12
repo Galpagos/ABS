@@ -20,7 +20,7 @@ public class SprawozdaniaRepository {
 	public List<AbsencjaDTO> getAbsencjeDlaPracownika(int pmIdPrac, List<SLRodzajeAbsencji> pmList) {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(AbsencjeColumns.ID_ABS, AbsencjeColumns.ID_pracownika, AbsencjeColumns.Od_kiedy,
+				.select(AbsencjeColumns.ID_tabeli, AbsencjeColumns.ID_pracownika, AbsencjeColumns.Od_kiedy,
 						AbsencjeColumns.Do_kiedy, AbsencjeColumns.RODZAJ, AbsencjeColumns.EKWIWALENT)//
 				.andWarunek(AbsencjeColumns.ID_pracownika, pmIdPrac)//
 				.andWarunek(warunekNaModul(pmList))//
@@ -34,7 +34,7 @@ public class SprawozdaniaRepository {
 	private AbsencjaDTO parsujAbsencje(LRecord pmRecord) {
 		return AbsencjaDTO//
 				.builder()//
-				.setId(pmRecord.getAsInteger(AbsencjeColumns.ID_ABS))//
+				.setId(pmRecord.getAsInteger(AbsencjeColumns.ID_tabeli))//
 				.setIdPracownika(pmRecord.getAsInteger(AbsencjeColumns.ID_pracownika))//
 				.setOkres(new Interval(pmRecord.getAsDate(AbsencjeColumns.Od_kiedy),
 						pmRecord.getAsDate(AbsencjeColumns.Do_kiedy)))//
@@ -72,7 +72,7 @@ public class SprawozdaniaRepository {
 
 	public String getUrlopNalezny(int pmId) {
 		return QueryBuilder.SELECT().select(ZestawienieColumns.Urlop_Nalezny)
-				.andWarunek(ZestawienieColumns.ID_PRAC, pmId).execute().getAsString(ZestawienieColumns.Urlop_Nalezny);
+				.andWarunek(ZestawienieColumns.ID_tabeli, pmId).execute().getAsString(ZestawienieColumns.Urlop_Nalezny);
 
 	}
 }
