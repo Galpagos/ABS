@@ -31,6 +31,7 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 	protected JButton mcancelButton;
 
 	public AbstractOkno(T1 pmParams) {
+		super();
 		mParamsIn = pmParams;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

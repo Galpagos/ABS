@@ -1,7 +1,8 @@
 package Wydruki.ListaPlac;
 
-import java.time.YearMonth;
 import java.util.List;
+
+import java.time.YearMonth;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -9,8 +10,11 @@ import Frames.dbAccess.Components.ResultTableWindow;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
+import enums.RodzajWydruku;
 import pl.home.ListaPlac.ListaPlac;
 import pl.home.ListaPlac.MiesiecznaPlacaPracownika;
+import pl.home.components.frames.mainframes.ReportsResult;
+import pl.home.components.frames.parameters.ReportsResultIn;
 
 public class ListaPlacWydruk implements wynikWResultTableWindow {
 	private ResultTableWindow mOknoWyniku;
@@ -66,14 +70,14 @@ public class ListaPlacWydruk implements wynikWResultTableWindow {
 	}
 
 	private void pokazResult() {
-		mOknoWyniku = new ResultTableWindow();
-		mOknoWyniku.ustawTabele(mModel);
-		mOknoWyniku.setDane(this);
-		// mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new
-		// SprawozdanieRoczneCellRender());
-		// mOknoWyniku.getMtable().setDefaultRenderer(PustePole.class, new
-		// CellRenderPustePole());
-		mOknoWyniku.setTytul("Lista Plac " + mDane.getData());
-		mOknoWyniku.pokazWynik();
+		ReportsResultIn lvParams = ReportsResultIn//
+				.builder()//
+				.dane(this)//
+				.model(mModel)//
+				.rodzajWydruku(RodzajWydruku.LISTA_PLAC)//
+				.tytul("Lista Plac " + mDane.getData())//
+				.build();
+
+		new ReportsResult(lvParams).get();
 	}
 }

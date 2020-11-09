@@ -1,25 +1,28 @@
 package Wydruki.SprawozdanieRoczne;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+
 import javax.swing.table.DefaultTableModel;
 
 import Frames.dbAccess.Components.ResultTableWindow;
-import ProjektGlowny.commons.utils.Interval;
-import Wydruki.ListaObecnosci.CellRenderPustePole;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
-import Wydruki.PrzygotowanieDanych.PustePole;
 import Wydruki.SprawozdanieMiesieczne.SprawozdaniaRepository;
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
+import enums.RodzajWydruku;
 import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
+import pl.home.components.frames.mainframes.ReportsResult;
+import pl.home.components.frames.parameters.ReportsResultIn;
 
 public class SprawozdanieRoczne implements wynikWResultTableWindow {
 	DefaultTableModel mModel = new DefaultTableModel();
@@ -58,14 +61,16 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 	}
 
 	private void pokazResult() {
-		mOknoWyniku = new ResultTableWindow();
-		mOknoWyniku.ustawTabele(mModel);
-		mOknoWyniku.setDane(this);
-		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieRoczneCellRender());
-		mOknoWyniku.getMtable().setDefaultRenderer(PustePole.class, new CellRenderPustePole());
-		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do "
-				+ mDane.getOkresSprawozdawczy().getEnd());
-		mOknoWyniku.pokazWynik();
+
+		ReportsResultIn lvParams = ReportsResultIn//
+				.builder()//
+				.dane(this)//
+				.rodzajWydruku(RodzajWydruku.SPR_ROCZNE)//
+				.model(mModel)//
+				.tytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do " + mDane.getOkresSprawozdawczy().getEnd())//
+				.build();
+
+		new ReportsResult(lvParams).get();
 	}
 
 	private void utworzWierszeTabeli() {
@@ -127,8 +132,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 
 		}
 		KomorkaSprawozdaniaRocznegoDTO lvDane = new KomorkaSprawozdaniaRocznegoDTO();
-		lvDane.setMapa(
-				mListaAbsWMiesiacu.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
+		lvDane.setMapa(mListaAbsWMiesiacu.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
 
 		return lvDane;// TODO Auto-generated method stub
 

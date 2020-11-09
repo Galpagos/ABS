@@ -1,19 +1,20 @@
 package Wydruki.ListaObecnosci;
 
-import java.awt.Dimension;
+import java.util.List;
+
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 import Frames.dbAccess.Components.ResultTableWindow;
 import Pracownik.ObslugaPracownka;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import Wydruki.PrzygotowanieDanych.PustePole;
+import enums.RodzajWydruku;
+import pl.home.components.frames.mainframes.ReportsResult;
+import pl.home.components.frames.parameters.ReportsResultIn;
 
 public class ListaObecnosci {
 	private DefaultTableModel mModel = new DefaultTableModel();
@@ -76,12 +77,12 @@ public class ListaObecnosci {
 	}
 
 	private void utworzNaglowek() {
-		mModel.addColumn("Nazwisko, Imi�");
+		mModel.addColumn("Nazwisko, Imię");
 		mModel.addColumn("Od");
 		mModel.addColumn("Do");
 		mModel.addColumn("Podpis");
 		mModel.addColumn("");
-		mModel.addColumn("Nazwisko, Imi�");
+		mModel.addColumn("Nazwisko, Imię");
 		mModel.addColumn("Od");
 		mModel.addColumn("Do");
 		mModel.addColumn("Podpis");
@@ -106,34 +107,24 @@ public class ListaObecnosci {
 	}
 
 	private void formatujOknoWyniku() {
-		mOknoWyniku = new ResultTableWindow();
-		mOknoWyniku.getMtable().setShowGrid(false);
-		mOknoWyniku.getMtable().setIntercellSpacing(new Dimension(0, 0));
-		mOknoWyniku.ustawTabele(mModel);
-		mOknoWyniku.getMtable().setBorder(BorderFactory.createEmptyBorder());
-		mOknoWyniku.getMtable().setRowHeight(Integer.valueOf(mDane.getWysokoscWiersza()));
 		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy");
 		String lvData = mDataObecnosci.format(fmt);
 
-		mOknoWyniku.setHeader(new MessageFormat(mDane.getNaglowek().replaceAll("<DATA>", mDane.getData().toString())));
-		mOknoWyniku.setFinal(new MessageFormat(mDane.getStopka()));
-		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new CellRenderListyObecnosci());
-		JTableHeader header = mOknoWyniku.getMtable().getTableHeader();
-		header.setDefaultRenderer(new CellRenderListyObecnosci());
-		mOknoWyniku.getMtable().setRowSelectionAllowed(false);
-		mOknoWyniku.setTytul("Lista obecności " + lvData);
+		ReportsResultIn lvParams = ReportsResultIn//
+				.builder()//
+				.rodzajWydruku(RodzajWydruku.LISTA_OBECNOSCI)//
+				.model(mModel)//
+				.wysokoscWiersza(mDane.getWysokoscWiersza())//
+				.header(new MessageFormat(mDane.getNaglowek().replaceAll("<DATA>", mDane.getData().toString())))//
+				.textFinal(new MessageFormat(mDane.getStopka()))//
+				.tytul("Lista obecności " + lvData)//
+				.build();
 
-		mOknoWyniku.getMtable().getColumnModel().getColumn(3).setPreferredWidth(350);
-		mOknoWyniku.getMtable().getColumnModel().getColumn(8).setPreferredWidth(350);
-		mOknoWyniku.getMtable().getColumnModel().getColumn(0).setPreferredWidth(200);
-		mOknoWyniku.getMtable().getColumnModel().getColumn(5).setPreferredWidth(200);
-		mOknoWyniku.getMtable().getColumnModel().getColumn(4).setPreferredWidth(250);
-
+		new ReportsResult(lvParams).get();
 	}
 
 	public void pokazResult() {
 		formatujOknoWyniku();
-		mOknoWyniku.pokazWynik();
 	}
 
 }

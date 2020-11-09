@@ -3,6 +3,7 @@ package Frames.dbAccess.Components;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
 
 @SuppressWarnings("serial")
-public class ResultTableWindow extends JFrame {
+public class ResultTableWindow extends JDialog {
 
 	private final JPanel contentPanel;
 	private JTable mtable;
@@ -69,8 +71,7 @@ public class ResultTableWindow extends JFrame {
 			{
 				mtable = new javax.swing.JTable() {
 					@Override
-					public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat,
-							MessageFormat footerFormat) {
+					public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat) {
 						return new TablePrintable(this, printMode, headerFormat, footerFormat);
 					}
 				};
@@ -135,8 +136,9 @@ public class ResultTableWindow extends JFrame {
 		}
 
 		pack();
-
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
+		// setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
+		// setExtendedState(JFrame.MAXIMIZED_BOTH);
 		pack();
 	}
 
@@ -152,7 +154,7 @@ public class ResultTableWindow extends JFrame {
 	public void pokazWynik() {
 		try {
 			setVisible(true);
-			setAlwaysOnTop(false);
+			setAlwaysOnTop(true);
 
 		} catch (Exception e) {
 			e.printStackTrace();

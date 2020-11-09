@@ -11,7 +11,7 @@ import javax.swing.table.TableCellRenderer;
 
 import Wydruki.PrzygotowanieDanych.PustePole;
 
-class CellRenderListyObecnosci extends JLabel implements TableCellRenderer {
+public class CellRenderListyObecnosci extends JLabel implements TableCellRenderer {
 	/**
 	 * 
 	 */
@@ -19,8 +19,7 @@ class CellRenderListyObecnosci extends JLabel implements TableCellRenderer {
 	private int mSize = 18;
 
 	@Override
-	public Component getTableCellRendererComponent(JTable pmTable, Object pmValue, boolean pmIsSelected,
-			boolean pmHasFocus, int pmRow, int pmColumn) {
+	public Component getTableCellRendererComponent(JTable pmTable, Object pmValue, boolean pmIsSelected, boolean pmHasFocus, int pmRow, int pmColumn) {
 		if (pmValue != null && (pmValue.getClass() == PustePole.class || (pmRow == -1 && pmColumn == 4))) {
 			setBorder(BorderFactory.createEmptyBorder());
 			setText("");

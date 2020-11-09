@@ -5,20 +5,19 @@ import ProjektGlowny.commons.utils.Interval;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.time.DayOfWeek;
 import java.time.YearMonth;
 
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Frames.dbAccess.Components.ResultTableWindow;
-import Pracownik.ObslugaPracownka;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
+import enums.RodzajWydruku;
 import pl.home.absencje.ObslugaAbsencji;
+import pl.home.components.frames.mainframes.ReportsResult;
+import pl.home.components.frames.parameters.ReportsResultIn;
 
 public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	DefaultTableModel mModel = new DefaultTableModel();
@@ -155,40 +154,16 @@ public class SprawozdanieMiesieczne implements wynikWResultTableWindow {
 	}
 
 	public void pokazResult() {
-		mOknoWyniku = new ResultTableWindow();
-		mOknoWyniku.setDane(this);
-		mOknoWyniku.ustawTabele(mModel);
-		mOknoWyniku.getMtable().setDefaultRenderer(Object.class, new SprawozdanieMiesieczneCellRender());
-		mOknoWyniku.getMtable().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent pmE) {
-				JTable target = (JTable) pmE.getSource();
-				int row = target.getSelectedRow();
-				int column = target.getSelectedColumn();
 
-				if ((target.getValueAt(row, column) != null) && target.getValueAt(row, column).getClass() == PracownikDTO.class) {
-					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, column);
-					new ObslugaPracownka().pokazPracownika(lvPracownik);
-					int k = target.getModel().getColumnCount();
-					Object[] lvPrzeliczonyWiersz = przeliczWierszTabeli(lvPracownik);
-					for (int i = 0; i < k; i++) {
-						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
-					}
-				}
-				if ((target.getValueAt(row, column) != null) && target.getValueAt(row, column).getClass() == AbsencjaDTO.class) {
-					PracownikDTO lvPracownik = (PracownikDTO) target.getValueAt(row, 0);
-					new ObslugaPracownka().pokazPracownika(lvPracownik);
-					int k = target.getModel().getColumnCount();
-					Object[] lvPrzeliczonyWiersz = przeliczWierszTabeli(lvPracownik);
-					for (int i = 0; i < k; i++) {
-						target.getModel().setValueAt(lvPrzeliczonyWiersz[i], row, i);
-					}
-					mOknoWyniku.repaint();
-				}
-			}
-		});
-		mOknoWyniku.setTytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do " + mDane.getOkresSprawozdawczy().getEnd());
-		mOknoWyniku.pokazWynik();
+		ReportsResultIn lvParams = ReportsResultIn//
+				.builder()//
+				.dane(this)//
+				.model(mModel)//
+				.rodzajWydruku(RodzajWydruku.SPR_MIESIECZNE)//
+				.tytul("Sprawozdanie za okres od " + mDane.getOkresSprawozdawczy().getStart() + " do " + mDane.getOkresSprawozdawczy().getEnd())//
+				.build();
+
+		new ReportsResult(lvParams).get();
 
 	}
 }
