@@ -1,11 +1,12 @@
 package ProjektGlowny.commons.DbBuilder;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import ProjektGlowny.commons.Components.SilentException;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-import ProjektGlowny.commons.Components.SilentException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class LRecordSet extends ArrayList<LRecord> {
 
@@ -13,14 +14,20 @@ public class LRecordSet extends ArrayList<LRecord> {
 	private static final long serialVersionUID = 2479458688075804811L;
 
 	public Integer getAsInteger(SystemTables pmNazwa) {
+		if (mIndex >= size())
+			return null;
 		return this.get(mIndex).getAsInteger(pmNazwa);
 	}
 
 	public String getAsString(SystemTables pmNazwa) {
+		if (mIndex >= size())
+			return null;
 		return this.get(mIndex).getAsString(pmNazwa);
 	}
 
 	public Timestamp getAsTimestamp(SystemTables pmNazwa) {
+		if (mIndex >= size())
+			return null;
 		return this.get(mIndex).getAsTimestamp(pmNazwa);
 	}
 
@@ -37,12 +44,14 @@ public class LRecordSet extends ArrayList<LRecord> {
 	}
 
 	public LocalDate getAsLocalDate(SystemTables pmData) {
-
+		if (mIndex >= size())
+			return null;
 		return this.get(mIndex).getAsLocalDate(pmData);
 	}
 
 	public Date getAsDate(SystemTables pmData) {
-
+		if (mIndex >= size())
+			return null;
 		return this.get(mIndex).getAsDate(pmData);
 	}
 }

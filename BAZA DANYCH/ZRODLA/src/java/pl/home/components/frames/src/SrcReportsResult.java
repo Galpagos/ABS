@@ -47,6 +47,7 @@ public abstract class SrcReportsResult extends AbstractOkno<ReportsResultIn, Rep
 	protected JTable mtable;
 	private MessageFormat mheader = new MessageFormat("Sprawozdanie");
 	private MessageFormat mFinal = new MessageFormat("");
+	private OrientationRequested mOrientation;
 
 	public SrcReportsResult(ReportsResultIn pmParams) {
 		super(pmParams);
@@ -61,6 +62,7 @@ public abstract class SrcReportsResult extends AbstractOkno<ReportsResultIn, Rep
 	}
 
 	private void ustawFormatowanieWydruku(RodzajWydruku pmRodzajWydruku) {
+		mOrientation = OrientationRequested.LANDSCAPE;
 		switch (pmRodzajWydruku) {
 			case LISTA_OBECNOSCI :
 				setingsListaObecnosci();
@@ -127,16 +129,20 @@ public abstract class SrcReportsResult extends AbstractOkno<ReportsResultIn, Rep
 		ustawTabele(mParamsIn.getModel());
 		mtable.setBorder(BorderFactory.createEmptyBorder());
 		mtable.setRowHeight(Integer.valueOf(mParamsIn.getWysokoscWiersza()));
-		mtable.setDefaultRenderer(Object.class, new CellRenderListyObecnosci());
+		mtable.setDefaultRenderer(Object.class, new CellRenderListyObecnosci()//
+				.setSize(mParamsIn.getSize())//
+				.setBoldLines(mParamsIn.getBoldLines()));
+
 		JTableHeader header = mtable.getTableHeader();
 		header.setDefaultRenderer(new CellRenderListyObecnosci());
 		mtable.setRowSelectionAllowed(false);
-
+		mOrientation = OrientationRequested.PORTRAIT;
 		mtable.getColumnModel().getColumn(3).setPreferredWidth(350);
-		mtable.getColumnModel().getColumn(8).setPreferredWidth(350);
+		mheader = mParamsIn.getHeader();
+		// mtable.getColumnModel().getColumn(8).setPreferredWidth(350);
 		mtable.getColumnModel().getColumn(0).setPreferredWidth(200);
-		mtable.getColumnModel().getColumn(5).setPreferredWidth(200);
-		mtable.getColumnModel().getColumn(4).setPreferredWidth(250);
+		// mtable.getColumnModel().getColumn(5).setPreferredWidth(200);
+		// mtable.getColumnModel().getColumn(4).setPreferredWidth(250);
 	}
 
 	@Override
@@ -186,7 +192,7 @@ public abstract class SrcReportsResult extends AbstractOkno<ReportsResultIn, Rep
 					try {
 						PrintRequestAttributeSet lvWydruk = new HashPrintRequestAttributeSet();
 						lvWydruk.add(new MediaPrintableArea(10f, 10f, 190f, 277f, MediaPrintableArea.MM));
-						lvWydruk.add(OrientationRequested.LANDSCAPE);
+						lvWydruk.add(mOrientation);
 
 						mtable.print(JTable.PrintMode.FIT_WIDTH, mheader, mFinal, true, lvWydruk, false);
 					} catch (Exception e1) {

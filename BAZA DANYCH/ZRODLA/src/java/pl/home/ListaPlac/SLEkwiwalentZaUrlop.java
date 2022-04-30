@@ -1,8 +1,8 @@
 package pl.home.ListaPlac;
 
-import java.math.BigDecimal;
-
 import ProjektGlowny.commons.enums.InterfejsSlownika;
+
+import java.math.BigDecimal;
 
 public enum SLEkwiwalentZaUrlop implements InterfejsSlownika {
 
@@ -41,12 +41,11 @@ public enum SLEkwiwalentZaUrlop implements InterfejsSlownika {
 				return e;
 			}
 		}
-		System.out.println("Nie znaleziono Ekwiwalentu dla urlopu");
+		System.out.println("Nie znaleziono Ekwiwalentu dla urlopu!");
 		return PROCENT_100;
 
 	}
 
-	@Override
 	public String getNazwaByKod(String pmKod) {
 
 		return getByKod(pmKod).getKod();

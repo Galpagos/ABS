@@ -8,7 +8,10 @@ public enum ZestawienieColumns implements SystemTables {
 	Data_Zwolnienia(java.sql.Timestamp.class, "Data zwolnienia"), //
 	Data_Zatrudnienia(java.sql.Timestamp.class, "Data zatrudnienia"), //
 	Urlop_Nalezny(Integer.class, "Urlop należny"), //
-	Data_Urodzenia(java.sql.Timestamp.class, "Data urodzenia");//
+	Data_Urodzenia(java.sql.Timestamp.class, "Data urodzenia"), //
+	ETAT(String.class, "Etat"), //
+	GODZINA_OD(Integer.class, "Godzina_Od"), //
+	GODZINA_DO(Integer.class, "Godzina_Do");//
 
 	private Class<?> mKlasa;
 	private String mColumnName;

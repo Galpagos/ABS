@@ -1,4 +1,4 @@
-package enums;
+package ProjektGlowny.commons.enums;
 
 import java.time.Year;
 

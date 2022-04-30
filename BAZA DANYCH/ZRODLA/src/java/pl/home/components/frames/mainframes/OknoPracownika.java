@@ -2,7 +2,10 @@ package pl.home.components.frames.mainframes;
 
 import ProjektGlowny.commons.utils.Interval;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import java.sql.Timestamp;
 
@@ -22,7 +25,6 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 
 	public OknoPracownika(OPracWejscie pmParams) {
 		super(pmParams);
-
 	}
 
 	@Override
@@ -51,13 +53,7 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 
 	@Override
 	protected void modyfikujAbsencje() {
-		mObsluga.ModyfikujAbsencje();
-		odswiezKontrolki();
-	}
-
-	@Override
-	protected void ustawUrlopNalezny() {
-		mObsluga.ustawUrlopNalezny();
+		mObsluga.modyfikujAbsencje();
 		odswiezKontrolki();
 	}
 
@@ -74,18 +70,13 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	}
 
 	@Override
-	protected void ustawDateUrodzenia() {
-		mObsluga.ustawDateUrodzenia();
-		odswiezKontrolki();
-	}
-
-	@Override
 	protected void odswiezKontrolki() {
 		super.odswiezKontrolki();
 		lblPracownik.setText("Pracownik: " + mPracownik.getNazwa());
 		odswiezLblDataUrodzenia();
 		lblUrlopNalezny.setText(mObsluga.getUrlop(mPracownik));
 		lblGrupy.setText(mObsluga.grupyPracownika());
+		lblEtat.setText(mObsluga.getEtat(mPracownik));
 		ustawTabele();
 	}
 
@@ -94,39 +85,49 @@ public class OknoPracownika extends SrcOknoPracownika implements InterfejsOknaPr
 	}
 
 	private void ustawTylkoTabele() {
-
 		tbAbsencje.reload(getZapytanieDoTabeli());
-
 	}
 
 	@Override
-	public int getZaznaczenieTabeli() {
-		return tbAbsencje.getSelectedRow();
+	public int[] getZaznaczenieTabeli() {
+		return tbAbsencje.getSelectedRows();
 	}
 
 	@Override
-	public AbsencjaDTO getAbsencjeZTabeli() {
-		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
-		int lvRow = tbAbsencje.convertRowIndexToModel(getZaznaczenieTabeli());
-		lvAbsencja.setId((Integer) tbAbsencje.getModel().getValueAt(lvRow, 0));
-		Date lvOd = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 2);
-		Date lvDo = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3);
-		lvAbsencja.setOkres(new Interval(lvOd, lvDo));
-		lvAbsencja.setIdPracownika(mPracownik.getId());
-		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
-		lvAbsencja.setRodzaj(lvRodzajAbs);
-		lvAbsencja.setProcent(SLEkwiwalentZaUrlop.getByKod(getProcentZTabeli(lvRow)));
-		lvAbsencja.setIdPracownika(mPracownik.getId());
-		return lvAbsencja;
+	public List<AbsencjaDTO> getAbsencjeZTabeli() {
+		List<AbsencjaDTO> lvLista = new ArrayList<>();
+		for (int lvInt : getZaznaczenieTabeli()) {
+			AbsencjaDTO lvAbsencja = new AbsencjaDTO();
+			if (lvInt == -1)
+				return Collections.emptyList();
+			int lvRow = tbAbsencje.convertRowIndexToModel(lvInt);
+			lvAbsencja.setId((Integer) tbAbsencje.getModel().getValueAt(lvRow, 0));
+			Date lvOd = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 2);
+			Date lvDo = (Timestamp) tbAbsencje.getModel().getValueAt(lvRow, 3);
+			lvAbsencja.setOkres(new Interval(lvOd, lvDo));
+			lvAbsencja.setIdPracownika(mPracownik.getId());
+			SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.AbsencjaPoNazwie((String) tbAbsencje.getModel().getValueAt(lvRow, 1));
+			lvAbsencja.setRodzaj(lvRodzajAbs);
+			lvAbsencja.setProcent(SLEkwiwalentZaUrlop.getByKod(getProcentZTabeli(lvRow)));
+			lvAbsencja.setIdPracownika(mPracownik.getId());
+			lvLista.add(lvAbsencja);
+		}
+		return lvLista;
 	}
 
 	private String getProcentZTabeli(int lvRow) {
-		return tbAbsencje.getModel().getValueAt(lvRow, 4) == null ? "0" : tbAbsencje.getModel().getValueAt(lvRow, 4).toString();
+		return tbAbsencje.getModel().getValueAt(lvRow, 4) == null ? "0" : tbAbsencje.getModel().getValueAt(lvRow, 4).toString().replace("%", "");
 	}
 
 	@Override
 	public PracownikDTO getPracownika() {
 		return mPracownik;
+	}
+
+	@Override
+	protected void ustawDane() {
+		mPracownik = mObsluga.ustawEtat();
+		odswiezKontrolki();
 	}
 
 }

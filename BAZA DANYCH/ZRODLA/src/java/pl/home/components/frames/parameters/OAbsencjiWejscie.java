@@ -17,5 +17,6 @@ public class OAbsencjiWejscie implements ParametryWejscia {
 
 	private final AbsencjaDTO mAbsencja;
 	private final List<PracownikDTO> mListaPracownikow;
+	private final boolean mCzyTylkoRodzaj;
 
 }

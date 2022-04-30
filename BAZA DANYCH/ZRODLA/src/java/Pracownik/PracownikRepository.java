@@ -1,5 +1,8 @@
 package Pracownik;
 
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ETAT;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.GODZINA_DO;
+import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.GODZINA_OD;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.ID_tabeli;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Pracownik;
 import static dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns.Urlop_Nalezny;
@@ -18,11 +21,13 @@ import java.util.stream.Collectors;
 import java.time.LocalDate;
 
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
+import Wydruki.PrzygotowanieDanych.ObiektDanychPracownika;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.GrupyPowiazaniaColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
 import dbAccesspl.home.Database.Table.Zestawienie.ZestawienieColumns;
+import enums.EtatPracownika;
 import enums.SLRodzajeAbsencji;
 
 public class PracownikRepository extends AccessDB {
@@ -31,6 +36,7 @@ public class PracownikRepository extends AccessDB {
 				.setFromGenerator(ID_tabeli)//
 				.set(Pracownik, pmNazwa)//
 				.set(Urlop_Nalezny, 26)//
+				.set(ETAT, 1)//
 				.execute();
 	}
 
@@ -89,6 +95,7 @@ public class PracownikRepository extends AccessDB {
 			lvAbsencja.setOkres(new Interval(pmRecord.getAsLocalDate(AbsencjeColumns.Od_kiedy), pmRecord.getAsLocalDate(AbsencjeColumns.Do_kiedy)));
 			lvPracownik.setListaAbsencji(Arrays.asList(lvAbsencja));
 		}
+		lvPracownik.setEtat(EtatPracownika.getByKod(pmRecord.getAsString(ETAT)));
 		return lvPracownik;
 	}
 
@@ -132,6 +139,13 @@ public class PracownikRepository extends AccessDB {
 				.execute();
 	}
 
+	public void ustawEtat(int pmId, EtatPracownika pmEtat) {
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.ETAT, pmEtat)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+	}
+
 	public Integer getUrlopNalezny(int pmId) {
 		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
 				.select(ZestawienieColumns.Urlop_Nalezny)//
@@ -155,8 +169,13 @@ public class PracownikRepository extends AccessDB {
 	public PracownikDTO getPracownik(Integer pmIdPracownika) {
 
 		LRecordSet lvWynik = QueryBuilder.SELECT()//
-				.select(ID_tabeli, ZestawienieColumns.Pracownik, ZestawienieColumns.Urlop_Nalezny, ZestawienieColumns.Data_Urodzenia,
-						ZestawienieColumns.Data_Zatrudnienia, ZestawienieColumns.Data_Zwolnienia)//
+				.select(ID_tabeli, //
+						ZestawienieColumns.Pracownik, //
+						ZestawienieColumns.Urlop_Nalezny, //
+						ZestawienieColumns.Data_Urodzenia, //
+						ZestawienieColumns.Data_Zatrudnienia, //
+						ZestawienieColumns.Data_Zwolnienia, //
+						ZestawienieColumns.ETAT)//
 				.andWarunek(ID_tabeli, pmIdPracownika)//
 				.execute();
 
@@ -171,4 +190,55 @@ public class PracownikRepository extends AccessDB {
 				.execute();
 		return lvRecordSet.getAsLocalDate(ZestawienieColumns.Data_Zwolnienia);
 	}
+
+	public EtatPracownika getEtatPracownika(int pmIdPracownika) {
+		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
+				.select(ZestawienieColumns.ETAT)//
+				.andWarunek(ID_tabeli, pmIdPracownika)//
+				.execute();
+		return EtatPracownika.getByKod(lvRecordSet.getAsString(ZestawienieColumns.ETAT));
+	}
+
+	public ObiektDanychPracownika getDanePracownika(int pmId) {
+		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
+				.select(ZestawienieColumns.Data_Urodzenia, Pracownik, ZestawienieColumns.ETAT, ZestawienieColumns.Urlop_Nalezny)//
+				.andWarunek(ID_tabeli, pmId)//
+				.execute();
+
+		ObiektDanychPracownika lvDane = new ObiektDanychPracownika();
+		lvDane.setDataUrodzenia(lvRecordSet.getAsLocalDate(ZestawienieColumns.Data_Urodzenia));
+		lvDane.setEtat(EtatPracownika.getByKod(lvRecordSet.getAsString(ZestawienieColumns.ETAT)));
+		lvDane.setUrlop(lvRecordSet.getAsInteger(ZestawienieColumns.Urlop_Nalezny));
+		lvDane.setIdPracownika(pmId);
+		lvDane.setNazwa(lvRecordSet.getAsString(Pracownik));
+		return lvDane;
+	}
+
+	public void zapiszDanePracownika(ObiektDanychPracownika pmDane) {
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.ETAT, pmDane.getEtat())//
+				.set(ZestawienieColumns.Urlop_Nalezny, pmDane.getUrlop())//
+				.set(ZestawienieColumns.Data_Urodzenia, pmDane.getDataUrodzenia())//
+				.set(Pracownik, pmDane.getNazwa())//
+				.andWarunek(ID_tabeli, pmDane.getIdPracownika())//
+				.execute();
+	}
+
+	public GodzinyPracyPracownika pobierzGodzinyPracy(Integer pmIdPracownika) {
+		LRecordSet lvRecordSet = QueryBuilder.SELECT()//
+				.select(GODZINA_OD, GODZINA_DO)//
+				.andWarunek(ID_tabeli, pmIdPracownika)//
+				.execute();
+		return new GodzinyPracyPracownika(lvRecordSet.getAsInteger(GODZINA_OD), lvRecordSet.getAsInteger(GODZINA_DO));
+
+	}
+
+	public void zapiszGodzinyPracy(GodzinyPracyPracownika pmGodziny, Integer pmIdPracownika) {
+		QueryBuilder.UPDATE()//
+				.set(ZestawienieColumns.GODZINA_OD, pmGodziny.getGodzinaOd())//
+				.set(ZestawienieColumns.GODZINA_DO, pmGodziny.getGodzinaDo())//
+				.andWarunek(ID_tabeli, pmIdPracownika)//
+				.execute();
+	}
+
 }

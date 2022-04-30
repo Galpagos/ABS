@@ -26,13 +26,19 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 	protected T1 mParamsIn;
 	protected T2 mParamsOut;
 	protected boolean mAccepted;
+	private boolean mCzyPytacOZapis;
 
 	protected JButton mokButton;
 	protected JButton mcancelButton;
 
+	protected void pytajOZapis() {
+		mCzyPytacOZapis = true;
+	}
+
 	public AbstractOkno(T1 pmParams) {
 		super();
 		mParamsIn = pmParams;
+		setLocationRelativeTo(null);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 927, 473);
@@ -46,6 +52,7 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 		onOpen();
 		odswiezKontrolki();
 		setVisible(true);
+		setLocationRelativeTo(null);
 	}
 
 	private void createCancelButton() {
@@ -70,10 +77,17 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 		mokButton.addActionListener(e -> {
 			if (validateForm()) {
 				mAccepted = true;
+				if (mCzyPytacOZapis && !czyZapisacZmiany())
+					return;
 				beforeClose();
 				dispose();
 			}
 		});
+	}
+
+	protected boolean czyZapisacZmiany() {
+		return JOptionPane.showConfirmDialog(null, "Czy zapisać zmiany?", "Potwierdzenie danych", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+
 	}
 
 	protected boolean validateForm() {
@@ -94,9 +108,10 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 
 	protected abstract T2 budujWyjscie();
 
+	@SuppressWarnings("unchecked")
 	public T2 get() {
 		if (mParamsOut == null)
-			return null;
+			mParamsOut = (T2) new ParametryWyjscia();
 		mParamsOut.setAccepted(mAccepted);
 		return mParamsOut;
 	}
@@ -138,6 +153,16 @@ public abstract class AbstractOkno<T1 extends ParametryWejscia, T2 extends Param
 		Komunikat lvKomunikat = przygotujKomunikat(pmKomunikat, pmArgs);
 		ZapytywatorUzytkownikaIn lv = new ZapytywatorUzytkownikaIn();
 		lv.setKontekst(ZapytyniaUzytkownika.INTEGER);
+		lv.setKomunikat(lvKomunikat);
+		lv.setIntParams(pmDefault);
+		return new ZapytywatorUzytkownika(lv).get().getWartoscInt();
+	}
+
+	@Override
+	public Integer askDouble(AskIntParams pmDefault, Komunikat pmKomunikat, String... pmArgs) {
+		Komunikat lvKomunikat = przygotujKomunikat(pmKomunikat, pmArgs);
+		ZapytywatorUzytkownikaIn lv = new ZapytywatorUzytkownikaIn();
+		lv.setKontekst(ZapytyniaUzytkownika.DOUBLE);
 		lv.setKomunikat(lvKomunikat);
 		lv.setIntParams(pmDefault);
 		return new ZapytywatorUzytkownika(lv).get().getWartoscInt();

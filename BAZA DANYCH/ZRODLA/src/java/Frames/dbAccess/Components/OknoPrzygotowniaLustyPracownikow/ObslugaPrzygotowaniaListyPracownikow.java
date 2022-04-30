@@ -15,8 +15,7 @@ public class ObslugaPrzygotowaniaListyPracownikow {
 
 	private ObslugaGrup mObslugaGrup = new ObslugaGrup();
 
-	public ObslugaPrzygotowaniaListyPracownikow(
-			SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
+	public ObslugaPrzygotowaniaListyPracownikow(SrcOknoPrzygotowaniaListyPracownikow pmOknoPrzygotowaniaListyPracownikow) {
 		mOkno = pmOknoPrzygotowaniaListyPracownikow;
 	}
 
@@ -54,9 +53,15 @@ public class ObslugaPrzygotowaniaListyPracownikow {
 	public void dodajWPrawo() {
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
 		int[] lvLista = mOkno.getSelectionLewaInt();
-		for (int lvIndeks : lvLista) {
-			lvListaPrawa.add(mOkno.getListaLewa().get(lvIndeks));
-		}
+		int[] lvSelection = mOkno.getSelectionPrawaInt();
+		if (lvSelection.length == 1)
+			for (int lvIndeks : lvLista) {
+				lvListaPrawa.add(lvSelection[0], mOkno.getListaLewa().get(lvIndeks));
+			}
+		else
+			for (int lvIndeks : lvLista) {
+				lvListaPrawa.add(mOkno.getListaLewa().get(lvIndeks));
+			}
 
 		mOkno.odswiezTabPrawa();
 	}
@@ -85,9 +90,12 @@ public class ObslugaPrzygotowaniaListyPracownikow {
 	public void dodajPrzerwe() {
 
 		List<PracownikDTO> lvListaPrawa = mOkno.getListaPrawa();
-
-		lvListaPrawa.add(new PracownikDTO().setNazwa("----------"));
-
+		int[] lvSelection = mOkno.getSelectionPrawaInt();
+		if (lvSelection.length != 0)
+			for (int i = lvSelection.length - 1; i >= 0; i--)
+				lvListaPrawa.add(lvSelection[i], new PracownikDTO().setNazwa("----------"));
+		else
+			lvListaPrawa.add(new PracownikDTO().setNazwa("----------"));
 		mOkno.odswiezTabPrawa();
 	}
 }

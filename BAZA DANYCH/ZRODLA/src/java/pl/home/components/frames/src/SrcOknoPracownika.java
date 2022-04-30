@@ -33,6 +33,11 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 
 	protected JLabel lblDataUrodzenia;
 	protected JLabel lblUrlopNalezny;
+	protected JLabel lblDataUrodzenia1;
+	protected JLabel lblUrlopNalezny1;
+	protected JLabel lblEtat;
+	protected JLabel lblEtat1;
+
 	private JPanel contentPane;
 	protected LTable tbAbsencje;
 	private JScrollPane mScrollPane;
@@ -40,13 +45,11 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 	protected JButton btnModyfikuj;
 	protected JButton btnUsun;
 	protected JLabel lblGrupy;
-
+	protected JButton btnUstawEtat;
 	protected JButton btnDodajAbsencje;
 
 	protected JLabel lblPracownik;
 	protected JButton btnUsunGrupe;
-	protected JButton btnUstawDatUrodzenia;
-	protected JButton btnUstawUrlop;
 	protected JButton btnDodajGrup;
 
 	@Override
@@ -55,28 +58,42 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		setModal(true);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		utworzOkno();
-		lblGrupy.setText("");
 		btnUsunGrupe = new JButton("Usuń grupę");
 		btnUsunGrupe.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnUsunGrupe.setBounds(737, 56, 160, 22);
 		contentPane.add(btnUsunGrupe);
-		btnUstawDatUrodzenia = new JButton("Ustaw datę urodzenia");
 
-		btnUstawDatUrodzenia.setBounds(315, 20, 223, 25);
-		contentPane.add(btnUstawDatUrodzenia);
+		lblPracownik = new JLabel("Pracownik: ");
+		lblPracownik.setBounds(10, 10, 300, 25);
+		contentPane.add(lblPracownik);
 
-		btnUstawUrlop = new JButton("Ustaw urlop należny");
-
-		btnUstawUrlop.setBounds(315, 55, 223, 25);
-		contentPane.add(btnUstawUrlop);
+		lblDataUrodzenia1 = new JLabel("Data ur.:");
+		lblDataUrodzenia1.setBounds(10, 30, 60, 25);
+		contentPane.add(lblDataUrodzenia1);
 
 		lblDataUrodzenia = new JLabel("");
-		lblDataUrodzenia.setBounds(557, 24, 168, 16);
+		lblDataUrodzenia.setBounds(70, 30, 100, 25);
 		contentPane.add(lblDataUrodzenia);
 
+		lblGrupy = new JLabel("Należy do grup: ");
+		lblGrupy.setBounds(10, 50, 500, 25);
+		contentPane.add(lblGrupy);
+
+		lblUrlopNalezny1 = new JLabel("Urlop należny:");
+		lblUrlopNalezny1.setBounds(300, 30, 150, 25);
+		contentPane.add(lblUrlopNalezny1);
+
 		lblUrlopNalezny = new JLabel("");
-		lblUrlopNalezny.setBounds(550, 59, 175, 16);
+		lblUrlopNalezny.setBounds(400, 30, 50, 25);
 		contentPane.add(lblUrlopNalezny);
+
+		lblEtat1 = new JLabel("Etat:");
+		lblEtat1.setBounds(300, 10, 50, 25);
+		contentPane.add(lblEtat1);
+
+		lblEtat = new JLabel("połowa etatu");
+		lblEtat.setBounds(340, 10, 100, 25);
+		contentPane.add(lblEtat);
 
 	}
 
@@ -87,14 +104,11 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		setContentPane(contentPane);
 
 		spnRok = new JSpinner();
-		spnRok.setModel(new SpinnerNumberModel(2020, 2016, 2025, 1));
+		int lvRok = LocalDate.now().getYear();
+		spnRok.setModel(new SpinnerNumberModel(lvRok, 2016, lvRok + 1, 1));
 		spnRok.setBounds(118, 397, 97, 22);
 
 		contentPane.setLayout(null);
-
-		lblPracownik = new JLabel("Pracownik: ");
-		lblPracownik.setBounds(12, 13, 334, 39);
-		contentPane.add(lblPracownik);
 
 		mcancelButton.setBounds(785, 377, 97, 25);
 		contentPane.add(mcancelButton);
@@ -107,22 +121,20 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		contentPane.add(lblAbsencjeZaRok);
 
 		btnDodajAbsencje = new JButton("Dodaj Absencje");
-		btnDodajAbsencje.setBounds(773, 104, 124, 25);
+		btnDodajAbsencje.setBounds(680, 104, 224, 25);
 		contentPane.add(btnDodajAbsencje);
 
 		btnModyfikuj = new JButton("Modyfikuj");
-
-		btnModyfikuj.setBounds(773, 142, 124, 25);
+		btnModyfikuj.setBounds(680, 144, 224, 25);
 		contentPane.add(btnModyfikuj);
 
 		btnUsun = new JButton("Usuń");
-
-		btnUsun.setBounds(773, 182, 124, 25);
+		btnUsun.setBounds(680, 184, 224, 25);
 		contentPane.add(btnUsun);
 
-		lblGrupy = new JLabel("Należy do grup: ");
-		lblGrupy.setBounds(12, 48, 334, 39);
-		contentPane.add(lblGrupy);
+		btnUstawEtat = new JButton("Modyfikuj dane");
+		btnUstawEtat.setBounds(680, 224, 224, 25);
+		contentPane.add(btnUstawEtat);
 
 		btnDodajGrup = new JButton("Dodaj grupę");
 
@@ -133,7 +145,7 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 		mScrollPane = new JScrollPane(tbAbsencje);
 		mScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		mScrollPane.setBounds(12, 100, 749, 284);
+		mScrollPane.setBounds(12, 100, 650, 284);
 		contentPane.add(mScrollPane);
 	}
 
@@ -147,13 +159,14 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 
 		btnDodajAbsencje.addActionListener(lvE -> dodajAbsencje());
 		btnUsunGrupe.addActionListener(e -> usunGrupe());
-		btnUstawDatUrodzenia.addActionListener(lvE -> ustawDateUrodzenia());
-		btnUstawUrlop.addActionListener(lvE -> ustawUrlopNalezny());
+		btnUstawEtat.addActionListener(lvE -> ustawDane());
 		btnModyfikuj.addActionListener(lvE -> modyfikujAbsencje());
 		btnUsun.addActionListener(lvE -> usunAbsencje());
 		btnDodajGrup.addActionListener(lvE -> przypiszGrupe());
 		spnRok.addChangeListener(lvE -> ustawTabele());
 	}
+
+	protected abstract void ustawDane();
 
 	protected abstract void ustawTabele();
 
@@ -162,10 +175,6 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 	protected abstract void usunAbsencje();
 
 	protected abstract void modyfikujAbsencje();
-
-	protected abstract void ustawUrlopNalezny();
-
-	protected abstract void ustawDateUrodzenia();
 
 	protected abstract void usunGrupe();
 
@@ -177,13 +186,11 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 	}
 
 	private LTable utworzTabele() {
-
 		LTable lvTabela = new LTable(getZapytanieDoTabeli());
 		lvTabela.hideColumn(AbsencjeColumns.ID_tabeli);
 		lvTabela.odswiez();
 
 		return lvTabela;
-
 	}
 
 	protected LRecordSet getZapytanieDoTabeli() {
@@ -193,17 +200,14 @@ public abstract class SrcOknoPracownika extends AbstractOkno<OPracWejscie, OPrac
 				.andAfterOrEqual(AbsencjeColumns.Od_kiedy, LocalDate.of((int) spnRok.getValue(), 1, 1))//
 				.andBeforeOrEqual(AbsencjeColumns.Do_kiedy, YearMonth.of((int) spnRok.getValue(), 12).atEndOfMonth())//
 				.execute();
-
 	}
 
 	@Override
 	protected void readParams() {
-
 	}
 
 	@Override
 	protected OPracWyjscie budujWyjscie() {
-
 		return OPracWyjscie.builder().build();
 	}
 

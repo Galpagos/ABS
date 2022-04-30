@@ -3,8 +3,11 @@ package Wydruki.PrzygotowanieDanych;
 import java.util.List;
 import java.util.Locale;
 
+import java.math.BigDecimal;
 import java.text.Collator;
 import java.time.LocalDate;
+
+import enums.EtatPracownika;
 
 public class PracownikDTO implements Comparable<PracownikDTO> {
 	private int mId;
@@ -12,6 +15,7 @@ public class PracownikDTO implements Comparable<PracownikDTO> {
 	private List<AbsencjaDTO> mListaAbsencji;
 	private String mUrlopNalezny;
 	private LocalDate mDataZwolnienia;
+	private EtatPracownika mEtat;
 
 	public String getUrlopNalezny() {
 		return mUrlopNalezny;
@@ -19,6 +23,14 @@ public class PracownikDTO implements Comparable<PracownikDTO> {
 
 	public void setUrlopNalezny(String pmUrlopNalezny) {
 		mUrlopNalezny = pmUrlopNalezny;
+	}
+
+	public EtatPracownika getEtat() {
+		return mEtat;
+	}
+
+	public void setEtat(EtatPracownika pmEtat) {
+		mEtat = pmEtat;
 	}
 
 	public int getId() {
@@ -65,5 +77,9 @@ public class PracownikDTO implements Comparable<PracownikDTO> {
 	@Override
 	public int compareTo(PracownikDTO pmO) {
 		return Collator.getInstance(new Locale("pl", "PL")).compare(mNazwa, pmO.mNazwa);
+	}
+
+	public BigDecimal getEtatBD() {
+		return BigDecimal.ONE.divide(new BigDecimal(mEtat.getKod()));
 	}
 }

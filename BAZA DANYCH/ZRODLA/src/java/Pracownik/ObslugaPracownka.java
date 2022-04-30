@@ -15,6 +15,7 @@ import Absencja.AbsencjaRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import dbAccesspl.home.Database.Table.Zestawienie.AbsencjeColumns;
+import enums.EtatPracownika;
 import enums.SLRodzajeAbsencji;
 import enums.WalidacjeTwarde;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
@@ -98,5 +99,11 @@ public class ObslugaPracownka {
 				.setRodzaj(SLRodzajeAbsencji.BRAK_STOSUNKU_PRACY);
 		mObslugaAbs.saveAbsence(lvAbs);
 		mRepo.zwolnijPracownika(pmId, null);
+	}
+
+	public EtatPracownika getEtat(PracownikDTO pmPracownik) {
+		if (pmPracownik.getEtat() != null)
+			return pmPracownik.getEtat();
+		return mRepo.getEtatPracownika(pmPracownik.getId());
 	}
 }

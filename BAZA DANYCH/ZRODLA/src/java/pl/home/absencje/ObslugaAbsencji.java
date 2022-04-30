@@ -1,7 +1,11 @@
 package pl.home.absencje;
 
+import ProjektGlowny.commons.utils.Interval;
+
 import java.util.List;
 import java.util.Optional;
+
+import java.time.LocalDate;
 
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -34,7 +38,7 @@ public class ObslugaAbsencji {
 		for (PracownikDTO lvPracownik : pmListaPracownikow) {
 
 			pmAbsencja.setIdPracownika(lvPracownik.getId());
-			lvOk = lvOk && saveAbsence(pmAbsencja);
+			lvOk = saveAbsence(pmAbsencja) && lvOk;
 		}
 		return lvOk;
 	}
@@ -54,5 +58,23 @@ public class ObslugaAbsencji {
 
 	public Optional<AbsencjaDTO> getAbsenceById(int pmId) {
 		return mRepo.getAbsenceById(pmId);
+	}
+
+	public void deleteAbsence(List<Integer> pmSelectedAbsenceId, LocalDate pmData) {
+		pmSelectedAbsenceId.forEach(lvId -> divideAndDelete(lvId, pmData));
+	}
+
+	private void divideAndDelete(Integer pmId, LocalDate pmData) {
+		AbsencjaDTO lvAbsencja = mRepo.getAbsenceById(pmId).get();
+		mRepo.deleteAbsence(pmId);
+
+		if (lvAbsencja.getOkres().getStart().isBefore(pmData))
+			mRepo.saveAbsence(new AbsencjaDTO(lvAbsencja)//
+					.setOkres(new Interval(lvAbsencja.getOkres().getStart(), pmData.minusDays(1))));
+
+		if (lvAbsencja.getOkres().getEnd().isAfter(pmData))
+			mRepo.saveAbsence(new AbsencjaDTO(lvAbsencja)//
+					.setOkres(new Interval(pmData.plusDays(1), lvAbsencja.getOkres().getEnd())));
+
 	}
 }

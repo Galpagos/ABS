@@ -4,7 +4,9 @@ import ProjektGlowny.commons.DbBuilder.LRecordSet;
 import ProjektGlowny.commons.DbBuilder.SystemTables;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -59,5 +61,15 @@ public class LTable extends JTable {
 		setModel(lvDTM);
 		odswiez();
 		getSelectionModel().setSelectionInterval(lvIndex, lvIndex);
+	}
+
+	public List<Integer> getSelectedKeys() {
+		int[] lvSelected = getSelectedRows();
+		return Arrays.stream(lvSelected)//
+				.boxed()//
+				.filter(lvIndex -> lvIndex < getRowCount())//
+				.map(lvIndex -> convertRowIndexToModel(lvIndex))//
+				.map(lvRow -> (Integer) getModel().getValueAt(lvRow, 0))//
+				.collect(Collectors.toList());
 	}
 }

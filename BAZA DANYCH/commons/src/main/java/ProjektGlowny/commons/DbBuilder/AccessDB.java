@@ -1,21 +1,22 @@
 package ProjektGlowny.commons.DbBuilder;
 
+import ProjektGlowny.commons.config.Config;
+
+import java.util.Optional;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-import java.util.Optional;
-
-import ProjektGlowny.commons.config.Config;
 
 public class AccessDB {
-		public static LRecordSet executeQuery(String pmZapytanie) {
+	public static LRecordSet executeQuery(String pmZapytanie) {
 		LRecordSet lvWynik = new LRecordSet();
-		System.out.println(pmZapytanie);
+
 		try (//
 				Connection lvCon = init(); //
-				
+
 				Statement lvStatement = lvCon.createStatement();)//
 
 		{
@@ -27,12 +28,10 @@ public class AccessDB {
 				while (rs.next()) {
 					LRecord lvMapa = new LRecord();
 					for (int column = 1; column <= columnCount; column++) {
-						ISystemTableNames lvTabela = Config.getSystemTableNames()
-								.getByName(metaData.getTableName(column));
+						ISystemTableNames lvTabela = Config.getSystemTableNames().getByName(metaData.getTableName(column));
 						String lvPoleS = metaData.getColumnName(column);
 						if (lvTabela != null) {
-							Optional<? extends SystemTables> lvPole = lvTabela.getTabela().stream()
-									.filter(lvA -> lvPoleS.equalsIgnoreCase(lvA.toString()))//
+							Optional<? extends SystemTables> lvPole = lvTabela.getTabela().stream().filter(lvA -> lvPoleS.equalsIgnoreCase(lvA.toString()))//
 									.findAny();
 							if (lvPole.isPresent())
 								lvMapa.put(lvPole.get(), rs.getObject(column));

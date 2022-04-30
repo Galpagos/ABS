@@ -9,8 +9,7 @@ import pl.home.components.frames.parameters.OPrzygListyPracWejscie;
 import pl.home.components.frames.parameters.OPrzygListyPracWyjscie;
 import pl.home.components.frames.src.SrcOknoPrzygotowaniaListyPracownikow;
 
-public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListyPracownikow
-		implements InterfejsPrzygotowaniaListyPracownikow {
+public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListyPracownikow implements InterfejsPrzygotowaniaListyPracownikow {
 
 	private static final long serialVersionUID = -5117051096105142242L;
 	ObslugaPrzygotowaniaListyPracownikow mObsluga;
@@ -48,6 +47,7 @@ public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListy
 	protected void wyborGRupy() {
 		mObsluga.zasilTabele((GrupaDTO) cbWyborGrupy.getSelectedItem());
 		odswiezKontrolki();
+		wszyscyWPrawo();
 	}
 
 	@Override
@@ -61,13 +61,13 @@ public class OknoPrzygotowaniaListyPracownikow extends SrcOknoPrzygotowaniaListy
 		GrupaDTO lvStart = new GrupaDTO();
 		lvStart.setNazwa("Wszyscy");
 		mObsluga.zasilTabele(lvStart);
+		cbWyborGrupy.setModel(new DefaultComboBoxModel<GrupaDTO>(mObsluga.pobierzGrupy()));
 		odswiezKontrolki();
 	}
 
 	@Override
 	protected void odswiezKontrolki() {
 		super.odswiezKontrolki();
-		cbWyborGrupy.setModel(new DefaultComboBoxModel<GrupaDTO>(mObsluga.pobierzGrupy()));
 	}
 
 	@Override

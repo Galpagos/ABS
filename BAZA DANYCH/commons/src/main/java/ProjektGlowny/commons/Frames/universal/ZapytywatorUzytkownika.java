@@ -1,5 +1,6 @@
 package ProjektGlowny.commons.Frames.universal;
 
+import ProjektGlowny.commons.Components.LDoubleFilter;
 import ProjektGlowny.commons.Components.LIntegerField;
 import ProjektGlowny.commons.Frames.AbstractOkno;
 import ProjektGlowny.commons.Frames.Komunikat;
@@ -61,6 +62,8 @@ public class ZapytywatorUzytkownika extends AbstractOkno<ZapytywatorUzytkownikaI
 		lbPytanie = new JLabel(mKomunikat.getKomunikat());
 		if (ZapytyniaUzytkownika.INTEGER == mKontekst)
 			mPole = new LIntegerField(mParamsIn.getDefaultText());
+		else if (ZapytyniaUzytkownika.DOUBLE == mKontekst)
+			mPole = new LDoubleFilter(mParamsIn.getDefaultText());
 		else
 			mPole = new JTextField();
 		mWalidacja = new JLabel();
@@ -75,6 +78,8 @@ public class ZapytywatorUzytkownika extends AbstractOkno<ZapytywatorUzytkownikaI
 		mContentPane.add(mPolePanel, BorderLayout.CENTER);
 		mContentPane.add(mOk, BorderLayout.PAGE_END);
 		pack();
+		if (getWidth() < 250)
+			this.setSize(250, getHeight());
 	}
 
 	@Override
@@ -82,6 +87,7 @@ public class ZapytywatorUzytkownika extends AbstractOkno<ZapytywatorUzytkownikaI
 		return ZapytywatorUzytkownikaOut//
 				.builder()//
 				.wartoscInt(ZapytyniaUzytkownika.INTEGER == mKontekst && mAccepted ? Integer.valueOf(mPole.getText()) : null)//
+				.wartoscDouble(ZapytyniaUzytkownika.DOUBLE == mKontekst && mAccepted ? Double.valueOf(mPole.getText()) : null)//
 				.warString(mPole.getText())//
 				.build();
 	}
@@ -93,6 +99,14 @@ public class ZapytywatorUzytkownika extends AbstractOkno<ZapytywatorUzytkownikaI
 		}
 		if (ZapytyniaUzytkownika.INTEGER == mKontekst) {
 			Integer lvWartosc = Integer.valueOf(mPole.getText());
+			if (mParamsIn.getIntParams().getMinValue() != null && lvWartosc.intValue() < mParamsIn.getIntParams().getMinValue().intValue())
+				return waliduj("Wartość musi być większa niż " + mParamsIn.getIntParams().getMinValue());
+
+			if (mParamsIn.getIntParams().getMaxValue() != null && lvWartosc.intValue() > mParamsIn.getIntParams().getMaxValue().intValue())
+				return waliduj("Wartość musi być mniejsza niż " + mParamsIn.getIntParams().getMaxValue());
+		}
+		if (ZapytyniaUzytkownika.DOUBLE == mKontekst) {
+			Double lvWartosc = Double.valueOf(mPole.getText());
 			if (mParamsIn.getIntParams().getMinValue() != null && lvWartosc.intValue() < mParamsIn.getIntParams().getMinValue().intValue())
 				return waliduj("Wartość musi być większa niż " + mParamsIn.getIntParams().getMinValue());
 

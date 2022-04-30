@@ -21,6 +21,8 @@ import pl.home.DniWolne.DzienWolnyDTO;
 import pl.home.components.frames.mainframes.OknoAbsencji;
 import pl.home.components.frames.mainframes.OknoSprawozdan;
 import pl.home.components.frames.mainframes.OneDayView;
+import pl.home.components.frames.mainframes.OneMonthView;
+import pl.home.components.frames.mainframes.SaturdayView;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
 import pl.home.components.frames.parameters.OSprawozdanWejscie;
 
@@ -142,5 +144,13 @@ public class ObslugaOknaGlownego {
 
 	public void showOneDayView() {
 		new OneDayView(null);
+	}
+
+	public void showOneMonthView() {
+		new OneMonthView(null);
+	}
+
+	public void showSaturdayView() {
+		new SaturdayView(null);
 	}
 }

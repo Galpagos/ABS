@@ -53,9 +53,12 @@ public class OneDayView extends SrcOneDayView {
 	@Override
 	protected void addWorker() {
 		OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().withCzyTrybSzybki(true).build();
+
 		OPrzygListyPracWyjscie lvWynik = new OknoPrzygotowaniaListyPracownikow(lvParams).get();
+
 		if (!lvWynik.isAccepted() || lvWynik.getLista().isEmpty())
 			return;
+
 		AbsencjaDTO lvAbsencja = new AbsencjaDTO();
 		SLRodzajeAbsencji lvRodzajAbs = SLRodzajeAbsencji.NB;
 		lvAbsencja.setOkres(new Interval(mData, mData));
@@ -75,6 +78,7 @@ public class OneDayView extends SrcOneDayView {
 
 		odswiezKontrolki();
 	}
+
 	@Override
 	protected void deleteAbsence() {
 		mObsluga.deleteAbsence(getSelectedAbsenceId());
@@ -86,6 +90,11 @@ public class OneDayView extends SrcOneDayView {
 		mObsluga.modifyAbsence(getSelectedAbsenceId().get(0));
 		odswiezKontrolki();
 
+	}
+	@Override
+	protected void deleteOneDayAbsence() {
+		mObsluga.deleteAbsence(getSelectedAbsenceId(), mData);
+		odswiezKontrolki();
 	}
 
 }

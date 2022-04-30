@@ -1,5 +1,7 @@
 package pl.home.ListaPlac;
 
+import static pl.home.ListaPlac.ListaPlacConst.KWOTA_MIESIECZNA;
+
 import ProjektGlowny.commons.utils.Interval;
 
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.math.RoundingMode;
 import java.time.YearMonth;
 
 import Datownik.LicznikDaty;
+import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import enums.SLRodzajeAbsencji;
@@ -18,15 +21,20 @@ import pl.home.absencje.ObslugaAbsencji;
 
 public class ListaPlac {
 	YearMonth mRokMiesiac;
-	private final BigDecimal KWOTA_MIESIECZNA = new BigDecimal(2600.00).setScale(2);
-	private final BigDecimal KWOTA_ZA_DZIEN = KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.8629)).setScale(8, RoundingMode.HALF_UP)
+	private final BigDecimal KWOTA_ZA_DZIEN = KWOTA_MIESIECZNA//
+			.multiply(BigDecimal.valueOf(0.8629))//
+			.setScale(8, RoundingMode.HALF_UP)//
 			.divide(BigDecimal.valueOf(30), 8, RoundingMode.HALF_UP);
+
 	private ListaPlacRepository mRepo;
 	private ObslugaAbsencji mObslugaAbs;
+	private PracownikRepository mPracownikRepo;
+
 	public ListaPlac(YearMonth pmYearMonth) {
 		mRokMiesiac = pmYearMonth;
 		mRepo = new ListaPlacRepositoryDB();
 		mObslugaAbs = new ObslugaAbsencji();
+		mPracownikRepo = new PracownikRepository();
 	}
 
 	void setListaPlacRepository(ListaPlacRepository pmRepo) {
@@ -43,10 +51,8 @@ public class ListaPlac {
 	private MiesiecznaPlacaPracownika wyliczWyplatePracownika(PracownikDTO pmPracownik) {
 
 		MiesiecznaPlacaPracownika lvWyplata = przygotujDaneDoWyliczeniaWyplaty(pmPracownik);
-		BigDecimal lvKwotaMiesieczna = pmPracownik.getId() == 43 ? KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.25)) : KWOTA_MIESIECZNA;// specjalna
-																																			// obsluga
-																																			// dla
-																																			// pracownika
+		BigDecimal lvKwotaMiesieczna = KWOTA_MIESIECZNA.multiply(pmPracownik.getEtatBD());
+
 		pmPracownik//
 				.getListaAbsencji()//
 				.forEach(lvAbsencja -> wyliczKwoteZAbsencji(lvAbsencja, lvWyplata));
@@ -81,12 +87,8 @@ public class ListaPlac {
 	}
 
 	private void wyliczKwoteUrlopy(AbsencjaDTO pmAbsencja, MiesiecznaPlacaPracownika pmWyplata) {
-		BigDecimal lvKwotaMiesieczna = pmWyplata.getPracownik().getId() == 43
-				? KWOTA_MIESIECZNA.multiply(BigDecimal.valueOf(0.25)) // specjalna
-																		// obsluga
-																		// dla
-																		// pracownika
-				: KWOTA_MIESIECZNA;
+		BigDecimal lvKwotaMiesieczna = KWOTA_MIESIECZNA.multiply(pmWyplata.getPracownik().getEtatBD());
+
 		pmWyplata.addKwotaZaUrlopy(//
 				lvKwotaMiesieczna//
 						.divide(BigDecimal.valueOf(liczbaDniRoboczychWMiesiacu()), 8, RoundingMode.HALF_UP)//
@@ -99,6 +101,7 @@ public class ListaPlac {
 		if (pmPracownik.getListaAbsencji() == null)
 			pmPracownik.setListaAbsencji(mObslugaAbs.getAbsencjePracownika(pmPracownik.getId()));
 
+		pmPracownik.setEtat(mPracownikRepo.getEtatPracownika(pmPracownik.getId()));
 		LicznikDaty.filtrujAbsencjePoOkresie(pmPracownik.getListaAbsencji(), new Interval(mRokMiesiac));
 		return new MiesiecznaPlacaPracownika().setPracownik(pmPracownik);
 	}
@@ -108,7 +111,8 @@ public class ListaPlac {
 			SLRodzajeAbsencji.urlop_ojcowski, //
 			SLRodzajeAbsencji.urlop_okolicznosciowy, //
 			SLRodzajeAbsencji.opieka2dni, //
-			SLRodzajeAbsencji.urlop_w_pracy);
+			SLRodzajeAbsencji.urlop_w_pracy, //
+			SLRodzajeAbsencji.NB);
 
 	private final List<SLRodzajeAbsencji> LISTA_CHOROBA = Arrays.asList(// \
 			SLRodzajeAbsencji.L_4, //

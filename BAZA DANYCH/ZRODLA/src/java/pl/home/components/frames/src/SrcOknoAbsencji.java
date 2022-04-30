@@ -20,11 +20,11 @@ import pl.home.components.frames.parameters.OAbsencjiWyjscie;
 
 @SuppressWarnings("serial")
 public abstract class SrcOknoAbsencji extends AbstractOkno<OAbsencjiWejscie, OAbsencjiWyjscie> {
-	private JLabel lblAbsencjaPracownika;
 	private JPanel contentPane;
 	protected MyDataField mDataOd;
 	protected MyDataField mDataDo;
-
+	protected JLabel lblDataOd;
+	protected JLabel lblDataDo;
 	protected JButton btnPickDate1;
 	protected JButton btnPickDate2;
 	protected JComboBox<SLRodzajeAbsencji> cbRodzajAbsencji;
@@ -92,11 +92,11 @@ public abstract class SrcOknoAbsencji extends AbstractOkno<OAbsencjiWejscie, OAb
 
 		setTitle("Absencja pracownika ");
 
-		JLabel lblDataOd = new JLabel("Data od:");
+		lblDataOd = new JLabel("Data od:");
 		lblDataOd.setBounds(13, 38, 168, 16);
 		contentPane.add(lblDataOd);
 
-		JLabel lblDataDo = new JLabel("Data do:");
+		lblDataDo = new JLabel("Data do:");
 		lblDataDo.setBounds(13, 78, 168, 16);
 		contentPane.add(lblDataDo);
 

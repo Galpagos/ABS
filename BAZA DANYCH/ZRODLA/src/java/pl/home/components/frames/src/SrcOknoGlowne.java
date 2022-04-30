@@ -50,9 +50,11 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 	protected JButton btnZwolnij;
 	protected JButton btnDodajMasowaAbsencje;
 	protected JButton btnOneDayView;
-
+	protected JButton btnOneMonthView;
+	protected JButton btnSaturdayView;
 	@Override
 	protected void budujOkno() {
+		requestFocus();
 		setBounds(100, 100, 825, 560);
 		mContentPane = new JPanel();
 		mContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -65,27 +67,27 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 		mContentPane.add(mButtonPanel);
 		mButtonPanel.setLayout(null);
 
-		btnPokazPracownika = new JButton("Pokaz Pracownika");
-		btnPokazPracownika.setBounds(46, 92, 191, 39);
-		mButtonPanel.add(btnPokazPracownika);
-
 		btnDodajPracownika = new JButton("Dodaj Pracownika");
 		btnDodajPracownika.setBounds(46, 40, 191, 39);
 		mButtonPanel.add(btnDodajPracownika);
 
+		btnPokazPracownika = new JButton("Pokaz Pracownika");
+		btnPokazPracownika.setBounds(46, 90, 191, 39);
+		mButtonPanel.add(btnPokazPracownika);
+
 		btnUsunPracownika = new JButton("Usuń Pracownika");
-		btnUsunPracownika.setBounds(46, 144, 191, 39);
+		btnUsunPracownika.setBounds(46, 140, 191, 39);
 		mButtonPanel.add(btnUsunPracownika);
 
 		mcancelButton.setBounds(402, 444, 97, 25);
 		mButtonPanel.add(mcancelButton);
 
 		btnPokazNieobecnych = new JButton("Pokaż nieobecnych");
-		btnPokazNieobecnych.setBounds(46, 250, 191, 39);
+		btnPokazNieobecnych.setBounds(46, 240, 191, 39);
 		mButtonPanel.add(btnPokazNieobecnych);
 
 		btnDodajMasowaAbsencje = new JButton("Dodaj Absencję");
-		btnDodajMasowaAbsencje.setBounds(46, 302, 191, 39);
+		btnDodajMasowaAbsencje.setBounds(46, 290, 191, 39);
 		mButtonPanel.add(btnDodajMasowaAbsencje);
 
 		btnDodajDzienWolny = new JButton("Dodaj Dzień Wolny");
@@ -93,23 +95,31 @@ public abstract class SrcOknoGlowne extends AbstractOkno<ParametryWejscia, Param
 		mButtonPanel.add(btnDodajDzienWolny);
 
 		btnPokazDniWolne = new JButton("Pokaż Dni Wolne");
-		btnPokazDniWolne.setBounds(282, 92, 179, 39);
+		btnPokazDniWolne.setBounds(282, 90, 179, 39);
 		mButtonPanel.add(btnPokazDniWolne);
 
-		btnSprawozdanie = new JButton("Sprawozdanie");
-		btnSprawozdanie.setBounds(282, 151, 179, 39);
+		btnSprawozdanie = new JButton("Wydruki");
+		btnSprawozdanie.setBounds(282, 140, 179, 39);
 		mButtonPanel.add(btnSprawozdanie);
 
 		btnOneDayView = new JButton("Weryfikuj obecności");
-		btnOneDayView.setBounds(282, 210, 179, 39);
+		btnOneDayView.setBounds(282, 190, 179, 39);
 		mButtonPanel.add(btnOneDayView);
 
+		btnOneMonthView = new JButton("Weryfikuj premie");
+		btnOneMonthView.setBounds(282, 240, 179, 39);
+		mButtonPanel.add(btnOneMonthView);
+
+		btnSaturdayView = new JButton("Weryfikuj soboty");
+		btnSaturdayView.setBounds(282, 290, 179, 39);
+		mButtonPanel.add(btnSaturdayView);
+
 		btnZwolnij = new JButton("Zwolnij Pracownika");
-		btnZwolnij.setBounds(46, 198, 191, 39);
+		btnZwolnij.setBounds(46, 190, 191, 39);
 		mButtonPanel.add(btnZwolnij);
 
 		btnZatrudnij = new JButton("Zatrudnij Pracownika");
-		btnZatrudnij.setBounds(46, 198, 191, 39);
+		btnZatrudnij.setBounds(46, 190, 191, 39);
 		mButtonPanel.add(btnZatrudnij);
 
 		mFiltrPracownika = new JTextField("");

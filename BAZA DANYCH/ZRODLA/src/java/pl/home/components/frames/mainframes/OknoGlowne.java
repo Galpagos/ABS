@@ -15,7 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import java.awt.EventQueue;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -37,8 +41,21 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 			@Override
 			public void run() {
 				Config.setSystemTableNames(SystemTablesNames.ABSENCJE);
-				new OknoGlowne().get();
-				System.exit(0);
+				JFrame lvFrame = new JFrame();
+				ImageIcon lvIcon = new ImageIcon("C:\\GITHUB\\BAZA DANYCH\\ZRODLA\\src\\main\\resources\\icon.png");
+				lvFrame.setIconImage(lvIcon.getImage());
+				lvFrame.setUndecorated(true);
+				lvFrame.setVisible(true);
+				lvFrame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowOpened(WindowEvent we) {
+						// if (new SrcLogowanie(null).get().isAccepted())
+						new OknoGlowne().get();
+						System.exit(0);
+					}
+				});
+				lvFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 			}
 		});
 	}
@@ -138,7 +155,6 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 
 	@Override
 	protected ParametryWyjscia budujWyjscie() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -168,6 +184,8 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		tbPracownicy.getSelectionModel().addListSelectionListener(e -> odswiezKontrolki());
 		btnDodajMasowaAbsencje.addActionListener(lvE -> mObsluga.dodajMasowaAbsencje());
 		btnOneDayView.addActionListener(lvE -> mObsluga.showOneDayView());
+		btnOneMonthView.addActionListener(lvE -> mObsluga.showOneMonthView());
+		btnSaturdayView.addActionListener(lvE -> mObsluga.showSaturdayView());
 	}
 
 	@Override

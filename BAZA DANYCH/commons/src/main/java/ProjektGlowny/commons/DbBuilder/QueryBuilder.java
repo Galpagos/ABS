@@ -1,5 +1,6 @@
 package ProjektGlowny.commons.DbBuilder;
 
+import ProjektGlowny.commons.enums.InterfejsSlownika;
 import ProjektGlowny.commons.parsers.ParseryDB;
 
 import java.util.Date;
@@ -125,10 +126,14 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 		String lvWartosc = "NULL";
 		if (mTabela == null)
 			mTabela = " " + pmSystemTables.getTableName() + " ";
+		if (pmWartosc instanceof InterfejsSlownika)
+			lvWartosc = ((InterfejsSlownika) pmWartosc).getKod();
 		if (Integer.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Integer)
 			lvWartosc = String.valueOf(((Integer) pmWartosc).intValue());
 		if (String.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof String)
 			lvWartosc = "'" + (String) pmWartosc + "'";
+		if (Double.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Double)
+			lvWartosc = "'" + pmWartosc.toString() + "'";
 		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof LocalDate && TypZapytania.SELECT.equals(mTyp))
 			lvWartosc = ParseryDB.DateParserToSQL_SELECT((LocalDate) pmWartosc);
 		if (Timestamp.class.equals(pmSystemTables.getKlasa()) && pmWartosc instanceof Date && TypZapytania.SELECT.equals(mTyp))
@@ -191,7 +196,11 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	}
 
 	private enum TypZapytania {
-		SELECT, UPDATE, DELETE, INSERT, COUNT;
+		SELECT,
+		UPDATE,
+		DELETE,
+		INSERT,
+		COUNT;
 	}
 
 	@Override
@@ -207,7 +216,7 @@ public class QueryBuilder extends AccessDB implements DbUpdate, DbSelect, DbDele
 	}
 
 	public static int getNextId(SystemTables pmPole) {
-		Integer lvActalId = executeQuery("SELECT TOP 1 " + pmPole + " FROM " + pmPole.getTableName() + " ORDER BY " + pmPole.getColumnName() + " DESC")
+		Integer lvActalId = executeQuery("SELECT TOP 1 " + pmPole + " FROM " + pmPole.getTableName() + " ORDER BY " + pmPole.toString() + " DESC")
 				.getAsInteger(pmPole);
 		return (lvActalId == null ? 0 : lvActalId.intValue()) + 1;
 	}

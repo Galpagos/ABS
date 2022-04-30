@@ -52,4 +52,19 @@ public enum WalidacjeTwarde implements Komunikat {
 	public String getTytul() {
 		return mNazwa;
 	}
+
+	public static Komunikat utworz(String pmTresc, boolean pmCzyBlad) {
+		return new Komunikat() {
+
+			@Override
+			public String getTytul() {
+				return pmCzyBlad ? "Błąd!" : "Ostrzeżenie!";
+			}
+
+			@Override
+			public String getKomunikat() {
+				return pmTresc;
+			}
+		};
+	}
 }

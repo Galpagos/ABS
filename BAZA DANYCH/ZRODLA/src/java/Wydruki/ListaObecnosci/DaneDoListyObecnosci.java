@@ -1,7 +1,9 @@
 package Wydruki.ListaObecnosci;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
+import java.time.LocalDate;
 
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import lombok.Data;
@@ -14,4 +16,6 @@ public class DaneDoListyObecnosci {
 	private String mNaglowek;
 	private String mStopka;
 	private Integer mWysokoscWiersza;
+	private Integer mFontSize;
+	private Set<Integer> mBoldLines;
 }

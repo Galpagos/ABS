@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 import javax.swing.JOptionPane;
 
-import Absencja.ObslugaAbsencjiDeprecated;
 import Absencja.WalidatorAbsenci;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -20,13 +19,13 @@ import enums.WalidacjeTwarde;
 import pl.home.ListaPlac.SLEkwiwalentZaUrlop;
 import pl.home.absencje.ObslugaAbsencji;
 import pl.home.components.frames.parameters.OAbsencjiWejscie;
+import pl.home.components.frames.parameters.OAbsencjiWyjscie;
 import pl.home.components.frames.src.SrcOknoAbsencji;
 
 public class OknoAbsencji extends SrcOknoAbsencji {
 
 	private static final long serialVersionUID = 1L;
 	private AbsencjaDTO mAbsencja;
-	private ObslugaAbsencjiDeprecated mObslugaAbsencji;
 	private ObslugaAbsencji mObsAbs;
 	private WalidatorAbsenci mWalidator;
 	private List<PracownikDTO> mListaPracownikow;
@@ -45,7 +44,6 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	protected void budujOkno() {
 		super.budujOkno();
 		mObsAbs = new ObslugaAbsencji();
-		mObslugaAbsencji = new ObslugaAbsencjiDeprecated();
 		mWalidator = new WalidatorAbsenci();
 	}
 
@@ -53,14 +51,26 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 	protected void odswiezKontrolki() {
 
 		super.odswiezKontrolki();
-		cbRodzajAbsencji.setSelectedItem(mAbsencja.getRodzaj());
-		cbProcent.setSelectedItem(mAbsencja.getProcent());
-		mDataOd.setValue(Data.DateFromLocalDate(mAbsencja.getOkres().getStart()));
-		mDataDo.setValue(Data.DateFromLocalDate(mAbsencja.getOkres().getEnd()));
+		if (mParamsIn.isCzyTylkoRodzaj()) {
+			mDataDo.setVisible(false);
+			mDataOd.setVisible(false);
+			lblDataDo.setVisible(false);
+			lblDataOd.setVisible(false);
+			btnPickDate1.setVisible(false);
+			btnPickDate2.setVisible(false);
+
+		} else {
+			cbRodzajAbsencji.setSelectedItem(mAbsencja.getRodzaj());
+			cbProcent.setSelectedItem(mAbsencja.getProcent());
+			mDataOd.setValue(Data.DateFromLocalDate(mAbsencja.getOkres().getStart()));
+			mDataDo.setValue(Data.DateFromLocalDate(mAbsencja.getOkres().getEnd()));
+		}
 	}
 
 	@Override
 	public void zapiszAbsencje() {
+		if (mParamsIn.isCzyTylkoRodzaj())
+			return;
 		List<AbsencjaDTO> lvNoweAbsencje = budujAbsencje();
 		for (int i = 0; i < lvNoweAbsencje.size(); i++) {
 			AbsencjaDTO lvAbsencja = lvNoweAbsencje.get(i);
@@ -123,5 +133,14 @@ public class OknoAbsencji extends SrcOknoAbsencji {
 		if (!mWalidator.czyPrawidloweDaty(lvOd, lvDo))
 			return false;
 		return super.validateForm();
+	}
+
+	@Override
+	protected OAbsencjiWyjscie budujWyjscie() {
+
+		return OAbsencjiWyjscie//
+				.builder()//
+				.withAbsencja(budujNiepelnaAbsencje())//
+				.build();
 	}
 }

@@ -1,5 +1,6 @@
 package Absencja;
 
+import ProjektGlowny.commons.enums.SLMiesiace;
 import ProjektGlowny.commons.utils.Interval;
 
 import java.util.Arrays;
@@ -17,11 +18,11 @@ import javax.swing.JOptionPane;
 import Pracownik.ObslugaPracownka;
 import Pracownik.PracownikRepository;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
-import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
 import enums.WalidacjeTwarde;
 import pl.home.absencje.AbsencjeRepositoryDB;
 
+@Deprecated
 public class WalidatorAbsenci {
 	private AbsencjaRepositor mRepo = new AbsencjaRepository();
 	private AbsencjeRepositoryDB mRepoAbs = new AbsencjeRepositoryDB();

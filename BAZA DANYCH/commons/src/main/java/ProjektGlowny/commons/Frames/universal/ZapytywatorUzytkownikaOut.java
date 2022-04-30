@@ -10,5 +10,6 @@ import lombok.Getter;
 public class ZapytywatorUzytkownikaOut extends ParametryWyjscia {
 
 	private Integer mWartoscInt;
+	private Double mWartoscDouble;
 	private String mWarString;
 }

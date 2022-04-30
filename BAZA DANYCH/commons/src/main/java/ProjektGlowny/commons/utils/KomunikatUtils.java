@@ -23,6 +23,21 @@ public class KomunikatUtils {
 		return lvMap;
 	}
 
+	public static Komunikat fromString(String pmTytul, String pmTresc) {
+		return new Komunikat() {
+
+			@Override
+			public String getTytul() {
+				return pmTytul;
+			}
+
+			@Override
+			public String getKomunikat() {
+				return pmTresc;
+			}
+		};
+	}
+
 	public static Komunikat przygotujKomunikat(Komunikat pmKomunikat, String... pmArgs) {
 		Map<String, String> lvMap = przygotujMapeZKomunikatu(pmKomunikat, pmArgs);
 		return new Komunikat() {

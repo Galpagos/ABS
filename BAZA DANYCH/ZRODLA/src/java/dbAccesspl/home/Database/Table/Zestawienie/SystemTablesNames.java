@@ -11,7 +11,8 @@ public enum SystemTablesNames implements ISystemTableNames {
 	AD_SYS_INFO("AD_SYS_INFO", EnumSet.allOf(SysInfoColumns.class), null), //
 	AD_GRUPY_POWIAZANIA("AD_GRUPY_POWIAZANIA", EnumSet.allOf(GrupyPowiazaniaColumns.class), null), //
 	AD_GRUPY("AD_GRUPY", EnumSet.allOf(GrupyColumns.class), GrupyColumns.ID_tabeli), //
-	ABSENCJE("Absencje", EnumSet.allOf(AbsencjeColumns.class), AbsencjeColumns.ID_tabeli);
+	ABSENCJE("Absencje", EnumSet.allOf(AbsencjeColumns.class), AbsencjeColumns.ID_tabeli), //
+	SOBOTA_ROBOCZA("SOB_ROB", EnumSet.allOf(SobotaRoboczaColumns.class), SobotaRoboczaColumns.ID_tabeli);
 
 	SystemTablesNames(String pmTableName, EnumSet<? extends SystemTables> pmTabela, SystemTables pmPrimaryKey) {
 		mTabela = pmTabela;

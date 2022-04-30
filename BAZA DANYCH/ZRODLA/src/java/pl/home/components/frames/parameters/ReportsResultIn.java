@@ -3,6 +3,7 @@ package pl.home.components.frames.parameters;
 import ProjektGlowny.commons.Frames.ParametryWejscia;
 
 import java.util.Map;
+import java.util.Set;
 
 import java.text.MessageFormat;
 
@@ -24,5 +25,7 @@ public class ReportsResultIn implements ParametryWejscia {
 	private Integer mWysokoscWiersza;
 	private MessageFormat mHeader;
 	private MessageFormat mTextFinal;
+	private Integer mSize;
+	private Set<Integer> mBoldLines;
 
 }

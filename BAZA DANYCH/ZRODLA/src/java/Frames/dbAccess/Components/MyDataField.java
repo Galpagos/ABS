@@ -1,11 +1,12 @@
 package Frames.dbAccess.Components;
 
-import java.time.LocalDate;
+import ProjektGlowny.commons.utils.Data;
+
 import java.util.Date;
 
-import javax.swing.JFormattedTextField;
+import java.time.LocalDate;
 
-import ProjektGlowny.commons.utils.Data;
+import javax.swing.JFormattedTextField;
 
 public class MyDataField extends JFormattedTextField {
 

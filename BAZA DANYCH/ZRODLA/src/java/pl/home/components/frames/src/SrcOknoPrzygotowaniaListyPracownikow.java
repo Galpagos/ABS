@@ -45,10 +45,6 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno<
 
 	}
 
-	public void dSrcOknoPrzygotowaniaListyPracownikow() {
-
-	}
-
 	@Override
 	public List<PracownikDTO> getListaLewa() {
 		return mListaLewa;
@@ -228,17 +224,16 @@ public abstract class SrcOknoPrzygotowaniaListyPracownikow extends AbstractOkno<
 		cbWyborGrupy.setBounds(12, 13, 154, 25);
 		cbWyborGrupy.setSelectedItem(" ");
 
-		mokButton.setBounds(487, 13, 77, 25);
+		mokButton.setBounds(407, 13, 120, 25);
 
 		getRootPane().setDefaultButton(mokButton);
 
-		mcancelButton.setBounds(576, 12, 77, 25);
+		mcancelButton.setBounds(536, 12, 120, 25);
 
 		buttonPane.setLayout(null);
 		buttonPane.add(cbWyborGrupy);
 		buttonPane.add(mokButton);
 		buttonPane.add(mcancelButton);
-
 	}
 
 	@Override

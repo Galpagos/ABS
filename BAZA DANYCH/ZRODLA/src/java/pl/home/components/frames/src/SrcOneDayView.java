@@ -1,5 +1,7 @@
 package pl.home.components.frames.src;
 
+import static Utils.GridUtils.gridCons;
+
 import ProjektGlowny.commons.Components.LTable;
 import ProjektGlowny.commons.DbBuilder.DbSelect;
 import ProjektGlowny.commons.DbBuilder.QueryBuilder;
@@ -12,10 +14,8 @@ import java.util.stream.Collectors;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -37,6 +37,7 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 	private JButton btnAddWorker;
 	private JButton btnBack;
 	private JButton btnDeleteAbsence;
+	private JButton btnDeleteOneDayAbsence;
 	private JButton btnDoubleBack;
 	private JButton btnDoubleNext;
 	private JButton btnModifyAbsence;
@@ -134,16 +135,6 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 				.andWarunek(ZestawienieColumns.Data_Zwolnienia, null).orderBy(ZestawienieColumns.Pracownik, true);
 	}
 
-	private GridBagConstraints gridCons(int pmX, int pmY) {
-		GridBagConstraints lvGridCons = new GridBagConstraints();
-		lvGridCons.gridx = pmX;
-		lvGridCons.gridy = pmY;
-		lvGridCons.fill = GridBagConstraints.HORIZONTAL;
-		lvGridCons.ipady = 10;
-		lvGridCons.insets = new Insets(5, 5, 5, 5);
-		return lvGridCons;
-	}
-
 	private void initBottomPanel() {
 		JPanel mBottomPanel = new JPanel(new GridLayout(1, 6, 10, 10));
 		mBottomPanel.setBorder(new EmptyBorder(10, 5, 5, 5));
@@ -186,9 +177,10 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 		lvPanel.add(cbEditableAbsence, gridCons(0, 2));
 		btnModifyAbsence = new JButton("Modyfikuj");
 		lvPanel.add(btnModifyAbsence, gridCons(0, 6));
-		btnDeleteAbsence = new JButton("Usuń");
+		btnDeleteAbsence = new JButton("Usuń w okresie");
 		lvPanel.add(btnDeleteAbsence, gridCons(0, 7));
-
+		btnDeleteOneDayAbsence = new JButton("Usuń tylko dzisiaj");
+		lvPanel.add(btnDeleteOneDayAbsence, gridCons(0, 8));
 		mContentPane.add(lvPanel, BorderLayout.LINE_END);
 	}
 
@@ -216,6 +208,8 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 
 	protected abstract void modifyAbsence();
 
+	protected abstract void deleteOneDayAbsence();
+
 	@Override
 	protected void odswiezKontrolki() {
 		lblData.setText(mData.format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -223,6 +217,7 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 		reloadTable();
 		btnModifyAbsence.setEnabled(mTable.getSelectedRows().length == 1);
 		btnDeleteAbsence.setEnabled(mTable.getSelectedRows().length > 0);
+		btnDeleteOneDayAbsence.setEnabled(mTable.getSelectedRows().length > 0);
 		repaint();
 	}
 
@@ -245,6 +240,7 @@ public abstract class SrcOneDayView extends AbstractOkno<OneDayViewIn, OneDayVie
 		btnAddWorker.addActionListener(lvE -> addWorker());
 		btnModifyAbsence.addActionListener(lvE -> modifyAbsence());
 		btnDeleteAbsence.addActionListener(lvE -> deleteAbsence());
+		btnDeleteOneDayAbsence.addActionListener(lvE -> deleteOneDayAbsence());
 		mTable.getSelectionModel().addListSelectionListener(e -> odswiezKontrolkiBezTabeli());
 	}
 

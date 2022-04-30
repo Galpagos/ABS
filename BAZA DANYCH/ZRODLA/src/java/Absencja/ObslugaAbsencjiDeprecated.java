@@ -1,5 +1,6 @@
 package Absencja;
 
+import ProjektGlowny.commons.enums.SLMiesiace;
 import ProjektGlowny.commons.utils.Interval;
 
 import java.util.Comparator;
@@ -11,7 +12,6 @@ import java.time.LocalDate;
 
 import Datownik.LicznikDaty;
 import Wydruki.PrzygotowanieDanych.AbsencjaDTO;
-import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
 import pl.home.absencje.AbsencjeRepositoryDB;
 

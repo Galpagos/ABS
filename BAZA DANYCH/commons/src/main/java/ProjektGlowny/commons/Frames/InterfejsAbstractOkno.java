@@ -10,5 +10,6 @@ public interface InterfejsAbstractOkno {
 	void err(Komunikat pmKomunikat, String... pmArgs);
 	LocalDate askLocalDate();
 	Integer askInt(AskIntParams pmDefault, Komunikat pmKomunikat, String... pmArgs);
+	Integer askDouble(AskIntParams pmDefault, Komunikat pmKomunikat, String[] pmArgs);
 
 }

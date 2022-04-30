@@ -1,15 +1,17 @@
 package Frames.dbAccess.Frames.OknoSprawozdan;
 
-import java.time.LocalDate;
+import ProjektGlowny.commons.Components.DatePicker;
+import ProjektGlowny.commons.enums.SLMiesiace;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import ProjektGlowny.commons.Components.DatePicker;
+import java.time.LocalDate;
+
 import Wydruki.ListaPlac.ListaPlacWydruk;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.SprawozdanieMiesieczne.SprawozdanieMiesieczne;
 import Wydruki.SprawozdanieRoczne.SprawozdanieRoczne;
-import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
 import pl.home.components.frames.mainframes.OknoListyObecnosci;
 import pl.home.components.frames.mainframes.OknoPrzygotowaniaListyPracownikow;
@@ -48,9 +50,13 @@ public class ObslugaOknaSprawozdan {
 		} else {
 			mDane.setListaAbsencji(new PobieranieModulow().get().getListaAbsencji());
 		}
+		LocalDate lvData = new DatePicker().setPickedLocalDate();
+		if (lvData == null)
+			return;
+		mDane.setOkresSprawozdawczy(SLMiesiace.values()[lvData.getMonthValue() - 1].getOkres(lvData.getYear()));
 		OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().build();
 		mDane.setListaPracownikow(new OknoPrzygotowaniaListyPracownikow(lvParams).WybierzPracownikow());
-		mDane.setOkresSprawozdawczy(SLMiesiace.N00_ROK.getOkres(mRok));
+		mDane.setOkresSprawozdawczy(SLMiesiace.N00_ROK.getOkres(lvData.getYear()));
 	}
 
 	private boolean przygotujDaneMiesieczne() {

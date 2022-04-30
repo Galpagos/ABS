@@ -1,12 +1,12 @@
 package Wydruki.ListaPlac;
 
+import java.util.Arrays;
 import java.util.List;
 
 import java.time.YearMonth;
 
 import javax.swing.table.DefaultTableModel;
 
-import Frames.dbAccess.Components.ResultTableWindow;
 import Wydruki.PrzygotowanieDanych.DaneDoSprawozdaniaMiesiecznego;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
@@ -17,7 +17,6 @@ import pl.home.components.frames.mainframes.ReportsResult;
 import pl.home.components.frames.parameters.ReportsResultIn;
 
 public class ListaPlacWydruk implements wynikWResultTableWindow {
-	private ResultTableWindow mOknoWyniku;
 	private DaneDoSprawozdaniaMiesiecznego mDane;
 	DefaultTableModel mModel = new DefaultTableModel();
 
@@ -39,7 +38,7 @@ public class ListaPlacWydruk implements wynikWResultTableWindow {
 		List<MiesiecznaPlacaPracownika> lvPlacePracownikow = lvPlace.wyliczWyplate(mDane.getListaPracownikow());
 		lvPlacePracownikow//
 				.stream()//
-				.forEachOrdered(lvWyplata -> utworzRekord(lvWyplata));
+				.forEachOrdered(this::utworzRekord);
 	}
 
 	private void utworzRekord(MiesiecznaPlacaPracownika pmWyplata) {
@@ -55,12 +54,8 @@ public class ListaPlacWydruk implements wynikWResultTableWindow {
 	}
 
 	private void przygotujNaglowek() {
-		mModel.addColumn("Pracownik");
-		mModel.addColumn("Kwota za pracę");
-		mModel.addColumn("Kwota za chorobę");
-		mModel.addColumn("Kwota za urlopy");
-		mModel.addColumn("Razem");
-
+		Arrays.stream(ListaPlacColumnEnum.values())//
+				.forEach(lvEnumValue -> mModel.addColumn(lvEnumValue.getColumnName()));
 	}
 
 	@Override

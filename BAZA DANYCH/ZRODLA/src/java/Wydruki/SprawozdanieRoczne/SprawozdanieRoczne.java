@@ -1,5 +1,6 @@
 package Wydruki.SprawozdanieRoczne;
 
+import ProjektGlowny.commons.enums.SLMiesiace;
 import ProjektGlowny.commons.utils.Interval;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import Wydruki.PrzygotowanieDanych.PracownikDTO;
 import Wydruki.SprawozdanieMiesieczne.SprawozdaniaRepository;
 import Wydruki.SprawozdanieMiesieczne.wynikWResultTableWindow;
 import enums.RodzajWydruku;
-import enums.SLMiesiace;
 import enums.SLRodzajeAbsencji;
 import pl.home.components.frames.mainframes.ReportsResult;
 import pl.home.components.frames.parameters.ReportsResultIn;
@@ -29,7 +29,6 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 	ResultTableWindow mOknoWyniku;
 	private SprawozdaniaRepository mRepo;
 	private DaneDoSprawozdaniaMiesiecznego mDane;
-	private int mRok = 2019;
 	private List<Interval> mDniWolneWRoku;
 	private List<SLRodzajeAbsencji> mListaAbsWMiesiacu;
 
@@ -123,7 +122,7 @@ public class SprawozdanieRoczne implements wynikWResultTableWindow {
 
 			lvAbsWMiesiacu.setRodzaj(lvAbs.getRodzaj());
 			lvAbsWMiesiacu.setProcent(lvAbs.getProcent());
-			Interval lvNowyOkres = lvAbs.getOkres().overlap(new Interval(pmI, mRok)).orElse(null);
+			Interval lvNowyOkres = lvAbs.getOkres().overlap(new Interval(pmI, mDane.getOkresSprawozdawczy().getEnd().getYear())).orElse(null);
 
 			if (lvNowyOkres != null) {
 				lvAbsWMiesiacu.setOkres(lvNowyOkres);
