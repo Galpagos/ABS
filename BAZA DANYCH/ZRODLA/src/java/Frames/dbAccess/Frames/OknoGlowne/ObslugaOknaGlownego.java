@@ -45,13 +45,11 @@ public class ObslugaOknaGlownego {
 	public void dodajPracownika() {
 		mObslugaPracownika.dodajNowegoPracownika();
 		mOkno.odswiezTabele();
-		mOkno.odswiezKontrolki();
 	}
 
 	public void usunPracownika() {
 		mObslugaPracownika.usunPracownika(mOkno.getPracownikZTabeli().getId());
 		mOkno.odswiezTabele();
-		mOkno.odswiezKontrolki();
 	}
 
 	public void pokazNieobecnych() {
@@ -118,13 +116,11 @@ public class ObslugaOknaGlownego {
 	public void zwolnijPracownika() {
 		mObslugaPracownika.zwolnijPracownika(mOkno.getPracownikZTabeli().getId());
 		mOkno.odswiezTabele();
-		mOkno.odswiezKontrolki();
 	}
 
 	public void zatrudnijPracownika() {
 		mObslugaPracownika.zatrudnijPracownika(mOkno.getPracownikZTabeli().getId());
 		mOkno.odswiezTabele();
-		mOkno.odswiezKontrolki();
 	}
 
 	public PracownikDTO getPracownik(Integer pmIdPracownika) {

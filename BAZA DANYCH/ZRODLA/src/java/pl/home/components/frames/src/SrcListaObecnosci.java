@@ -3,7 +3,6 @@ package pl.home.components.frames.src;
 import ProjektGlowny.commons.Components.DatePicker;
 import ProjektGlowny.commons.Frames.AbstractOkno;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +26,7 @@ import javax.swing.text.NumberFormatter;
 
 import Frames.dbAccess.Components.ListaObecnosciCellRenderer;
 import Pracownik.PracownikRepository;
+import Repository.OsobyNaWydrukuRepo;
 import Wydruki.ListaObecnosci.DaneDoListyObecnosci;
 import Wydruki.ListaObecnosci.ListaObecnosciConst;
 import Wydruki.PrzygotowanieDanych.PracownikDTO;
@@ -43,18 +43,17 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 	private JFormattedTextField txtWysokoscWiersza;
 	private JFormattedTextField txtFontSize;
 	private JFormattedTextField txtData;
-	// private JList<PracownikDTO> tblLewa;
 	private JList<PracownikDTO> tblPrawa;
 	private JPanel mPane;
-	// private JScrollPane mScrollPaneLeft;
 	private JScrollPane mScrollPaneRight;
-	// private JButton btnEdytujLewaKolumna;
 	private JButton btnEdytujPrawaKolumna;
 	protected DaneDoListyObecnosci mDane;
 	private JButton btnEdytujDate;
 	private JButton btnBoldLines;
 	private JButton btnClearBoldLines;
+	private JButton btnSaveList;
 	private PracownikRepository mRepo;
+	private OsobyNaWydrukuRepo mDaneWydrukuRepo;
 	private Set<Integer> mBoldLines;
 	public SrcListaObecnosci(ListaObecnosciWejscie pmParams) {
 		super(pmParams);
@@ -65,14 +64,9 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 	protected void onOpen() {
 		mRepo = new PracownikRepository();
 		mDane = new DaneDoListyObecnosci();
+		mDaneWydrukuRepo = new OsobyNaWydrukuRepo();
 		mBoldLines = new HashSet<>();
-		// mDane.setListaLewa(new ArrayList<PracownikDTO>());
-		List<Integer> lvInitIdList = Arrays.asList( //
-				81, 16, 84, 20, 23, 26, 75, 27, 0, //
-				2, 30, 35, 36, 39, 40, 42, 10, 43, 44, 45, 51, 46, 47, 0, //
-				1, 22, 4, 5, 0, //
-				18, 25, 8, 6, 9, 41, 0, //
-				7);
+		List<Integer> lvInitIdList = mDaneWydrukuRepo.pobierzListe(1);
 
 		List<PracownikDTO> lvInitList = lvInitIdList//
 				.stream()//
@@ -84,7 +78,10 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 	private PracownikDTO getPracownik(Integer pmId) {
 		if (pmId == 0)
 			return new PracownikDTO().setNazwa("----------");
-		return mRepo.getPracownik(pmId);
+		PracownikDTO lvPrac = mRepo.getPracownik(pmId);
+		if (lvPrac == null)
+			return new PracownikDTO().setNazwa("----------");
+		return lvPrac;
 	}
 	@Override
 	protected void przypiszMetody() {
@@ -94,18 +91,14 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 			wydrukuj();
 			this.dispose();
 		});
-		// btnEdytujLewaKolumna.addActionListener(e -> {
-		// setAlwaysOnTop(false);
-		// OPrzygListyPracWejscie lvParams =
-		// OPrzygListyPracWejscie.builder().withLista(mDane.getListaLewa()).build();
-		// mDane.setListaLewa(new
-		// OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa());
-		// odswiezKontrolki();
-		// });
 		btnEdytujPrawaKolumna.addActionListener(e -> {
 			setAlwaysOnTop(false);
 			OPrzygListyPracWejscie lvParams = OPrzygListyPracWejscie.builder().withLista(mDane.getListaPrawa()).build();
-			mDane.setListaPrawa(new OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa());
+			mDane.setListaPrawa(new OknoPrzygotowaniaListyPracownikow(lvParams).getListaPrawa()//
+					.stream()//
+					.map(lvPrac -> lvPrac.getId())//
+					.map(this::getPracownik)//
+					.collect(Collectors.toList()));
 			odswiezKontrolki();
 		});
 
@@ -131,6 +124,12 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 			odswiezKontrolki();
 
 		});
+		btnSaveList.addActionListener(e -> {
+			mDaneWydrukuRepo.zapiszListe(mDane.getListaPrawa().stream().map(PracownikDTO::getId).collect(Collectors.toList()));
+			JOptionPane.showMessageDialog(null, "Zapisano dane", "", JOptionPane.INFORMATION_MESSAGE);
+			odswiezKontrolki();
+
+		});
 	}
 
 	private void przygotujDane() {
@@ -146,7 +145,6 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 
 	@Override
 	protected void odswiezKontrolki() {
-		// tblLewa.setModel(createModel(mDane.getListaLewa()));
 		tblPrawa.setModel(createModel(mDane.getListaPrawa()));
 		tblPrawa.setCellRenderer(new ListaObecnosciCellRenderer(mBoldLines));
 		tblPrawa.repaint();
@@ -182,21 +180,12 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 		getRootPane().setDefaultButton(mokButton);
 		mPane.add(mcancelButton);
 
-		// mScrollPaneLeft = new JScrollPane();
-		// mScrollPaneLeft.setBounds(48, 68, 262, 430);
-		// getContentPane().add(mScrollPaneLeft);
-		// mScrollPaneLeft.setPreferredSize(new Dimension(100, 100));
-		// tblLewa = new JList<PracownikDTO>();
-		// mScrollPaneLeft.setViewportView(tblLewa);
 		mScrollPaneRight = new JScrollPane();
 		mScrollPaneRight.setPreferredSize(new Dimension(100, 100));
 		mScrollPaneRight.setBounds(40, 70, 500, 430);
 		getContentPane().add(mScrollPaneRight);
 		tblPrawa = new JList<PracownikDTO>();
 		mScrollPaneRight.setViewportView(tblPrawa);
-
-		// btnEdytujLewaKolumna = new JButton("Edytuj");
-		// btnEdytujLewaKolumna.setBounds(213, 499, 97, 25);
 
 		btnEdytujPrawaKolumna = new JButton("Edytuj");
 		btnEdytujPrawaKolumna.setBounds(440, 505, 100, 25);
@@ -268,6 +257,10 @@ public abstract class SrcListaObecnosci extends AbstractOkno<ListaObecnosciWejsc
 		btnClearBoldLines = new JButton("Wyczyść pogrubienia");
 		btnClearBoldLines.setBounds(550, 210, 200, 20);
 		getContentPane().add(btnClearBoldLines);
+
+		btnSaveList = new JButton("Zapisz listę");
+		btnSaveList.setBounds(550, 240, 200, 20);
+		getContentPane().add(btnSaveList);
 
 	}
 

@@ -179,6 +179,8 @@ public class PracownikRepository extends AccessDB {
 				.andWarunek(ID_tabeli, pmIdPracownika)//
 				.execute();
 
+		if (lvWynik.isEmpty())
+			return null;
 		return parsujPracownika(lvWynik.get(0));
 	}
 

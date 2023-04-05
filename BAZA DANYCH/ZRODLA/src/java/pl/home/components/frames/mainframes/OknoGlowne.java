@@ -68,17 +68,17 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		return new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent pmE) {
-				ustawTabele(tbPracownicy);
+				odswiezTabele();
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent pmE) {
-				ustawTabele(tbPracownicy);
+				odswiezTabele();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent pmE) {
-				ustawTabele(tbPracownicy);
+				odswiezTabele();
 			}
 		};
 	}
@@ -94,7 +94,6 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 			lvZapytanieLS = lvZapytanieLS.andWarunek(Data_Zwolnienia, null);
 
 		pmTabela.reload(lvZapytanieLS.execute());
-
 	}
 
 	@Override
@@ -135,7 +134,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 	}
 
 	private boolean czyJedenRekord() {
-		return tbPracownicy.getSelectedRowCount() == 1;
+		return tbPracownicy.getSelectedRowCount() == 1 && tbPracownicy.getRowCount() != 0;
 	}
 
 	private boolean czyZwolniony(PracownikDTO pmPracownik) {
@@ -146,6 +145,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 	@Override
 	public void odswiezTabele() {
 		ustawTabele(tbPracownicy);
+		odswiezKontrolki();
 	}
 
 	@Override
@@ -176,10 +176,7 @@ public class OknoGlowne extends SrcOknoGlowne implements InterfejsOknaGlownego {
 		btnSprawozdanie.addActionListener(lvE -> mObsluga.sprawozdanie());
 		btnZwolnij.addActionListener(lvE -> mObsluga.zwolnijPracownika());
 		mFiltrPracownika.getDocument().addDocumentListener(ustawListenerFiltruPracownika());
-		cbCzyUsunieci.addActionListener(lvE -> {
-			odswiezTabele();
-			odswiezKontrolki();
-		});
+		cbCzyUsunieci.addActionListener(lvE -> odswiezKontrolki());
 		btnZatrudnij.addActionListener(lvE -> mObsluga.zatrudnijPracownika());
 		tbPracownicy.getSelectionModel().addListSelectionListener(e -> odswiezKontrolki());
 		btnDodajMasowaAbsencje.addActionListener(lvE -> mObsluga.dodajMasowaAbsencje());

@@ -2,17 +2,23 @@ package Wersja;
 
 import ProjektGlowny.commons.DbBuilder.AccessDB;
 
+import java.util.Arrays;
+import java.util.List;
+
 import java.io.File;
 import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 import com.healthmarketscience.jackcess.ColumnBuilder;
 import com.healthmarketscience.jackcess.DataType;
 import com.healthmarketscience.jackcess.Database;
 import com.healthmarketscience.jackcess.DatabaseBuilder;
 import com.healthmarketscience.jackcess.IndexBuilder;
+import com.healthmarketscience.jackcess.Table;
 import com.healthmarketscience.jackcess.TableBuilder;
 
-import dbAccesspl.home.Database.Table.Zestawienie.SobotaRoboczaColumns;
+import dbAccesspl.home.Database.Table.Zestawienie.DaneWydrukiColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.SysInfoColumns;
 import dbAccesspl.home.Database.Table.Zestawienie.SystemTablesNames;
 
@@ -20,22 +26,33 @@ public class Przekod extends AccessDB {
 
 	public static void Wykonaj() throws IOException {
 
-		if (!"3.00".equals(pobierzWersje()))
+		if ("10.00".equals(pobierzWersje()))
 			return;
 		try (Database db = DatabaseBuilder.open(new File("..//BAZA.accdb"))) {
 			System.out.println("Podbito wersję");
-			TableBuilder lvTable = new TableBuilder(SystemTablesNames.SOBOTA_ROBOCZA.getNazwa())//
-					.addColumn(new ColumnBuilder(SobotaRoboczaColumns.ID_tabeli.name()).setType(DataType.INT))//
-					.addColumn(new ColumnBuilder(SobotaRoboczaColumns.ID_pracownika.name()).setType(DataType.INT))//
-					.addColumn(new ColumnBuilder(SobotaRoboczaColumns.DATA.name()).setType(DataType.SHORT_DATE_TIME))//
-					.addColumn(new ColumnBuilder(SobotaRoboczaColumns.GODZINY.name()).setType(DataType.INT))
-					.addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns(SobotaRoboczaColumns.ID_tabeli.name()).setPrimaryKey());
+			TableBuilder lvTable = new TableBuilder(SystemTablesNames.DANE_WYDRUKI.getNazwa())//
+					.addColumn(new ColumnBuilder(DaneWydrukiColumns.ID_tabeli.name()).setType(DataType.INT))//
+					.addColumn(new ColumnBuilder(DaneWydrukiColumns.ID_OSOBY.name()).setType(DataType.INT))//
+					.addColumn(new ColumnBuilder(DaneWydrukiColumns.ID_POZYCJI.name()).setType(DataType.INT))//
+					.addColumn(new ColumnBuilder(DaneWydrukiColumns.ID_WYDRUKU.name()).setType(DataType.INT))
+					.addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns(DaneWydrukiColumns.ID_tabeli.name()).setPrimaryKey());
 
-			lvTable.toTable(db);
-
+			Table lvDaneWydruki = lvTable.toTable(db);
+			List<Integer> lvInitIdList = Arrays.asList( //
+					81, 16, 84, 20, 23, 26, 75, 27, 0, //
+					2, 30, 35, 36, 39, 40, 42, 10, 43, 44, 45, 51, 46, 47, 0, //
+					1, 22, 4, 5, 0, //
+					18, 25, 8, 6, 9, 41, 0, //
+					7);
+			for (int i = 0; i < lvInitIdList.size(); i++) {
+				Object[] lvRow = {i, lvInitIdList.get(i), i, 1};
+				lvDaneWydruki.addRow(lvRow);
+			}
 		}
 
-		podbijWersje("4.00");
+		podbijWersje("10.00");
+		JOptionPane.showMessageDialog(null, "Uruchom ponownie program", "", JOptionPane.INFORMATION_MESSAGE);
+		System.exit(0);
 		// try (Connection lvCon = init(); PreparedStatement lvStm =
 		// lvCon.prepareStatement(" ALTER TABLE Absencje DROP COLUMN
 		// Rodzaj_absencji ");) {
